@@ -10,6 +10,7 @@ import {
 	Zap,
 } from 'lucide-react';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -99,6 +100,18 @@ export default function ClusterPage() {
 						Unlock the Full Potential of <br className="hidden md:block" />
 						<span className="text-arctic-blue">AI & HPC</span>
 					</h1>
+
+					{/* Cluster Photo */}
+					<div className="mx-auto mb-12 max-w-md rounded-3xl border border-border bg-card p-4 shadow-sm">
+						<Image
+							alt="Hot Aisle cluster setup with Powered by AMD signage"
+							className="h-auto w-full rounded-2xl object-cover"
+							height={679}
+							priority
+							src="/assets/cluster/cluster-powered-by-amd.webp"
+							width={456}
+						/>
+					</div>
 
 					<p className="mx-auto mb-12 max-w-4xl font-light text-muted-foreground text-xl leading-relaxed md:text-2xl">
 						Welcome to Hot Aisle, where unparalleled compute power and expert consulting
