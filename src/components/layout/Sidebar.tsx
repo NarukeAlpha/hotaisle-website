@@ -64,7 +64,10 @@ export function Sidebar() {
 		const handleResize = () => {
 			if (window.innerWidth < 768) {
 				setCollapsed(true);
+				return;
 			}
+
+			setCollapsed(false);
 		};
 
 		// Initial check
