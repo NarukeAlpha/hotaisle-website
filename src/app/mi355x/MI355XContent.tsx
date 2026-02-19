@@ -15,23 +15,16 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Script from 'next/script';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 export default function MI355XContent() {
-	const { resolvedTheme } = useTheme();
-	const [isMounted, setIsMounted] = useState(false);
 	const [selectedImage, setSelectedImage] = useState<{
 		src: string;
 		alt: string;
 		width: number;
 		height: number;
 	} | null>(null);
-
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
 
 	useEffect(() => {
 		if (!selectedImage) {
@@ -390,19 +383,13 @@ export default function MI355XContent() {
 									strategy="lazyOnload"
 								/>
 								<iframe
-									className="min-h-screen w-full rounded-xl border border-border bg-muted/20"
+									className="min-h-screen w-full rounded-xl border border-border bg-muted/20 dark:[filter:invert(0.93)_hue-rotate(180deg)]"
 									data-tally-src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
 									frameBorder={0}
 									height={1000}
 									loading="lazy"
 									marginHeight={0}
 									marginWidth={0}
-									style={{
-										filter:
-											isMounted && resolvedTheme === 'dark'
-												? 'invert(1) hue-rotate(180deg)'
-												: 'none',
-									}}
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
 								<p className="mt-4 text-center text-muted-foreground text-xs">
