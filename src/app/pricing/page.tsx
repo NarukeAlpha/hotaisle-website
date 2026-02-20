@@ -37,8 +37,8 @@ export default function PricingPage() {
 						Transparent <span className="text-arctic-blue">Pricing</span>
 					</h1>
 					<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
-						<span className="font-bold text-foreground">$1.99/GPU/hr</span>. No
-						contracts. Billed by the minute.
+						<span className="font-bold text-foreground">$1.99/GPU/hr</span>.
+						Self-service. No contracts. Billed by the minute.
 					</p>
 				</div>
 			</div>
@@ -180,7 +180,7 @@ export default function PricingPage() {
 
 			{/* Features List */}
 			<div className="container mx-auto mt-24 px-6">
-				<h2 className="mb-12 text-center font-bold text-3xl">Plans Include</h2>
+				<h2 className="mb-12 text-center font-bold text-4xl">Plans Include</h2>
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{[
 						{

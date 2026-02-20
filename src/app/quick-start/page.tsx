@@ -247,13 +247,16 @@ export default function QuickStartPage() {
 
 					{/* Contact */}
 					<div className="rounded-xl border border-arctic-blue/10 bg-arctic-blue/5 p-8 text-center">
-						<h3 className="mb-2 font-bold text-lg">Questions?</h3>
+						<h3 className="mb-2 font-bold text-4xl">Questions?</h3>
 						<a
 							className="flex items-center justify-center gap-2 font-bold text-arctic-blue text-xl hover:underline"
 							href="mailto:hello@hotaisle.ai"
 						>
 							<Mail size={20} /> hello@hotaisle.ai
 						</a>
+						<p className="mt-3 text-muted-foreground text-sm">
+							A real human will reply, not an AI bot or support agent.
+						</p>
 					</div>
 				</div>
 			</div>
