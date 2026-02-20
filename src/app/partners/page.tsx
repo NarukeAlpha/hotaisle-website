@@ -27,9 +27,11 @@ const partners = [
 		],
 	},
 	{
-		category: 'Container Orchestration',
+		category: 'Orchestration',
 		icon: Database,
-		list: [{ name: 'dstack.ai', url: 'https://dstack.ai', desc: 'AI Orchestration Platform' }],
+		list: [
+			{ name: 'dstack', url: 'https://dstack.ai', desc: 'Premier AI Orchestration Platform' },
+		],
 	},
 	{
 		category: 'Software Engineering & Optimization',
