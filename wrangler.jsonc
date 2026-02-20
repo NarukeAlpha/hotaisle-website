@@ -19,6 +19,10 @@
 			"custom_domain": true
 		},
 		{
+			"pattern": "blog.hotaisle.xyz",
+			"custom_domain": true
+		},
+		{
 			"pattern": "mta-sts.hotaisle.xyz",
 			"custom_domain": true
 		}
