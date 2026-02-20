@@ -29,6 +29,9 @@ const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 const NEW_LINE_SPLIT_REGEX = /\r?\n/;
 const IMAGE_EXTENSION_REGEX = /\.(?:avif|gif|jpe?g|png|svg|webp)(?:$|[?#])/i;
 const NOTION_MULTILINE_METADATA_KEYS = new Set(['description']);
+const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
+const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
+const EDGE_DASHES_REGEX = /^-+|-+$/g;
 const BLOG_HEADER_IMAGE_BY_SLUG: Record<string, string> = {
 	'hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust':
 		'/assets/blog/hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust/header.jpg',
@@ -227,6 +230,26 @@ function decodeMarkdownPath(rawPath: string): string {
 	}
 }
 
+function toSlugSegment(segment: string): string {
+	const parsed = path.parse(segment);
+	const baseName = parsed.name || parsed.base;
+	const normalizedBaseName = baseName
+		.normalize('NFKD')
+		.replace(UNICODE_DIACRITICS_REGEX, '')
+		.toLowerCase()
+		.replace(NON_ALPHANUMERIC_REGEX, '-')
+		.replace(EDGE_DASHES_REGEX, '');
+
+	const normalizedExtension = parsed.ext.toLowerCase();
+	const safeBaseName = normalizedBaseName || 'file';
+
+	if (!normalizedExtension) {
+		return safeBaseName;
+	}
+
+	return `${safeBaseName}${normalizedExtension}`;
+}
+
 function isLikelyImageReference(source: string): boolean {
 	const decoded = decodeMarkdownPath(source);
 	if (!EXTERNAL_OR_SPECIAL_LINK_REGEX.test(decoded)) {
@@ -242,7 +265,7 @@ function toAssetUrl(assetPath: string): string {
 	const encoded = normalized
 		.split('/')
 		.filter(Boolean)
-		.map((segment) => encodeURIComponent(segment))
+		.map((segment) => toSlugSegment(segment))
 		.join('/');
 	return `${BLOG_ASSET_PREFIX}${encoded}`;
 }
@@ -474,7 +497,8 @@ async function copyBlogAssets(
 
 	for (const entry of entries) {
 		const sourcePath = path.join(sourceDirectory, entry.name);
-		const destinationPath = path.join(destinationDirectory, entry.name);
+		const encodedName = toSlugSegment(entry.name);
+		const destinationPath = path.join(destinationDirectory, encodedName);
 
 		if (entry.isDirectory()) {
 			await copyBlogAssets(sourcePath, destinationPath);
