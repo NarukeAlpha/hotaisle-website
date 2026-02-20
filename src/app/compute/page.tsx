@@ -123,13 +123,10 @@ export default function ComputePage() {
 
 			{/* Strict Specs Table */}
 			<div className="container mx-auto max-w-6xl px-6 py-24" id="specs">
-				<div className="mb-12 flex items-center justify-between">
+				<div className="mb-12">
 					<h2 className="font-black text-3xl md:text-4xl">
 						Best-in-Class Specifications
 					</h2>
-					<div className="hidden rounded-lg bg-muted px-4 py-2 text-muted-foreground text-sm md:block">
-						Updated Feb 2026
-					</div>
 				</div>
 
 				<div className="grid grid-cols-1 gap-6">
@@ -180,7 +177,7 @@ export default function ComputePage() {
 												2,048 GB
 											</span>
 										)}
-										{spec.item === 'DIsk' && (
+										{spec.item === 'Disk' && (
 											<span className="font-black text-3xl text-arctic-blue">
 												122.88 TB
 											</span>
@@ -191,7 +188,7 @@ export default function ComputePage() {
 											</span>
 										)}
 										{spec.item === 'Network' && (
-											<span className="font-black text-3xl text-green-500">
+											<span className="font-black text-3xl text-orange-500">
 												3.2 Tbps
 											</span>
 										)}
