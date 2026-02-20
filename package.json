@@ -3,6 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"generate:blog": "bun run scripts/generate_blog_data.ts",
+		"prebuild": "bun run generate:blog",
+		"prepreview": "bun run generate:blog",
+		"predeploy": "bun run generate:blog",
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
