@@ -15,6 +15,10 @@
 			"custom_domain": true
 		},
 		{
+			"pattern": "www.hotaisle.xyz",
+			"custom_domain": true
+		},
+		{
 			"pattern": "mta-sts.hotaisle.xyz",
 			"custom_domain": true
 		}
