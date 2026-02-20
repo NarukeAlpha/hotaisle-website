@@ -37,7 +37,7 @@ export default function PricingPage() {
 						Transparent <span className="text-arctic-blue">Pricing</span>
 					</h1>
 					<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
-						From <span className="font-bold text-foreground">$1.99/GPU/hr</span>. No
+						<span className="font-bold text-foreground">$1.99/GPU/hr</span>. No
 						contracts. Billed by the minute.
 					</p>
 				</div>
