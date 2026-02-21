@@ -44,7 +44,7 @@ const partners = [
 			{
 				name: 'Spectral Compute',
 				url: 'https://spectralcompute.co.uk/',
-				desc: 'CUDA-to-AMD Porting',
+				desc: 'Write CUDA code. Run everywhere.',
 			},
 			{
 				name: 'Fluid Numerics',
