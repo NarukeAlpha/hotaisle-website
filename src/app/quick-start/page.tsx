@@ -63,7 +63,7 @@ export default function QuickStartPage() {
 							<div>
 								<h3 className="mb-1 font-bold text-lg">Create Account</h3>
 								<p className="text-muted-foreground text-sm">
-									Log in to the TUI (Text User Interface) and create a team.
+									Log in to the TUI (Terminal User Interface) and create a team.
 								</p>
 							</div>
 						</div>
