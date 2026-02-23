@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 };
 
 const introText = [
-	'Hot Aisle is laser-focused on delivering bare metal hardware. We don’t build software solutions, we leave that to our partners. The capital demands and complexity of deploying cutting-edge high-performance compute (HPC) are already immense, and that’s where we’ve chosen to specialize.',
-	'We deliberately avoid locking our infrastructure into a single software stack. AI is one major use case, but it’s not the only one. As we continue to roll out our rentable supercomputers, we expect entirely new categories of demand. Just a few years ago, LLMs barely registered. Three years from now, we’ll likely be talking about something entirely different.',
-	'Our goal is to support software partners who want to test, optimize, and validate their products on our hardware. These collaborations enable mutual endorsements and unlock value across the stack—for us, for them, and most importantly, for you.',
+	'Our partners are one of our most valuable assets, and our ecosystem reflects how we operate today: tight collaboration across hardware, orchestration, networking, and performance engineering.',
+	'We work directly with these teams to validate integrations, improve deployment workflows, and keep production environments reliable at scale.',
+	'The result is a stronger platform and faster execution for customers deploying serious GPU workloads.',
 ];
 
 const partners = [
