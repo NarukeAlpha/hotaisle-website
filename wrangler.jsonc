@@ -1,0 +1,33 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "hotaisle-website",
+	"compatibility_date": "2026-02-14",
+	"assets": {
+		"directory": "./dist"
+	},
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true
+		}
+	},
+	"send_metrics": false,
+	"routes": [
+		{
+			"pattern": "hotaisle.xyz",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.hotaisle.xyz",
+			"custom_domain": true
+		},
+		{
+			"pattern": "blog.hotaisle.xyz",
+			"custom_domain": true
+		},
+		{
+			"pattern": "mta-sts.hotaisle.xyz",
+			"custom_domain": true
+		}
+	]
+}
