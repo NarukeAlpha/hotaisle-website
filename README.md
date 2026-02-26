@@ -11,7 +11,7 @@
 
 ## 🚀 Overview
 
-**Hot Aisle** is a high-performance cloud platform designed to democratize access to supercomputing power. We provide instant, bare-metal access to AMD Instinct™ MI300x accelerators for AI training and inference at a fraction of the cost of traditional hyperscalers.
+**Hot Aisle** is a high-performance cloud platform designed to democratize access to supercomputing power. We provide instant, bare-metal and virtual machine access to AMD Instinct™ MI300x accelerators for AI training and inference at a fraction of the cost and complexity of traditional hyperscalers.
 
 This repository contains the frontend application that powers **[hotaisle.xyz](https://hotaisle.xyz)**.
 
@@ -40,6 +40,10 @@ This repository contains the frontend application that powers **[hotaisle.xyz](h
 
     Open [http://localhost:3000](http://localhost:3000) to view the application.
 
+## Hosting
+
+The site is hosted on CloudFlare workers and is just static generated without any connections to anything. We could have some dynamic aspects some day. Have fun hackers.
+
 ## 📂 Project Structure
 
 ```
@@ -48,27 +52,26 @@ hotaisle-next/
 │   └── assets/          # Blog and content images
 ├── scripts/             # Maintenance scripts (date fixers, tag generators)
 ├── src/
-│   ├── app/             # Next.js App Router pages
+│   ├── app/             # App Router pages
 │   ├── components/      # Reusable UI components
 │   │   ├── home/        # Homepage specific (PyramidHero, SecuritySection)
 │   │   └── layout/      # Sidebar, Header, Footer
 │   └── lib/             # Utility functions
 ```
 
-## 🔧 Maintenance Scripts
-
-This project includes custom scripts in the `scripts/` directory to help manage content:
-
--   `node scripts/check_dates.js`: Verifies blog post frontmatter dates.
--   `node scripts/fix_blog_dates.js`: Auto-corrects invalid date formats.
--   `node scripts/update_blog_tags.js`: Regenerates the global tag cloud based on content.
-
 ## 🎨 Branding
 
 The **Hot Aisle** brand is defined by:
+-   **Hot Aisle**: Name is "Hot Aisle"
 -   **Primary Color**: Hot Orange (`#f97316`)
 -   **Secondary**: Neutral Grays / Dark Mode Black
 -   **Aesthetic**: "Glassy", Technical, Premium, Minimalist.
+
+## Contributions
+
+All commits must be verified. If you don't set that up first, I have to uncheck the box and then recheck it.
+
+<img width="1192" height="145" alt="image" src="https://github.com/user-attachments/assets/ab086c4a-d0b8-44f9-bafd-8d3554be5855" />
 
 ---
 
