@@ -4,6 +4,8 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 
@@ -485,6 +487,13 @@ async function renderMarkdown(markdown: string): Promise<string> {
 	const processedContent = await remark()
 		.use(remarkGfm)
 		.use(remarkRehype)
+		.use(rehypeSlug)
+		.use(rehypeAutolinkHeadings, {
+			behavior: 'wrap',
+			properties: {
+				className: ['heading-link'],
+			},
+		})
 		.use(rehypeHighlight)
 		.use(rehypeStringify)
 		.process(markdown);
