@@ -1,8 +1,8 @@
 'use client';
 
 import { BookOpen, ChevronRight, Hash, Loader2, Scale, Search, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface SearchResult {
 	category: 'Page' | 'Blog' | 'Policy';
@@ -23,7 +23,7 @@ export function SearchUI({ isOpen, onClose }: SearchUIProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [allData, setAllData] = useState<SearchResult[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const router = useRouter();
+	const navigate = useNavigate();
 
 	// Fetch index on mount (or first open to save bandwidth)
 	useEffect(() => {
@@ -93,7 +93,7 @@ export function SearchUI({ isOpen, onClose }: SearchUIProps) {
 
 	const handleSelect = (url: string) => {
 		onClose();
-		router.push(url);
+		navigate(url);
 	};
 
 	if (!isOpen) {

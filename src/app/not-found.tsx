@@ -1,5 +1,5 @@
 import { ArrowLeft, Compass, Home } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export default function NotFound() {
 	return (
@@ -24,14 +24,14 @@ export default function NotFound() {
 				<div className="flex flex-wrap items-center justify-center gap-3">
 					<Link
 						className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 font-bold text-background transition-all hover:scale-[1.02] hover:opacity-90"
-						href="/"
+						to="/"
 					>
 						<Home size={16} />
 						Go Home
 					</Link>
 					<Link
 						className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 font-bold text-foreground transition-colors hover:border-hot-orange/40 hover:bg-muted"
-						href="/blog"
+						to="/blog"
 					>
 						<ArrowLeft size={16} />
 						Read the Blog

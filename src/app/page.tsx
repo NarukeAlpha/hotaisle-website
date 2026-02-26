@@ -1,14 +1,7 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { PyramidHero } from '@/components/home/PyramidHero';
 import { SecuritySection } from '@/components/home/SecuritySection';
 import { VideoSection } from '@/components/home/VideoSection';
-
-export const metadata: Metadata = {
-	title: 'Hot Aisle | AMD Exclusive AI Cloud',
-	description:
-		'AMD Exclusive AI Cloud. Get direct access to AMD MI300x GPUs and spin up high-performance HBM3 instances in seconds.',
-};
 
 export default function Home() {
 	return (
@@ -24,7 +17,7 @@ export default function Home() {
 				<h2 className="mb-8 font-bold text-4xl">Ready to Accelerate?</h2>
 				<Link
 					className="inline-flex rounded-full bg-white px-8 py-4 font-bold text-hot-orange text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:bg-neutral-100"
-					href="/quick-start"
+					to="/quick-start"
 				>
 					Launch Instance
 				</Link>

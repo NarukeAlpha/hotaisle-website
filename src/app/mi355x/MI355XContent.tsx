@@ -13,8 +13,6 @@ import {
 	X,
 	Zap,
 } from 'lucide-react';
-import Image from 'next/image';
-import Script from 'next/script';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -102,7 +100,7 @@ export default function MI355XContent() {
 							}
 							type="button"
 						>
-							<Image
+							<img
 								alt="Direct Liquid Cooled Design"
 								className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
 								height={600}
@@ -180,7 +178,7 @@ export default function MI355XContent() {
 							}
 							type="button"
 						>
-							<Image
+							<img
 								alt="MI355X Specs"
 								className="w-full bg-white object-contain dark:bg-black/50"
 								height={600}
@@ -215,7 +213,7 @@ export default function MI355XContent() {
 						}
 						type="button"
 					>
-						<Image
+						<img
 							alt="Platform Architecture"
 							className="w-full"
 							height={600}
@@ -241,7 +239,7 @@ export default function MI355XContent() {
 							}
 							type="button"
 						>
-							<Image
+							<img
 								alt="Multi-Chip Architecture"
 								className="h-auto w-full object-contain"
 								height={776}
@@ -370,7 +368,7 @@ export default function MI355XContent() {
 						{/* Tally Form */}
 						<div className="relative overflow-hidden rounded-3xl border-2 border-orange-500/20 bg-card p-2 shadow-2xl">
 							<div className="rounded-[20px] bg-background p-4 md:p-8">
-								<Script
+								<script
 									onLoad={() => {
 										const tally = (
 											window as Window & {
@@ -380,7 +378,6 @@ export default function MI355XContent() {
 										tally?.loadEmbeds();
 									}}
 									src="https://tally.so/widgets/embed.js"
-									strategy="lazyOnload"
 								/>
 								<iframe
 									className="min-h-screen w-full rounded-xl border border-border bg-muted/20 dark:[filter:invert(0.93)_hue-rotate(180deg)]"
@@ -437,7 +434,7 @@ export default function MI355XContent() {
 								>
 									<X size={20} />
 								</button>
-								<Image
+								<img
 									alt={selectedImage.alt}
 									className="h-auto max-h-[88vh] w-full rounded-xl object-contain"
 									height={selectedImage.height}

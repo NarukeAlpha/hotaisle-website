@@ -9,18 +9,6 @@ import {
 	Video,
 	Zap,
 } from 'lucide-react';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-
-export const metadata: Metadata = {
-	title: 'Datacenter | Tier 3+ Secure Facilities',
-	description:
-		'Our datacenters feature 24/7 security, N+1 redundancy, and direct fiber connectivity to ensure 99.99% uptime for your AI infrastructure.',
-	openGraph: {
-		title: 'Datacenter | Tier 3+ Secure Facilities',
-		description: '24/7 security, N+1 redundancy, and direct fiber connectivity.',
-	},
-};
 
 const advantages = [
 	{
@@ -104,13 +92,12 @@ export default function DatacenterPage() {
 					{/* Hero Image - Inside View */}
 					<div className="relative w-full flex-1">
 						<div className="relative aspect-video overflow-hidden rounded-2xl border-4 border-background shadow-2xl">
-							<Image
+							<img
 								alt="Switch Datacenter Interior"
-								className="object-cover transition-transform duration-700 hover:scale-105"
-								fill
-								priority
-								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+								className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+								height={1080}
 								src="/assets/datacentre/inside.png"
+								width={1920}
 							/>
 						</div>
 						<div className="absolute -bottom-6 -left-6 flex items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-lg">
@@ -163,13 +150,16 @@ export default function DatacenterPage() {
 				<div className="container mx-auto flex max-w-7xl flex-col items-center gap-16 lg:flex-row">
 					{/* Outside Image */}
 					<div className="order-2 w-full flex-1 lg:order-1">
-						<div className="relative aspect-4/3 overflow-hidden rounded-2xl border-4 border-background shadow-2xl">
-							<Image
+						<div
+							className="relative overflow-hidden rounded-2xl border-4 border-background shadow-2xl"
+							style={{ aspectRatio: '4/3' }}
+						>
+							<img
 								alt="Switch Pyramid Datacenter Exterior"
-								className="object-cover"
-								fill
-								sizes="(max-width: 1024px) 100vw, 50vw"
+								className="h-full w-full object-cover"
+								height={1080}
 								src="/assets/datacentre/outside.png"
+								width={1920}
 							/>
 							<div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-8">
 								<div className="text-white">

@@ -1,33 +1,44 @@
+'use client';
+
 import { ChevronLeft, FileText } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getAllSlugs, getPageContent } from '@/lib/content';
+import { useEffect, useState } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { getPageContent, type PageData } from '@/lib/content';
 
-interface Props {
-	params: Promise<{ slug: string }>;
-}
+export default function PolicyPage() {
+	const { slug } = useParams<{ slug: string }>();
+	const [page, setPage] = useState<PageData | null>(null);
+	const [loading, setLoading] = useState(true);
 
-export function generateStaticParams() {
-	const slugs = getAllSlugs('policies');
-	return slugs.map((slug) => ({ slug }));
-}
+	useEffect(() => {
+		let mounted = true;
+		async function loadPage() {
+			if (!slug) {
+				setLoading(false);
+				return;
+			}
+			const content = await getPageContent('policies', slug);
+			if (mounted) {
+				setPage(content);
+				setLoading(false);
+			}
+		}
+		loadPage().catch(() => {
+			if (mounted) {
+				setLoading(false);
+			}
+		});
+		return () => {
+			mounted = false;
+		};
+	}, [slug]);
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-	const params = await props.params;
-	const page = await getPageContent('policies', params.slug);
-	if (!page) {
-		return { title: 'Not Found' };
+	if (loading) {
+		return <div>Loading...</div>;
 	}
-	return { title: page.title, description: page.description };
-}
-
-export default async function PolicyPage(props: Props) {
-	const params = await props.params;
-	const page = await getPageContent('policies', params.slug);
 
 	if (!page) {
-		return notFound();
+		return <Navigate replace to="/404" />;
 	}
 
 	return (
@@ -37,7 +48,7 @@ export default async function PolicyPage(props: Props) {
 			<div className="sticky top-0 z-50 -mx-6 mb-8 border-transparent border-b bg-background/80 px-6 py-4 backdrop-blur-md transition-all data-[stuck=true]:border-border">
 				<Link
 					className="inline-flex items-center font-medium text-muted-foreground text-sm transition-colors hover:text-arctic-blue"
-					href="/policies"
+					to="/policies"
 				>
 					<ChevronLeft className="mr-1" size={16} />
 					Back to Policies

@@ -1,11 +1,5 @@
 import { FileText, Info, Lock, Server, Shield, Users } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Policies | Hot Aisle',
-	description: 'Legal documentation, terms of service, and compliance policies.',
-};
+import { Link } from 'react-router-dom';
 
 const policies = [
 	{
@@ -62,8 +56,8 @@ export default function PoliciesIndexPage() {
 				{policies.map((p) => (
 					<Link
 						className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-arctic-blue/50 hover:shadow-lg"
-						href={`/policies/${p.slug}`}
 						key={p.slug}
+						to={`/policies/${p.slug}`}
 					>
 						<div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-arctic-blue/10">
 							<p.icon

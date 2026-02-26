@@ -1,14 +1,35 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { BlogIndex } from '@/components/blog/BlogIndex';
-import { getAllBlogPosts } from '@/lib/content';
+import { type BlogPost, getAllBlogPosts } from '@/lib/content';
 
-export const metadata: Metadata = {
-	title: 'Blog | Hot Aisle',
-	description: 'Insights, announcements, and thoughts from the Hot Aisle team.',
-};
+export default function BlogPage() {
+	const [posts, setPosts] = useState<BlogPost[]>([]);
+	const [loading, setLoading] = useState(true);
 
-export default async function BlogPage() {
-	const posts = await getAllBlogPosts();
+	useEffect(() => {
+		let mounted = true;
+		async function loadPosts() {
+			const blogPosts = await getAllBlogPosts();
+			if (mounted) {
+				setPosts(blogPosts);
+				setLoading(false);
+			}
+		}
+		loadPosts().catch(() => {
+			if (mounted) {
+				setLoading(false);
+			}
+		});
+		return () => {
+			mounted = false;
+		};
+	}, []);
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className="container mx-auto min-h-screen px-6 py-8 md:py-12">

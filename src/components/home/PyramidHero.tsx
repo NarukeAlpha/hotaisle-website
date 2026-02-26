@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRight, Zap } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 export function PyramidHero() {
 	const rackDepths = [16, -36, -88, -140, -192, -244, -296, -348];
@@ -106,7 +106,7 @@ export function PyramidHero() {
 				<div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
 					<Link
 						className="group relative overflow-hidden rounded-full bg-hot-orange px-8 py-4 font-bold text-lg text-white shadow-hot-orange/30 shadow-lg transition-all hover:scale-105 hover:shadow-hot-orange/50"
-						href="/quick-start"
+						to="/quick-start"
 					>
 						<div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />
 						<div className="relative flex items-center gap-2">
@@ -115,7 +115,7 @@ export function PyramidHero() {
 					</Link>
 					<Link
 						className="flex items-center gap-2 rounded-full border border-border bg-muted/50 px-8 py-4 font-bold text-foreground text-lg transition-all hover:bg-muted"
-						href="/pricing"
+						to="/pricing"
 					>
 						See Pricing <ArrowRight size={18} />
 					</Link>

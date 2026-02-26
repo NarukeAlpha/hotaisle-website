@@ -1,11 +1,5 @@
 import { BookOpen, Box, Code, Mail, Server, Terminal } from 'lucide-react';
-import type { Metadata } from 'next';
 import CopyCommand from '@/components/CopyCommand';
-
-export const metadata: Metadata = {
-	title: 'Quick Start | Hot Aisle',
-	description: 'Get started with Hot Aisle in seconds. SSH access, credits, and instant compute.',
-};
 
 export default function QuickStartPage() {
 	return (

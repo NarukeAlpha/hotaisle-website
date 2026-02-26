@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import type { BlogPost } from '@/lib/content';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -15,8 +15,8 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 			{posts.map((post) => (
 				<Link
 					className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg dark:hover:border-arctic-blue/50"
-					href={`/blog/${post.slug}`}
 					key={post.slug}
+					to={`/blog/${post.slug}`}
 				>
 					{/* Image */}
 					<div className="relative h-48 w-full overflow-hidden bg-muted">

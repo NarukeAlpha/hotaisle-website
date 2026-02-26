@@ -1,16 +1,5 @@
 import { Activity, ArrowRight, Cpu, Globe, Network, ShieldCheck, Zap } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Networking | 400Gbps InfiniBand Fabric',
-	description:
-		'Low-latency, high-throughput networking designed for distributed training. 400Gbps InfiniBand per node ensures linear scaling.',
-	openGraph: {
-		title: 'Networking | 400Gbps InfiniBand Fabric',
-		description: 'Low-latency, high-throughput networking designed for distributed training.',
-	},
-};
+import { Link } from 'react-router-dom';
 
 const fabric = [
 	{
@@ -233,7 +222,7 @@ export default function NetworkingPage() {
 					</p>
 					<Link
 						className="inline-block rounded-full bg-foreground px-10 py-4 font-bold text-background text-lg transition-transform hover:scale-105 hover:opacity-90"
-						href="mailto:hello@hotaisle.ai"
+						to="mailto:hello@hotaisle.ai"
 					>
 						Contact Network Team
 					</Link>

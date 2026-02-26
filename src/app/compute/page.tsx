@@ -1,18 +1,5 @@
 import { Server, ShieldCheck } from 'lucide-react';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Supercomputer | AMD MI300x Clusters',
-	description:
-		"Scale your AI training with 192GB HBM3 memory per GPU. Hot Aisle's bare-metal AMD MI300x clusters are built for massive LLM workloads.",
-	openGraph: {
-		title: 'Supercomputer | AMD MI300x Clusters',
-		description:
-			'Scale your AI training with 192GB HBM3 memory per GPU. Custom clusters available.',
-	},
-};
+import { Link } from 'react-router-dom';
 
 const specs = [
 	{
@@ -81,13 +68,13 @@ export default function ComputePage() {
 						<div className="flex flex-wrap gap-4">
 							<Link
 								className="rounded-lg bg-foreground px-8 py-4 font-bold text-background transition-transform hover:scale-105 hover:opacity-90"
-								href="/quick-start"
+								to="/quick-start"
 							>
 								Reserve Now
 							</Link>
 							<Link
 								className="rounded-lg border border-border px-8 py-4 font-bold text-foreground transition-colors hover:bg-muted"
-								href="#specs"
+								to="#specs"
 							>
 								View Specs
 							</Link>
@@ -97,11 +84,10 @@ export default function ComputePage() {
 					{/* Hero Image */}
 					<div className="group relative w-full flex-1">
 						<div className="relative overflow-hidden rounded-3xl border border-border p-8 shadow-2xl">
-							<Image
+							<img
 								alt="Dell PowerEdge XE9680"
 								className="h-auto w-full object-contain transition-transform duration-700 hover:scale-105"
 								height={600}
-								priority
 								src="/assets/compute/hero.png"
 								width={800}
 							/>
@@ -264,7 +250,7 @@ export default function ComputePage() {
 						{/* Racks Image Visual */}
 						<div className="relative">
 							<div className="relative z-10 overflow-hidden rounded-2xl border-4 border-background shadow-2xl">
-								<Image
+								<img
 									alt="Hot Aisle Server Racks"
 									className="h-auto w-full object-cover"
 									height={800}
@@ -274,7 +260,7 @@ export default function ComputePage() {
 							</div>
 							{/* Decorative GPU image overlay */}
 							<div className="absolute -bottom-12 -left-12 z-20 hidden h-48 w-48 overflow-hidden rounded-2xl border-4 border-background shadow-2xl md:block">
-								<Image
+								<img
 									alt="AMD MI300X Detail"
 									className="h-full w-full object-cover"
 									height={200}

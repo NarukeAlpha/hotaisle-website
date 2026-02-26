@@ -1,8 +1,8 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { BlogPost } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
@@ -60,7 +60,7 @@ export function BlogHero({ posts }: { posts: BlogPost[] }) {
 								</span>
 							))}
 						</div>
-						<Link href={`/blog/${post.slug}`}>
+						<Link to={`/blog/${post.slug}`}>
 							<h2 className="mb-4 font-bold text-3xl text-foreground leading-tight transition-colors hover:text-arctic-blue md:text-5xl">
 								{post.title}
 							</h2>
@@ -70,7 +70,7 @@ export function BlogHero({ posts }: { posts: BlogPost[] }) {
 						</p>
 						<Link
 							className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-							href={`/blog/${post.slug}`}
+							to={`/blog/${post.slug}`}
 						>
 							Read Article
 						</Link>

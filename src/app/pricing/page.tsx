@@ -1,17 +1,5 @@
 import { Check, Server, Shield, Zap } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Pricing | $1.99/hr AMD MI300x',
-	description:
-		'Transparent pricing with no hidden fees. Start instancing AMD MI300x GPUs for as low as $1.99/hr. Reserve dedicated clusters for enterprise needs.',
-	openGraph: {
-		title: 'Pricing | $1.99/hr AMD MI300x',
-		description:
-			'Transparent pricing. Start instancing AMD MI300x GPUs for as low as $1.99/hr.',
-	},
-};
+import { Link } from 'react-router-dom';
 
 export default function PricingPage() {
 	return (
@@ -19,7 +7,7 @@ export default function PricingPage() {
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-orange-500 to-red-600 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
 				🔥 We are now accepting MI355x reservations!{' '}
-				<Link className="ml-2 underline hover:text-white/90" href="/mi355x">
+				<Link className="ml-2 underline hover:text-white/90" to="/mi355x">
 					Reserve now
 				</Link>
 			</div>
@@ -80,7 +68,7 @@ export default function PricingPage() {
 						</ul>
 						<Link
 							className="w-full rounded-lg bg-foreground py-3 text-center font-bold text-background transition-colors hover:bg-foreground/90"
-							href="/quick-start"
+							to="/quick-start"
 						>
 							Deploy Small
 						</Link>
@@ -125,7 +113,7 @@ export default function PricingPage() {
 						</ul>
 						<Link
 							className="w-full rounded-lg bg-arctic-blue py-3 text-center font-bold text-white shadow-arctic-blue/20 shadow-lg transition-colors hover:bg-arctic-blue/90 dark:text-neutral-900"
-							href="/quick-start"
+							to="/quick-start"
 						>
 							Deploy Medium
 						</Link>
@@ -167,7 +155,7 @@ export default function PricingPage() {
 						</ul>
 						<Link
 							className="w-full rounded-lg bg-foreground py-3 text-center font-bold text-background transition-colors hover:bg-foreground/90"
-							href="/quick-start"
+							to="/quick-start"
 						>
 							Deploy Large
 						</Link>
@@ -234,7 +222,7 @@ export default function PricingPage() {
 					</p>
 					<Link
 						className="rounded-lg bg-foreground px-6 py-2 font-bold text-background transition-colors hover:opacity-90"
-						href="/mi355x"
+						to="/mi355x"
 					>
 						Reserve Now
 					</Link>

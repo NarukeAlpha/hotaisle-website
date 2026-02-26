@@ -17,9 +17,8 @@ import {
 	Server,
 	Zap,
 } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { SearchUI } from '@/components/search/SearchUI';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './ThemeToggle';
@@ -55,7 +54,8 @@ export function Sidebar() {
 	// but user specifically requested "collapsed by default" on mobile.
 	const [collapsed, setCollapsed] = useState(false);
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
-	const pathname = usePathname();
+	const location = useLocation();
+	const pathname = location.pathname;
 
 	const [tooltip, setTooltip] = useState<{ label: string; y: number } | null>(null);
 
@@ -114,7 +114,7 @@ export function Sidebar() {
 				<Link
 					aria-label="Home"
 					className="flex h-full w-full items-center justify-center"
-					href="/"
+					to="/"
 				>
 					{/* Full Logo (Visible when Expanded) */}
 					<div
@@ -209,11 +209,11 @@ export function Sidebar() {
 									: 'text-muted-foreground',
 								collapsed ? 'justify-center px-2' : ''
 							)}
-							href={item.href}
 							key={item.href}
 							onClick={handleLinkClick}
 							onMouseEnter={(e) => handleMouseEnter(e, item.label)}
 							onMouseLeave={handleMouseLeave}
+							to={item.href}
 						>
 							<Icon className={cn('h-5 w-5 shrink-0', collapsed ? 'mr-0' : 'mr-3')} />
 							{!collapsed && <span className="whitespace-nowrap">{item.label}</span>}
@@ -242,9 +242,9 @@ export function Sidebar() {
 						</button>
 						<Link
 							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
-							href="/contact"
 							onMouseEnter={(e) => handleMouseEnter(e, 'Contact Us')}
 							onMouseLeave={handleMouseLeave}
+							to="/contact"
 						>
 							<Mail size={20} />
 						</Link>
@@ -266,7 +266,7 @@ export function Sidebar() {
 						<div className="flex flex-col items-end">
 							<Link
 								className="group/link mb-1 flex items-center gap-1 font-medium text-sm transition-colors hover:text-hot-orange"
-								href="/contact"
+								to="/contact"
 							>
 								Say hello
 								<ChevronRight

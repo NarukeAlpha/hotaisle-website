@@ -2,46 +2,43 @@
 	"name": "hotaisle-next",
 	"version": "0.1.0",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"generate:blog": "bun run scripts/generate_blog_data.ts",
 		"generate:static-content": "bun run scripts/generate_static_content_data.ts",
 		"generate:content": "bun run generate:blog && bun run generate:static-content",
 		"prebuild": "bun run generate:content",
-		"prepreview": "bun run generate:content",
-		"predeploy": "bun run generate:content",
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview",
 		"check": "bun ./node_modules/ultracite/dist/index.js check",
-		"fix": "bun ./node_modules/ultracite/dist/index.js fix",
-		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+		"fix": "bun ./node_modules/ultracite/dist/index.js fix"
 	},
 	"dependencies": {
-		"@opennextjs/cloudflare": "^1.16.5",
 		"@tailwindcss/typography": "^0.5.19",
 		"clsx": "^2.1.1",
 		"gray-matter": "^4.0.3",
 		"lucide-react": "^0.575.0",
-		"next": "16.1.6",
-		"next-themes": "^0.4.6",
 		"react": "19.2.4",
 		"react-dom": "19.2.4",
+		"react-router-dom": "^7.13.1",
 		"remark": "^15.0.1",
 		"remark-gfm": "^4.0.1",
 		"remark-html": "^16.0.1",
-		"tailwind-merge": "^3.5.0"
+		"tailwind-merge": "^3.5.0",
+		"use-local-storage-state": "^19.5.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.3",
-		"@tailwindcss/postcss": "^4.2.0",
-		"@types/node": "^25.3.0",
+		"@biomejs/biome": "^2.4.4",
+		"@tailwindcss/postcss": "^4.2.1",
+		"@types/node": "^25.3.1",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
-		"tailwindcss": "^4.2.0",
+		"@vitejs/plugin-react": "^5.1.4",
+		"tailwindcss": "^4.2.1",
 		"typescript": "^5.9.3",
-		"ultracite": "^7.2.3",
-		"wrangler": "^4.67.0"
+		"ultracite": "^7.2.4",
+		"vinext": "^0.0.10",
+		"vite": "^7.3.1"
 	}
 }

@@ -9,15 +9,7 @@ import {
 	Users,
 	Zap,
 } from 'lucide-react';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Cluster Design & Deploy | Hot Aisle',
-	description:
-		"Unlock the full potential of AI & HPC with Hot Aisle's advanced cluster solutions. Trusted expertise, cutting-edge hardware, and custom consulting.",
-};
+import { Link } from 'react-router-dom';
 
 const clusters = [
 	{
@@ -103,11 +95,10 @@ export default function ClusterPage() {
 
 					{/* Cluster Photo */}
 					<div className="mx-auto mb-12 max-w-md rounded-3xl border border-border bg-card p-4 shadow-sm">
-						<Image
+						<img
 							alt="Hot Aisle cluster setup with Powered by AMD signage"
 							className="h-auto w-full rounded-2xl object-cover"
 							height={679}
-							priority
 							src="/assets/cluster/cluster-powered-by-amd.webp"
 							width={456}
 						/>
@@ -123,13 +114,13 @@ export default function ClusterPage() {
 					<div className="flex flex-col justify-center gap-6 md:flex-row">
 						<Link
 							className="rounded-full bg-foreground px-10 py-4 font-bold text-background text-lg transition-transform hover:scale-105 hover:opacity-90"
-							href="/contact"
+							to="/contact"
 						>
 							Start Your Deployment
 						</Link>
 						<Link
 							className="rounded-full border border-border bg-background px-10 py-4 font-bold text-foreground text-lg transition-colors hover:bg-muted"
-							href="#clusters"
+							to="#clusters"
 						>
 							Explore Clusters
 						</Link>
@@ -216,7 +207,7 @@ export default function ClusterPage() {
 							</p>
 							<Link
 								className="flex items-center gap-1 font-bold text-arctic-blue transition-colors hover:text-foreground"
-								href="/contact"
+								to="/contact"
 							>
 								Talk to an Architect <ArrowRight size={16} />
 							</Link>
@@ -277,7 +268,7 @@ export default function ClusterPage() {
 					</p>
 					<Link
 						className="inline-block rounded-full bg-background px-12 py-5 font-bold text-foreground text-xl transition-transform hover:scale-105"
-						href="/contact"
+						to="/contact"
 					>
 						Contact Us Today
 					</Link>

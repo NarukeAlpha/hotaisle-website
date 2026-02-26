@@ -1,12 +1,5 @@
 import { Cpu, Database, ExternalLink, Globe, Handshake, Server } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Partners | Hot Aisle',
-	description:
-		'Our ecosystem of trusted hardware, software, and deployment partners. Hot Aisle is laser-focused on delivering bare metal hardware.',
-};
+import { Link } from 'react-router-dom';
 
 const introText = [
 	'Our partners are one of our most valuable assets, and our ecosystem reflects how we operate today: tight collaboration across hardware, orchestration, networking, and performance engineering.',
@@ -159,7 +152,7 @@ export default function PartnersPage() {
 					</p>
 					<Link
 						className="inline-block rounded-lg bg-muted px-8 py-3 font-bold text-foreground transition-colors hover:bg-foreground hover:text-background"
-						href="mailto:hello@hotaisle.ai"
+						to="mailto:hello@hotaisle.ai"
 					>
 						Contact Partner Team
 					</Link>

@@ -1,8 +1,9 @@
+'use client';
+
 import { ArrowLeft, Calendar } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getAllSlugs, getPageContent } from '@/lib/content';
+import { useEffect, useState } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { getPageContent, type PageData } from '@/lib/content';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',
@@ -11,35 +12,30 @@ const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	timeZone: 'UTC',
 });
 
-interface Props {
-	params: Promise<{ slug: string }>;
-}
+export default function BlogPostPage() {
+	const { slug } = useParams<{ slug: string }>();
+	const [post, setPost] = useState<PageData | null>(null);
+	const [loading, setLoading] = useState(true);
 
-export function generateStaticParams() {
-	const slugs = getAllSlugs('blog');
-	return slugs.map((slug) => ({ slug }));
-}
+	useEffect(() => {
+		async function loadPost() {
+			if (!slug) {
+				setLoading(false);
+				return;
+			}
+			const content = await getPageContent('blog', slug);
+			setPost(content);
+			setLoading(false);
+		}
+		loadPost();
+	}, [slug]);
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-	const params = await props.params;
-	const post = await getPageContent('blog', params.slug);
-
-	if (!post) {
-		return { title: 'Not Found' };
+	if (loading) {
+		return <div>Loading...</div>;
 	}
 
-	return {
-		title: post.metaTitle ?? post.title,
-		description: post.metaDescription ?? post.description,
-	};
-}
-
-export default async function BlogPostPage(props: Props) {
-	const params = await props.params;
-	const post = await getPageContent('blog', params.slug);
-
 	if (!post) {
-		return notFound();
+		return <Navigate replace to="/404" />;
 	}
 
 	return (
@@ -60,7 +56,7 @@ export default async function BlogPostPage(props: Props) {
 				<div className="container absolute inset-0 z-10 mx-auto flex max-w-4xl flex-col justify-end px-6 pb-12">
 					<Link
 						className="group mb-8 inline-flex items-center font-bold text-muted-foreground text-sm uppercase tracking-wide transition-colors hover:text-foreground"
-						href="/blog"
+						to="/blog"
 					>
 						<ArrowLeft
 							className="mr-2 transition-transform group-hover:-translate-x-1"
@@ -70,7 +66,7 @@ export default async function BlogPostPage(props: Props) {
 					</Link>
 
 					<div className="mb-6 flex flex-wrap gap-2">
-						{post.tags?.map((tag) => (
+						{post.tags?.map((tag: string) => (
 							<span
 								className="rounded-full border border-arctic-blue/20 bg-arctic-blue/10 px-3 py-1 font-bold text-arctic-blue text-xs uppercase tracking-wider backdrop-blur-sm"
 								key={tag}
@@ -108,7 +104,7 @@ export default async function BlogPostPage(props: Props) {
 					<h3 className="mb-6 font-bold text-2xl">More from Hot Aisle</h3>
 					<Link
 						className="inline-flex rounded-full border border-border bg-muted px-8 py-3 font-bold text-foreground transition-all hover:border-arctic-blue/30 hover:bg-muted/80"
-						href="/blog"
+						to="/blog"
 					>
 						Read More Articles
 					</Link>

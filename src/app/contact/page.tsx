@@ -1,10 +1,3 @@
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-	title: 'Contact | Hot Aisle',
-	description: 'Get in touch with the Hot Aisle team.',
-};
-
 export default function ContactPage() {
 	return (
 		<div className="animation-fade-in min-h-screen bg-background px-6 py-16 text-foreground">

@@ -1,11 +1,4 @@
 import { Lightbulb, Linkedin, Users } from 'lucide-react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-	title: 'About Us | Hot Aisle',
-	description:
-		'Founded by technical experts Jon Stevens and Clint Armstrong. Backed by industry leaders.',
-};
 
 export default function AboutPage() {
 	return (

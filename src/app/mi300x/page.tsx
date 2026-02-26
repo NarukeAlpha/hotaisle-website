@@ -1,13 +1,5 @@
 import { ArrowRight, BarChart2, Check, Cpu, Layers, Server, Share2, Zap } from 'lucide-react';
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'AMD Instinct MI300X | Hot Aisle',
-	description:
-		'Leading-Edge accelerator for generative AI. 192GB HBM3 memory, 5.3 TB/s bandwidth.',
-};
+import { Link } from 'react-router-dom';
 
 export default function MI300XPage() {
 	return (
@@ -15,7 +7,7 @@ export default function MI300XPage() {
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-emerald-900 to-green-800 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
 				🔥 We are now accepting MI355x reservations!{' '}
-				<Link className="ml-2 underline hover:text-white/90" href="/mi355x">
+				<Link className="ml-2 underline hover:text-white/90" to="/mi355x">
 					Reserve now
 				</Link>
 			</div>
@@ -72,13 +64,13 @@ export default function MI300XPage() {
 							<div className="flex flex-wrap gap-4">
 								<Link
 									className="rounded-full bg-orange-600 px-8 py-4 font-bold text-lg text-white shadow-lg shadow-orange-500/20 transition-all hover:scale-105 hover:bg-orange-700"
-									href="/quick-start"
+									to="/quick-start"
 								>
 									Deploy MI300X
 								</Link>
 								<Link
 									className="flex items-center rounded-full border border-border bg-muted px-8 py-4 font-bold text-foreground text-lg transition-all hover:bg-muted/80"
-									href="/benchmarks-and-analysis"
+									to="/benchmarks-and-analysis"
 								>
 									View Benchmarks <ArrowRight className="ml-2" size={18} />
 								</Link>
@@ -86,12 +78,10 @@ export default function MI300XPage() {
 						</div>
 						<div className="relative w-full flex-1">
 							<div className="relative flex aspect-square items-center justify-center">
-								<Image
+								<img
 									alt="AMD Instinct MI300X"
 									className="relative z-20 mx-auto w-full max-w-2xl drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
 									height={745}
-									priority
-									sizes="(max-width: 1024px) 90vw, 48vw"
 									src="/assets/compute/gpu.png"
 									width={864}
 								/>
@@ -296,7 +286,7 @@ export default function MI300XPage() {
 					</p>
 					<Link
 						className="inline-flex items-center font-bold text-orange-500 hover:underline"
-						href="/quick-start"
+						to="/quick-start"
 					>
 						Ready to deploy? Get started now <ArrowRight className="ml-2" size={16} />
 					</Link>

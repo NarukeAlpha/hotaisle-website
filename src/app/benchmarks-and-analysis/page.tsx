@@ -1,12 +1,5 @@
 import { ArrowRight, BarChart2, Cpu, ExternalLink, FileText, Zap } from 'lucide-react';
-import type { Metadata } from 'next';
-import Link from 'next/link';
-
-export const metadata: Metadata = {
-	title: 'Benchmarks & Analysis | Hot Aisle',
-	description:
-		'Performance metrics, efficiency data, and expert analysis for AMD Instinct MI300x vs NVIDIA H100/H200.',
-};
+import { Link } from 'react-router-dom';
 
 const benchmarks = [
 	{
@@ -139,7 +132,7 @@ export default function BenchmarksPage() {
 				<div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-neutral-100 via-background to-background dark:from-neutral-900 dark:via-background dark:to-background" />
 
 				<div className="container relative z-10 mx-auto max-w-4xl text-center">
-					<h1 className="mb-8 bg-linear-to-r from-neutral-900 to-neutral-600 bg-clip-text font-black text-5xl text-transparent tracking-tighter md:text-7xl dark:from-white dark:to-neutral-400">
+					<h1 className="mb-8 bg-linear-to-r from-foreground to-foreground bg-clip-text font-black text-5xl text-transparent tracking-tighter md:text-7xl">
 						Benchmarks & <span className="text-arctic-blue">Analysis</span>
 					</h1>
 
@@ -172,9 +165,9 @@ export default function BenchmarksPage() {
 					{benchmarks.map((b) => (
 						<Link
 							className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-arctic-blue/50 hover:shadow-xl"
-							href={b.url}
 							key={b.url}
 							target="_blank"
+							to={b.url}
 						>
 							<div className="mb-4 flex items-start justify-between">
 								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors duration-300 group-hover:bg-arctic-blue/10 group-hover:text-arctic-blue">
@@ -211,7 +204,7 @@ export default function BenchmarksPage() {
 					</p>
 					<Link
 						className="inline-flex rounded-full bg-arctic-blue px-8 py-3 font-bold text-white transition-all hover:scale-105 hover:bg-arctic-blue/90 dark:text-neutral-950"
-						href="/quick-start"
+						to="/quick-start"
 					>
 						Start Benchmarking Today
 					</Link>
