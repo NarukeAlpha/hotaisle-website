@@ -122,7 +122,7 @@ export function PyramidHero() {
 				</div>
 
 				<p className="mt-6 text-base text-muted-foreground opacity-80">
-					No Contracts. No Commitments. Just $1.99/hr.
+					No Contracts. No Commitments. No Drama. Just $1.99/hr.
 				</p>
 			</div>
 
