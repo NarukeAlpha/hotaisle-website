@@ -15,6 +15,10 @@
 
 This repository contains the frontend application that powers **[hotaisle.xyz](https://hotaisle.xyz)**.
 
+## Hosting
+
+The site is hosted on CloudFlare workers and is just static generated without any connections to anything. We could have some dynamic aspects some day. Have fun hackers.
+
 ## ✨ Key Features
 
 -   **🔥 3D Hero**: A custom, CSS-driven 3D animation.
@@ -40,9 +44,6 @@ This repository contains the frontend application that powers **[hotaisle.xyz](h
 
     Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Hosting
-
-The site is hosted on CloudFlare workers and is just static generated without any connections to anything. We could have some dynamic aspects some day. Have fun hackers.
 
 ## 📂 Project Structure
 
