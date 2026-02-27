@@ -1,25 +1,25 @@
-# Connecting OpenCode to vLLM on HotAisle
+# Connecting OpenCode to vLLM on Hot Aisle
 
 Slug: opencode-vllm-hotaisle
 Publish: Yes
-Meta Title: Connecting OpenCode to vLLM on HotAisle
-Meta Description: Step-by-step guide to running OpenCode against a self-hosted vLLM server on HotAisle using an AMD MI300X, with notes on tool calling, SSH tunneling, and GPU memory concurrency tradeoffs.
-Meta Keywords: Hot Aisle, HotAisle, vLLM, OpenCode, AMD, MI300X, ROCm, coding agents, tool calling, KV cache, concurrency, SSH tunnel
+Meta Title: Connecting OpenCode to vLLM on Hot Aisle
+Meta Description: Step-by-step guide to running OpenCode against a self-hosted vLLM server on Hot Aisle using an AMD MI300X, with notes on tool calling, SSH tunneling, and GPU memory concurrency tradeoffs.
+Meta Keywords: Hot Aisle, vLLM, OpenCode, AMD, MI300X, ROCm, coding agents, tool calling, KV cache, concurrency, SSH tunnel
 Author: Melissa Palmer
 Date: 02/26/2026
-Description: Step-by-step guide to connecting OpenCode to a self-hosted vLLM instance on HotAisle using an AMD MI300X GPU.  Includes tool calling flags, SSH tunneling, and how context length impacts KV cache and concurrency.
+Description: Step-by-step guide to connecting OpenCode to a self-hosted vLLM instance on Hot Aisle using an AMD MI300X GPU.  Includes tool calling flags, SSH tunneling, and how context length impacts KV cache and concurrency.
 Featured: No
 Tags: GPU, vLLM, OpenCode, ROCm, Agents
 
-# Connecting OpenCode to vLLM on HotAisle
+# Connecting OpenCode to vLLM on Hot Aisle
 
-If you’re looking for effectively unlimited tokens with a predictable hourly cost, connecting OpenCode to a self-hosted vLLM instance on HotAisle is a great way to get out of token jail.
+If you're looking for effectively unlimited tokens with a predictable hourly cost, connecting OpenCode to a self-hosted vLLM instance on Hot Aisle is a great way to get out of token jail.
 
 Instead of paying per request, you run your own model on dedicated GPUs and let OpenCode interact with it over an API endpoint just like a hosted provider.  The difference is that you control the hardware, the cost model, and the data.
 
 Because the model runs on dedicated GPU infrastructure, costs are tied to hardware time rather than per-token usage.  This can be helpful during development and experimentation, since iterative workflows such as coding agents often involve many repeated prompts, tool calls, and refinements.  When the infrastructure is already running, additional experimentation does not change costs until you scale the hardware itself, which can make it easier to explore configurations and workflows without constantly thinking about token consumption.
 
-In this guide, we’ll deploy a VM on HotAisle and connect it to OpenCode using vLLM as the inference server.  The VM used in this example includes 1 × AMD MI300X GPU with 192 GB of VRAM.  For the model, we are using **Qwen/Qwen3-Coder-30B-A3B-Instruct**, which has been working well for coding workflows.  We’ll also cover a few important configuration details that matter specifically for coding agents.
+In this guide, we'll deploy a VM on Hot Aisle and connect it to OpenCode using vLLM as the inference server.  The VM used in this example includes 1 × AMD MI300X GPU with 192 GB of VRAM.  For the model, we are using **Qwen/Qwen3-Coder-30B-A3B-Instruct**, which has been working well for coding workflows.  We'll also cover a few important configuration details that matter specifically for coding agents.
 
 ## **What is OpenCode?**
 
@@ -27,29 +27,29 @@ OpenCode is an open-source coding agent and developer assistant that connects to
 
 It supports multiple model providers, including self-hosted inference servers like vLLM, allowing you to run coding agents on your own infrastructure instead of relying on hosted APIs.  You can learn more about OpenCode and install it from the official site: https://opencode.ai
 
-## **HotAisle + vLLM Basics**
+## **Hot Aisle + vLLM Basics**
 
-New to HotAisle or vLLM? Here’s what to know before we get started.
+New to Hot Aisle or vLLM? Here's what to know before we get started.
 
-HotAisle provides access to dedicated GPU infrastructure with predictable hourly pricing, which makes it a great fit for running your own models instead of paying per-token API costs. Instead of sending prompts to a hosted provider, you deploy a virtual machine with GPUs, load a model locally, and expose it through an API endpoint.
+Hot Aisle provides access to dedicated GPU infrastructure with predictable hourly pricing, which makes it a great fit for running your own models instead of paying per-token API costs. Instead of sending prompts to a hosted provider, you deploy a virtual machine with GPUs, load a model locally, and expose it through an API endpoint.
 
 vLLM is the component that makes this practical. It is an optimized inference server designed for large language models that focuses on efficient GPU utilization, high throughput, and fast response times. vLLM handles model loading, token generation, batching, and memory management (including KV cache allocation), and exposes an OpenAI-compatible API that tools like OpenCode can connect to directly. In other words, vLLM is the bridge between your GPU hardware and your coding assistant.
 
-In this setup, OpenCode runs locally on your machine while the language model runs remotely on a HotAisle GPU VM. The two communicate over a secure SSH tunnel, allowing OpenCode to interact with the remote model just like it would with a hosted API provider.
+In this setup, OpenCode runs locally on your machine while the language model runs remotely on a Hot Aisle GPU VM. The two communicate over a secure SSH tunnel, allowing OpenCode to interact with the remote model just like it would with a hosted API provider.
 
-vLLM runs inside a Docker container on the HotAisle VM and exposes an OpenAI-compatible API endpoint that OpenCode connects to. This separation allows you to use powerful remote GPUs while keeping your development workflow local.  Running vLLM in Docker simplifies dependency management and makes deployments reproducible, since the ROCm runtime, model libraries, and server configuration are packaged together rather than installed directly on the host operating system.
+vLLM runs inside a Docker container on the Hot Aisle VM and exposes an OpenAI-compatible API endpoint that OpenCode connects to. This separation allows you to use powerful remote GPUs while keeping your development workflow local.  Running vLLM in Docker simplifies dependency management and makes deployments reproducible, since the ROCm runtime, model libraries, and server configuration are packaged together rather than installed directly on the host operating system.
 
 Essentially, the architecture looks like this:
 
 ```
-OpenCode → SSH Tunnel → HotAisle VM → vLLM → GPU → Model
+OpenCode → SSH Tunnel → Hot Aisle VM → vLLM → GPU → Model
 ```
 
 Now, let's walk through getting started.
 
 ## Deploying Your VM and Model
 
-HotAisle is simple to get started with.  You can start with issuing the following command at your terminal:
+Hot Aisle is simple to get started with.  You can start with issuing the following command at your terminal:
 
 ```
 ssh admin.hotaisle.app
@@ -57,9 +57,9 @@ ssh admin.hotaisle.app
 
 Yes, that's really it.  You can find more details at the [quick-start guide here.](https://hotaisle.xyz/quick-start)
 
-While you're in the HotAisle TUI, we will also need to generate an API token and take note of our team name when we create it, because we will need them to deploy a VM with cloud-init.
+While you're in the Hot Aisle TUI, we will also need to generate an API token and take note of our team name when we create it, because we will need them to deploy a VM with cloud-init.
 
-HotAisle has cloud-init templates here: https://github.com/hotaisle/cloud-init-templates, along with a walk through to get started.
+Hot Aisle has cloud-init templates here: https://github.com/hotaisle/cloud-init-templates, along with a walk through to get started.
 
 You can find my fork of the cloud-init templates here: https://github.com/vmiss33/cloud-init-templates.  You can find the template I used in this example, as well as the other templates I am using for other projects.
 
@@ -267,15 +267,15 @@ Here is what mine looks like:
 
 Note: You can only have one model at a time in the file, so if you need to switch modes, don't forget to update the model line of this file.
 
-## Create a SSH Tunnel to the HotAisle VM
+## Create a SSH Tunnel to the Hot Aisle VM
 
-Create a ssh tunnel to the HotAisle VM:
+Create a ssh tunnel to the Hot Aisle VM:
 
 ```bash
 ssh -N -L 8000:localhost:8000 hotaisle@x.x.x.x
-``` 
+```
 
-where x.x.x.x is the IP of your HotAisle VM.
+where x.x.x.x is the IP of your Hot Aisle VM.
 
 ## Connect to OpenCode
 
@@ -329,8 +329,8 @@ Here are the main tools and resources used in this guide:
 
 - OpenCode — coding agent: https://github.com/opencode-ai/opencode
 - vLLM — inference server: https://github.com/vllm-project/vllm
-- HotAisle — Simple, hourly GPU infrastructure: https://hotaisle.xyz
-- HotAisle cloud-init-templates Repo: https://github.com/hotaisle/cloud-init-templates
+- Hot Aisle — Simple, hourly GPU infrastructure: https://hotaisle.xyz
+- Hot Aisle cloud-init-templates Repo: https://github.com/hotaisle/cloud-init-templates
 
 My Fork of Hot Aisle's cloud-init-templates:
 
