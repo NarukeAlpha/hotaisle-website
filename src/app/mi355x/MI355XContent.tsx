@@ -15,14 +15,10 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { ClickableImage, type ImageData } from '@/components/ClickableImage';
 
 export default function MI355XContent() {
-	const [selectedImage, setSelectedImage] = useState<{
-		src: string;
-		alt: string;
-		width: number;
-		height: number;
-	} | null>(null);
+	const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
 
 	useEffect(() => {
 		if (!selectedImage) {
@@ -88,27 +84,15 @@ export default function MI355XContent() {
 				{/* Direct Liquid Cooling */}
 				<section className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
 					<div className="order-2 lg:order-1">
-						<button
+						<ClickableImage
+							alt="Direct Liquid Cooled Design"
 							className="group relative w-full overflow-hidden rounded-3xl border border-border text-left shadow-2xl"
-							onClick={() =>
-								setSelectedImage({
-									src: '/assets/mi355x/mi355ximage.png',
-									alt: 'Direct Liquid Cooled Design',
-									width: 800,
-									height: 600,
-								})
-							}
-							type="button"
-						>
-							<img
-								alt="Direct Liquid Cooled Design"
-								className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
-								height={600}
-								loading="eager"
-								src="/assets/mi355x/mi355ximage.png"
-								width={800}
-							/>
-						</button>
+							height={600}
+							imgClassName="w-full object-cover transition-transform duration-700 group-hover:scale-105"
+							onClick={setSelectedImage}
+							src="/assets/mi355x/mi355ximage.png"
+							width={800}
+						/>
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
@@ -166,27 +150,15 @@ export default function MI355XContent() {
 						</div>
 					</div>
 					<div>
-						<button
+						<ClickableImage
+							alt="MI355X Specs"
 							className="relative w-full overflow-hidden rounded-3xl border border-border text-left shadow-2xl transition-transform hover:scale-[1.02]"
-							onClick={() =>
-								setSelectedImage({
-									src: '/assets/mi355x/techstats.png',
-									alt: 'MI355X Specs',
-									width: 800,
-									height: 600,
-								})
-							}
-							type="button"
-						>
-							<img
-								alt="MI355X Specs"
-								className="w-full bg-white object-contain dark:bg-black/50"
-								height={600}
-								loading="eager"
-								src="/assets/mi355x/techstats.png"
-								width={800}
-							/>
-						</button>
+							height={600}
+							imgClassName="w-full bg-white object-contain dark:bg-black/50"
+							onClick={setSelectedImage}
+							src="/assets/mi355x/techstats.png"
+							width={800}
+						/>
 					</div>
 				</section>
 
@@ -201,52 +173,29 @@ export default function MI355XContent() {
 							device for upstream server and/or I/O connectivity.
 						</p>
 					</div>
-					<button
+					<ClickableImage
+						alt="Platform Architecture"
 						className="relative inline-block overflow-hidden rounded-2xl bg-white p-4 text-left"
-						onClick={() =>
-							setSelectedImage({
-								src: '/assets/mi355x/platformarchitecture.png',
-								alt: 'Platform Architecture',
-								width: 1000,
-								height: 600,
-							})
-						}
-						type="button"
-					>
-						<img
-							alt="Platform Architecture"
-							className="w-full"
-							height={600}
-							src="/assets/mi355x/platformarchitecture.png"
-							style={{ width: '100%', height: 'auto' }}
-							width={1000}
-						/>
-					</button>
+						height={600}
+						imgClassName="w-full"
+						onClick={setSelectedImage}
+						src="/assets/mi355x/platformarchitecture.png"
+						width={1000}
+					/>
 				</section>
 
 				{/* Multi-Chip Architecture */}
 				<section className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
 					<div className="order-2 lg:order-1">
-						<button
+						<ClickableImage
+							alt="Multi-Chip Architecture"
 							className="relative mx-auto block w-full max-w-4xl overflow-hidden rounded-3xl border border-border bg-white p-4 text-left shadow-2xl md:p-6"
-							onClick={() =>
-								setSelectedImage({
-									src: '/assets/mi355x/mutlishiparchitecture.png',
-									alt: 'Multi-Chip Architecture',
-									width: 1920,
-									height: 776,
-								})
-							}
-							type="button"
-						>
-							<img
-								alt="Multi-Chip Architecture"
-								className="h-auto w-full object-contain"
-								height={776}
-								src="/assets/mi355x/mutlishiparchitecture.png"
-								width={1920}
-							/>
-						</button>
+							height={776}
+							imgClassName="h-auto w-full object-contain"
+							onClick={setSelectedImage}
+							src="/assets/mi355x/mutlishiparchitecture.png"
+							width={1920}
+						/>
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
