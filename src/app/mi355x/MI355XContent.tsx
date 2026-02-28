@@ -19,6 +19,7 @@ import { ClickableImage, type ImageData } from '@/components/ClickableImage';
 
 export default function MI355XContent() {
 	const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
+	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	useEffect(() => {
 		if (!selectedImage) {
@@ -39,6 +40,36 @@ export default function MI355XContent() {
 			document.body.style.overflow = '';
 		};
 	}, [selectedImage]);
+
+	useEffect(() => {
+		// Load Tally script
+		const script = document.createElement('script');
+		script.src = 'https://tally.so/widgets/embed.js';
+		script.async = true;
+		script.onload = () => {
+			const tally = (window as Window & { Tally?: { loadEmbeds: () => void } }).Tally;
+			tally?.loadEmbeds();
+		};
+		document.body.appendChild(script);
+
+		// Setup dark mode detection
+		const updateDarkMode = () => {
+			setIsDarkMode(document.documentElement.classList.contains('dark'));
+		};
+
+		updateDarkMode();
+
+		const observer = new MutationObserver(updateDarkMode);
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['class'],
+		});
+
+		return () => {
+			document.body.removeChild(script);
+			observer.disconnect();
+		};
+	}, []);
 
 	return (
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
@@ -317,25 +348,17 @@ export default function MI355XContent() {
 						{/* Tally Form */}
 						<div className="relative overflow-hidden rounded-3xl border-2 border-orange-500/20 bg-card p-2 shadow-2xl">
 							<div className="rounded-[20px] bg-background p-4 md:p-8">
-								<script
-									onLoad={() => {
-										const tally = (
-											window as Window & {
-												Tally?: { loadEmbeds: () => void };
-											}
-										).Tally;
-										tally?.loadEmbeds();
-									}}
-									src="https://tally.so/widgets/embed.js"
-								/>
 								<iframe
-									className="min-h-screen w-full rounded-xl border border-border bg-muted/20 dark:[filter:invert(0.93)_hue-rotate(180deg)]"
+									className="min-h-screen w-full rounded-xl border border-border"
 									data-tally-src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
 									frameBorder={0}
 									height={1000}
 									loading="lazy"
 									marginHeight={0}
 									marginWidth={0}
+									style={{
+										filter: isDarkMode ? 'invert(0.93) hue-rotate(180deg)' : 'none',
+									}}
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
 								<p className="mt-4 text-center text-muted-foreground text-xs">
