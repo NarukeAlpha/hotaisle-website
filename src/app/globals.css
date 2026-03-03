@@ -155,10 +155,10 @@ body {
 .prose pre {
 	padding: 1.5rem;
 	overflow-x: auto;
+	line-height: 1.6;
 	background-color: var(--muted);
 	border: 1px solid var(--border);
 	border-radius: 0.5rem;
-	line-height: 1.6;
 }
 
 .prose pre code {
@@ -178,13 +178,13 @@ body {
 }
 
 .prose ul > li::marker {
-	color: var(--hot-orange);
 	font-weight: 700;
+	color: var(--hot-orange);
 }
 
 .prose ol > li::marker {
-	color: var(--hot-orange);
 	font-weight: 700;
+	color: var(--hot-orange);
 }
 
 @keyframes fadeIn {

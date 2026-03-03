@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeStringify from 'rehype-stringify';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_DIR = path.join(CONTENT_DIR, 'blog');
@@ -37,8 +37,7 @@ const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
 const EDGE_DASHES_REGEX = /^-+|-+$/g;
 const BLOG_HEADER_IMAGE_BY_SLUG: Record<string, string> = {
-	'gpu-orchestration-with-dstack':
-		'/assets/blog/gpu-orchestration-with-dstack/header.jpg',
+	'gpu-orchestration-with-dstack': '/assets/blog/gpu-orchestration-with-dstack/header.jpg',
 	'hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust':
 		'/assets/blog/hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust/header.jpg',
 	'soc-2-type-1-completed-hot-aisle-secures-initial-compliance-milestone':

@@ -1,6 +1,6 @@
+import { exec } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 
 const execAsync = promisify(exec);
@@ -34,7 +34,7 @@ function watchDirectory(dir: string) {
 		return;
 	}
 
-	fs.watch(dir, { recursive: true }, (eventType, filename) => {
+	fs.watch(dir, { recursive: true }, (_eventType, filename) => {
 		if (filename?.endsWith('.md')) {
 			regenerateContent();
 		}

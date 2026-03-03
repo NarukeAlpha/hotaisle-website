@@ -1,9 +1,9 @@
-type ImageData = {
-	src: string;
+interface ImageData {
 	alt: string;
-	width: number;
 	height: number;
-};
+	src: string;
+	width: number;
+}
 
 export function ClickableImage({
 	src,

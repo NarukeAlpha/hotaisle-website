@@ -10,7 +10,7 @@
 		"watch:content": "bun run scripts/watch_content.ts",
 		"prebuild": "bun run generate:content",
 		"dev": "bun run generate:content && (bun run watch:content & vite)",
-		"build": "vite build",
+		"build": "vite build && bun run scripts/generate_blog_html.ts",
 		"preview": "vite preview",
 		"deploy": "vinext deploy",
 		"check": "bun ./node_modules/ultracite/dist/index.js check",
@@ -20,7 +20,7 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"clsx": "^2.1.1",
 		"gray-matter": "^4.0.3",
-		"lucide-react": "^0.575.0",
+		"lucide-react": "^0.576.0",
 		"react": "19.2.4",
 		"react-dom": "19.2.4",
 		"react-router-dom": "^7.13.1",
@@ -36,7 +36,7 @@
 		"use-local-storage-state": "^19.5.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
+		"@biomejs/biome": "^2.4.5",
 		"@tailwindcss/postcss": "^4.2.1",
 		"@types/node": "^25.3.3",
 		"@types/react": "^19.2.14",
@@ -45,7 +45,7 @@
 		"tailwindcss": "^4.2.1",
 		"typescript": "^5.9.3",
 		"ultracite": "^7.2.4",
-		"vinext": "^0.0.15",
+		"vinext": "^0.0.19",
 		"vite": "^7.3.1",
 		"wrangler": "^4.69.0"
 	}

@@ -23,8 +23,10 @@ const DEFAULT_KEYWORDS = [
 interface RouteMetadata {
 	description?: string;
 	image?: string;
+	imageAlt?: string;
 	keywords?: string;
 	title: string;
+	type?: 'article' | 'website';
 }
 
 const STATIC_ROUTE_METADATA: Record<string, RouteMetadata> = {
@@ -156,6 +158,8 @@ function resolveMetadata(pathname: string): RouteMetadata {
 				description: post.metaDescription ?? post.description ?? DEFAULT_DESCRIPTION,
 				keywords: post.metaKeywords ?? DEFAULT_KEYWORDS,
 				image: toAbsoluteUrl(post.coverImage),
+				imageAlt: post.title,
+				type: 'article',
 			};
 		}
 	}
@@ -190,7 +194,9 @@ export function HeadMetadata() {
 		const title = metadata.title;
 		const description = metadata.description ?? DEFAULT_DESCRIPTION;
 		const image = toAbsoluteUrl(metadata.image);
+		const imageAlt = metadata.imageAlt ?? `${SITE_NAME} social preview`;
 		const keywords = metadata.keywords ?? DEFAULT_KEYWORDS;
+		const type = metadata.type ?? 'website';
 
 		document.title = title;
 		document.documentElement.lang = 'en';
@@ -199,7 +205,7 @@ export function HeadMetadata() {
 		setMetaTag('name', 'description', description);
 		setMetaTag('name', 'keywords', keywords);
 		setMetaTag('name', 'robots', 'index, follow');
-		setMetaTag('property', 'og:type', 'website');
+		setMetaTag('property', 'og:type', type);
 		setMetaTag('property', 'og:site_name', SITE_NAME);
 		setMetaTag('property', 'og:locale', 'en_US');
 		setMetaTag('property', 'og:url', canonicalUrl);
@@ -208,7 +214,7 @@ export function HeadMetadata() {
 		setMetaTag('property', 'og:image', image);
 		setMetaTag('property', 'og:image:width', '1200');
 		setMetaTag('property', 'og:image:height', '630');
-		setMetaTag('property', 'og:image:alt', `${SITE_NAME} social preview`);
+		setMetaTag('property', 'og:image:alt', imageAlt);
 		setMetaTag('name', 'twitter:card', 'summary_large_image');
 		setMetaTag('name', 'twitter:title', title);
 		setMetaTag('name', 'twitter:description', description);

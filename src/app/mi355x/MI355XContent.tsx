@@ -357,7 +357,9 @@ export default function MI355XContent() {
 									marginHeight={0}
 									marginWidth={0}
 									style={{
-										filter: isDarkMode ? 'invert(0.93) hue-rotate(180deg)' : 'none',
+										filter: isDarkMode
+											? 'invert(0.93) hue-rotate(180deg)'
+											: 'none',
 									}}
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
