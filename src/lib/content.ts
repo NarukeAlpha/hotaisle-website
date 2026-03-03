@@ -16,23 +16,20 @@ export interface PageData {
 }
 
 export type BlogPost = PageData & {
+	coverImage?: string;
 	date: string;
 	tags?: string[];
-	coverImage?: string;
 };
 
 const BLOG_POSTS_BY_SLUG = new Map(BLOG_POSTS.map((post) => [post.slug, post]));
 const POLICIES_BY_SLUG = new Map(POLICIES.map((policy) => [policy.slug, policy]));
 
-export function getPageContent(
-	category: 'policies' | 'blog',
-	slug: string
-): Promise<PageData | null> {
+export function getPageContent(category: 'policies' | 'blog', slug: string): PageData | null {
 	if (category === 'blog') {
-		return Promise.resolve(BLOG_POSTS_BY_SLUG.get(slug) ?? null);
+		return BLOG_POSTS_BY_SLUG.get(slug) ?? null;
 	}
 
-	return Promise.resolve(POLICIES_BY_SLUG.get(slug) ?? null);
+	return POLICIES_BY_SLUG.get(slug) ?? null;
 }
 
 export function getAllSlugs(category: 'policies' | 'blog'): string[] {
@@ -43,9 +40,9 @@ export function getAllSlugs(category: 'policies' | 'blog'): string[] {
 	return POLICIES.map((policy) => policy.slug);
 }
 
-export function getAllBlogPosts(): Promise<BlogPost[]> {
+export function getAllBlogPosts(): BlogPost[] {
 	const sortedPosts = [...BLOG_POSTS].sort(
 		(left, right) => new Date(right.date).getTime() - new Date(left.date).getTime()
 	);
-	return Promise.resolve(sortedPosts);
+	return sortedPosts;
 }

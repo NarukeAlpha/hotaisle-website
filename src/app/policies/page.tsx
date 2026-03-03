@@ -1,5 +1,5 @@
 import { FileText, Info, Lock, Server, Shield, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 const policies = [
 	{
@@ -54,10 +54,10 @@ export default function PoliciesIndexPage() {
 
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{policies.map((p) => (
-					<Link
+					<AppLink
 						className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-arctic-blue/50 hover:shadow-lg"
+						href={`/policies/${p.slug}`}
 						key={p.slug}
-						to={`/policies/${p.slug}`}
 					>
 						<div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-arctic-blue/10">
 							<p.icon
@@ -67,7 +67,7 @@ export default function PoliciesIndexPage() {
 						</div>
 						<h2 className="mb-2 font-bold text-foreground text-xl">{p.title}</h2>
 						<p className="text-muted-foreground text-sm">{p.desc}</p>
-					</Link>
+					</AppLink>
 				))}
 			</div>
 		</div>

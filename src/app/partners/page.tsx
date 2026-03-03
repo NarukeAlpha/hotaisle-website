@@ -1,5 +1,4 @@
 import { Cpu, Database, ExternalLink, Globe, Handshake, Server } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const introText = [
 	'Our partners are one of our most valuable assets, and our ecosystem reflects how we operate today: tight collaboration across hardware, orchestration, networking, and performance engineering.',
@@ -150,12 +149,12 @@ export default function PartnersPage() {
 					<p className="mb-4 text-muted-foreground">
 						Would you like to be added to the list?
 					</p>
-					<Link
+					<a
 						className="inline-block rounded-lg bg-muted px-8 py-3 font-bold text-foreground transition-colors hover:bg-foreground hover:text-background"
-						to="mailto:hello@hotaisle.ai"
+						href="mailto:hello@hotaisle.ai"
 					>
 						Contact Partner Team
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>

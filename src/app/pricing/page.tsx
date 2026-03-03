@@ -1,5 +1,5 @@
 import { Check, Server, Shield, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 export default function PricingPage() {
 	return (
@@ -7,9 +7,9 @@ export default function PricingPage() {
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-orange-500 to-red-600 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
 				🔥 We are now accepting MI355x reservations!{' '}
-				<Link className="ml-2 underline hover:text-white/90" to="/mi355x">
+				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
-				</Link>
+				</AppLink>
 			</div>
 
 			{/* Hero Header */}
@@ -66,12 +66,12 @@ export default function PricingPage() {
 								<span>12TB NVMe Storage</span>
 							</li>
 						</ul>
-						<Link
+						<AppLink
 							className="w-full rounded-lg bg-foreground py-3 text-center font-bold text-background transition-colors hover:bg-foreground/90"
-							to="/quick-start"
+							href="/quick-start"
 						>
 							Deploy Small
-						</Link>
+						</AppLink>
 					</div>
 
 					{/* Medium Tier */}
@@ -111,12 +111,12 @@ export default function PricingPage() {
 								<span>12TB NVMe Storage</span>
 							</li>
 						</ul>
-						<Link
+						<AppLink
 							className="w-full rounded-lg bg-arctic-blue py-3 text-center font-bold text-white shadow-arctic-blue/20 shadow-lg transition-colors hover:bg-arctic-blue/90 dark:text-neutral-900"
-							to="/quick-start"
+							href="/quick-start"
 						>
 							Deploy Medium
-						</Link>
+						</AppLink>
 					</div>
 
 					{/* Large Tier */}
@@ -153,12 +153,12 @@ export default function PricingPage() {
 								<span>2TB RAM + 122TB NVMe</span>
 							</li>
 						</ul>
-						<Link
+						<AppLink
 							className="w-full rounded-lg bg-foreground py-3 text-center font-bold text-background transition-colors hover:bg-foreground/90"
-							to="/quick-start"
+							href="/quick-start"
 						>
 							Deploy Large
-						</Link>
+						</AppLink>
 					</div>
 				</div>
 			</div>
@@ -222,12 +222,12 @@ export default function PricingPage() {
 					<p className="mb-6 text-muted-foreground">
 						Be the first to access the next generation of AMD compute.
 					</p>
-					<Link
+					<AppLink
 						className="rounded-lg bg-foreground px-6 py-2 font-bold text-background transition-colors hover:opacity-90"
-						to="/mi355x"
+						href="/mi355x"
 					>
 						Reserve Now
-					</Link>
+					</AppLink>
 				</div>
 			</div>
 		</div>

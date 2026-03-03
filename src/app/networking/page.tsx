@@ -1,5 +1,4 @@
 import { Activity, ArrowRight, Cpu, Globe, Network, ShieldCheck, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const fabric = [
 	{
@@ -220,12 +219,12 @@ export default function NetworkingPage() {
 						We specialize in custom topology for high-performance computing clusters.
 						Contact us and we will create it for you.
 					</p>
-					<Link
+					<a
 						className="inline-block rounded-full bg-foreground px-10 py-4 font-bold text-background text-lg transition-transform hover:scale-105 hover:opacity-90"
-						to="mailto:hello@hotaisle.ai"
+						href="mailto:hello@hotaisle.ai"
 					>
 						Contact Network Team
-					</Link>
+					</a>
 				</div>
 			</div>
 		</div>

@@ -1,5 +1,3 @@
-'use client';
-
 import {
 	ArrowRight,
 	Cpu,
@@ -10,67 +8,11 @@ import {
 	Server,
 	ShieldCheck,
 	Thermometer,
-	X,
 	Zap,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { ClickableImage, type ImageData } from '@/components/ClickableImage';
+import { ClickableImage } from '@/components/ClickableImage';
 
 export default function MI355XContent() {
-	const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
-	const [isDarkMode, setIsDarkMode] = useState(false);
-
-	useEffect(() => {
-		if (!selectedImage) {
-			return;
-		}
-
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				setSelectedImage(null);
-			}
-		};
-
-		document.addEventListener('keydown', onKeyDown);
-		document.body.style.overflow = 'hidden';
-
-		return () => {
-			document.removeEventListener('keydown', onKeyDown);
-			document.body.style.overflow = '';
-		};
-	}, [selectedImage]);
-
-	useEffect(() => {
-		// Load Tally script
-		const script = document.createElement('script');
-		script.src = 'https://tally.so/widgets/embed.js';
-		script.async = true;
-		script.onload = () => {
-			const tally = (window as Window & { Tally?: { loadEmbeds: () => void } }).Tally;
-			tally?.loadEmbeds();
-		};
-		document.body.appendChild(script);
-
-		// Setup dark mode detection
-		const updateDarkMode = () => {
-			setIsDarkMode(document.documentElement.classList.contains('dark'));
-		};
-
-		updateDarkMode();
-
-		const observer = new MutationObserver(updateDarkMode);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['class'],
-		});
-
-		return () => {
-			document.body.removeChild(script);
-			observer.disconnect();
-		};
-	}, []);
-
 	return (
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* Hero Section */}
@@ -92,18 +34,12 @@ export default function MI355XContent() {
 						era of innovation.
 					</p>
 
-					<button
+					<a
 						className="scroll-to-reserve-btn inline-flex items-center rounded-full bg-foreground px-8 py-4 font-bold text-background transition-transform hover:scale-105"
-						onClick={() => {
-							const el = document.getElementById('reserve');
-							if (el) {
-								el.scrollIntoView({ behavior: 'smooth' });
-							}
-						}}
-						type="button"
+						href="#reserve"
 					>
 						Reserve Now <ArrowRight className="ml-2" size={20} />
-					</button>
+					</a>
 					<p className="mt-4 font-bold text-orange-500 text-xs uppercase tracking-widest">
 						🔥 Scroll to the bottom to reserve 🔥
 					</p>
@@ -120,7 +56,6 @@ export default function MI355XContent() {
 							className="group relative w-full overflow-hidden rounded-3xl border border-border text-left shadow-2xl"
 							height={600}
 							imgClassName="w-full object-cover transition-transform duration-700 group-hover:scale-105"
-							onClick={setSelectedImage}
 							src="/assets/mi355x/mi355ximage.png"
 							width={800}
 						/>
@@ -186,7 +121,6 @@ export default function MI355XContent() {
 							className="relative w-full overflow-hidden rounded-3xl border border-border text-left shadow-2xl transition-transform hover:scale-[1.02]"
 							height={600}
 							imgClassName="w-full bg-white object-contain dark:bg-black/50"
-							onClick={setSelectedImage}
 							src="/assets/mi355x/techstats.png"
 							width={800}
 						/>
@@ -209,7 +143,6 @@ export default function MI355XContent() {
 						className="relative inline-block overflow-hidden rounded-2xl bg-white p-4 text-left"
 						height={600}
 						imgClassName="w-full"
-						onClick={setSelectedImage}
 						src="/assets/mi355x/platformarchitecture.png"
 						width={1000}
 					/>
@@ -223,7 +156,6 @@ export default function MI355XContent() {
 							className="relative mx-auto block w-full max-w-4xl overflow-hidden rounded-3xl border border-border bg-white p-4 text-left shadow-2xl md:p-6"
 							height={776}
 							imgClassName="h-auto w-full object-contain"
-							onClick={setSelectedImage}
 							src="/assets/mi355x/mutlishiparchitecture.png"
 							width={1920}
 						/>
@@ -350,17 +282,12 @@ export default function MI355XContent() {
 							<div className="rounded-[20px] bg-background p-4 md:p-8">
 								<iframe
 									className="min-h-screen w-full rounded-xl border border-border"
-									data-tally-src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
 									frameBorder={0}
 									height={1000}
 									loading="lazy"
 									marginHeight={0}
 									marginWidth={0}
-									style={{
-										filter: isDarkMode
-											? 'invert(0.93) hue-rotate(180deg)'
-											: 'none',
-									}}
+									src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
 								<p className="mt-4 text-center text-muted-foreground text-xs">
@@ -385,41 +312,6 @@ export default function MI355XContent() {
 					</p>
 				</div>
 			</div>
-
-			{selectedImage && typeof document !== 'undefined'
-				? createPortal(
-						<div
-							aria-modal="true"
-							className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 md:p-8"
-							role="dialog"
-						>
-							<button
-								aria-label="Close image preview"
-								className="absolute inset-0 z-0 h-full w-full"
-								onClick={() => setSelectedImage(null)}
-								type="button"
-							/>
-							<div className="relative z-10 max-h-full w-full max-w-7xl">
-								<button
-									aria-label="Close image preview"
-									className="absolute top-2 right-2 z-10 rounded-full bg-black/60 p-2 text-white transition-colors hover:bg-black/80"
-									onClick={() => setSelectedImage(null)}
-									type="button"
-								>
-									<X size={20} />
-								</button>
-								<img
-									alt={selectedImage.alt}
-									className="h-auto max-h-[88vh] w-full rounded-xl object-contain"
-									height={selectedImage.height}
-									src={selectedImage.src}
-									width={selectedImage.width}
-								/>
-							</div>
-						</div>,
-						document.body
-					)
-				: null}
 		</div>
 	);
 }

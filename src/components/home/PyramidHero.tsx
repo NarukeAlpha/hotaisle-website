@@ -1,7 +1,5 @@
-'use client';
-
 import { ArrowRight, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 export function PyramidHero() {
 	const rackDepths = [16, -36, -88, -140, -192, -244, -296, -348];
@@ -104,21 +102,21 @@ export function PyramidHero() {
 				</p>
 
 				<div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
-					<Link
+					<AppLink
 						className="group relative overflow-hidden rounded-full bg-hot-orange px-8 py-4 font-bold text-lg text-white shadow-hot-orange/30 shadow-lg transition-all hover:scale-105 hover:shadow-hot-orange/50"
-						to="/quick-start"
+						href="/quick-start"
 					>
 						<div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />
 						<div className="relative flex items-center gap-2">
 							Start in 60 Seconds <Zap className="h-5 w-5 fill-current" />
 						</div>
-					</Link>
-					<Link
+					</AppLink>
+					<AppLink
 						className="flex items-center gap-2 rounded-full border border-border bg-muted/50 px-8 py-4 font-bold text-foreground text-lg transition-all hover:bg-muted"
-						to="/pricing"
+						href="/pricing"
 					>
 						See Pricing <ArrowRight size={18} />
-					</Link>
+					</AppLink>
 				</div>
 
 				<p className="mt-6 text-base text-muted-foreground opacity-80">
@@ -126,7 +124,7 @@ export function PyramidHero() {
 				</p>
 			</div>
 
-			<style jsx>{`
+			<style>{`
         .hall-wrapper {
           display: flex;
           justify-content: center;

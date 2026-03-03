@@ -1,5 +1,5 @@
 import { ArrowRight, BarChart2, Check, Cpu, Layers, Server, Share2, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 export default function MI300XPage() {
 	return (
@@ -7,9 +7,9 @@ export default function MI300XPage() {
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-emerald-900 to-green-800 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
 				🔥 We are now accepting MI355x reservations!{' '}
-				<Link className="ml-2 underline hover:text-white/90" to="/mi355x">
+				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
-				</Link>
+				</AppLink>
 			</div>
 
 			{/* Product Hero */}
@@ -62,18 +62,18 @@ export default function MI300XPage() {
 							</div>
 
 							<div className="flex flex-wrap gap-4">
-								<Link
+								<AppLink
 									className="rounded-full bg-orange-600 px-8 py-4 font-bold text-lg text-white shadow-lg shadow-orange-500/20 transition-all hover:scale-105 hover:bg-orange-700"
-									to="/quick-start"
+									href="/quick-start"
 								>
 									Deploy MI300X
-								</Link>
-								<Link
+								</AppLink>
+								<AppLink
 									className="flex items-center rounded-full border border-border bg-muted px-8 py-4 font-bold text-foreground text-lg transition-all hover:bg-muted/80"
-									to="/benchmarks-and-analysis"
+									href="/benchmarks-and-analysis"
 								>
 									View Benchmarks <ArrowRight className="ml-2" size={18} />
-								</Link>
+								</AppLink>
 							</div>
 						</div>
 						<div className="relative w-full flex-1">
@@ -284,12 +284,12 @@ export default function MI300XPage() {
 						For more information about the AMD Instinct MI300X, the AMD Instinct MI300X
 						Platform, and the AMD ROCm™ software platform, visit AMD.com/INSTINCT.
 					</p>
-					<Link
+					<AppLink
 						className="inline-flex items-center font-bold text-orange-500 hover:underline"
-						to="/quick-start"
+						href="/quick-start"
 					>
 						Ready to deploy? Get started now <ArrowRight className="ml-2" size={16} />
-					</Link>
+					</AppLink>
 				</div>
 			</div>
 		</div>

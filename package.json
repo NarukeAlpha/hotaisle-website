@@ -6,12 +6,13 @@
 	"scripts": {
 		"generate:blog": "bun run scripts/generate_blog_data.ts",
 		"generate:static-content": "bun run scripts/generate_static_content_data.ts",
-		"generate:content": "bun run generate:blog && bun run generate:static-content",
+		"generate:search": "bun run scripts/generate_search_data.ts",
+		"generate:content": "bun run generate:blog && bun run generate:static-content && bun run generate:search",
 		"watch:content": "bun run scripts/watch_content.ts",
 		"prebuild": "bun run generate:content",
-		"dev": "bun run generate:content && (bun run watch:content & vite)",
-		"build": "vite build && bun run scripts/generate_blog_html.ts",
-		"preview": "vite preview",
+		"dev": "bun run generate:content && (bun run watch:content & vinext dev)",
+		"build": "bun run scripts/build_static.ts",
+		"preview": "vinext start",
 		"deploy": "vinext deploy",
 		"check": "bun ./node_modules/ultracite/dist/index.js check",
 		"fix": "bun ./node_modules/ultracite/dist/index.js fix"
@@ -47,6 +48,6 @@
 		"ultracite": "^7.2.4",
 		"vinext": "^0.0.19",
 		"vite": "^7.3.1",
-		"wrangler": "^4.69.0"
+		"wrangler": "^4.70.0"
 	}
 }

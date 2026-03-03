@@ -1,5 +1,3 @@
-'use client';
-
 export function SecuritySection() {
 	return (
 		<section className="border-neutral-200 border-y bg-neutral-100 py-12 dark:border-neutral-800 dark:bg-neutral-900">

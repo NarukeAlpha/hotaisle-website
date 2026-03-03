@@ -1,9 +1,7 @@
-'use client';
-
 import { ArrowLeft, Calendar } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { getPageContent, type PageData } from '@/lib/content';
+import NotFoundPage from '@/app/not-found';
+import { AppLink } from '@/components/AppLink';
+import { getAllSlugs, getPageContent } from '@/lib/content';
 import './syntax-highlighting.css';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -13,30 +11,18 @@ const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	timeZone: 'UTC',
 });
 
-export default function BlogPostPage() {
-	const { slug } = useParams<{ slug: string }>();
-	const [post, setPost] = useState<PageData | null>(null);
-	const [loading, setLoading] = useState(true);
+export const dynamicParams = false;
 
-	useEffect(() => {
-		async function loadPost() {
-			if (!slug) {
-				setLoading(false);
-				return;
-			}
-			const content = await getPageContent('blog', slug);
-			setPost(content);
-			setLoading(false);
-		}
-		loadPost();
-	}, [slug]);
+export function generateStaticParams(): Array<{ slug: string }> {
+	return getAllSlugs('blog').map((slug) => ({ slug }));
+}
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params;
+	const post = getPageContent('blog', slug);
 
 	if (!post) {
-		return <Navigate replace to="/404" />;
+		return <NotFoundPage />;
 	}
 
 	return (
@@ -55,16 +41,16 @@ export default function BlogPostPage() {
 					</div>
 				)}
 				<div className="container absolute inset-0 z-10 mx-auto flex max-w-4xl flex-col justify-end px-6 pb-12">
-					<Link
+					<AppLink
 						className="group mb-8 inline-flex items-center font-bold text-muted-foreground text-sm uppercase tracking-wide transition-colors hover:text-foreground"
-						to="/blog"
+						href="/blog"
 					>
 						<ArrowLeft
 							className="mr-2 transition-transform group-hover:-translate-x-1"
 							size={16}
 						/>
 						Back to Blog
-					</Link>
+					</AppLink>
 
 					<div className="mb-6 flex flex-wrap gap-2">
 						{post.tags?.map((tag: string) => (
@@ -85,7 +71,7 @@ export default function BlogPostPage() {
 						<div className="flex items-center gap-2">
 							<Calendar className="text-arctic-blue" size={18} />
 							<time dateTime={post.date}>
-								{PUBLISH_DATE_FORMATTER.format(new Date(post.date ?? ''))}
+								{PUBLISH_DATE_FORMATTER.format(new Date(post.date))}
 							</time>
 						</div>
 						{post.author && <p>By {post.author}</p>}
@@ -103,12 +89,12 @@ export default function BlogPostPage() {
 
 				<div className="mt-16 border-border border-t pt-16 text-center">
 					<h3 className="mb-6 font-bold text-2xl">More from Hot Aisle</h3>
-					<Link
+					<AppLink
 						className="inline-flex rounded-full border border-border bg-muted px-8 py-3 font-bold text-foreground transition-all hover:border-arctic-blue/30 hover:bg-muted/80"
-						to="/blog"
+						href="/blog"
 					>
 						Read More Articles
-					</Link>
+					</AppLink>
 				</div>
 			</article>
 		</div>

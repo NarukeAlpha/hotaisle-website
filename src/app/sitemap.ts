@@ -1,7 +1,13 @@
-import type { MetadataRoute } from 'next';
 import { getAllSlugs } from '@/lib/content';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+interface SitemapEntry {
+	changeFrequency: 'monthly' | 'weekly' | 'yearly';
+	lastModified: Date;
+	priority: number;
+	url: string;
+}
+
+export default function sitemap(): SitemapEntry[] {
 	const baseUrl = 'https://hotaisle.xyz';
 
 	// Static routes

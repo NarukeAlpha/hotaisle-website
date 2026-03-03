@@ -9,7 +9,7 @@ import {
 	Users,
 	Zap,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 const clusters = [
 	{
@@ -112,18 +112,18 @@ export default function ClusterPage() {
 					</p>
 
 					<div className="flex flex-col justify-center gap-6 md:flex-row">
-						<Link
+						<AppLink
 							className="rounded-full bg-foreground px-10 py-4 font-bold text-background text-lg transition-transform hover:scale-105 hover:opacity-90"
-							to="/contact"
+							href="/contact"
 						>
 							Start Your Deployment
-						</Link>
-						<Link
+						</AppLink>
+						<a
 							className="rounded-full border border-border bg-background px-10 py-4 font-bold text-foreground text-lg transition-colors hover:bg-muted"
-							to="#clusters"
+							href="#clusters"
 						>
 							Explore Clusters
-						</Link>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -205,12 +205,12 @@ export default function ClusterPage() {
 								But don't know where to start? We can help you design, build, and
 								deploy.
 							</p>
-							<Link
+							<AppLink
 								className="flex items-center gap-1 font-bold text-arctic-blue transition-colors hover:text-foreground"
-								to="/contact"
+								href="/contact"
 							>
 								Talk to an Architect <ArrowRight size={16} />
-							</Link>
+							</AppLink>
 						</div>
 					</div>
 
@@ -266,12 +266,12 @@ export default function ClusterPage() {
 						learn how Hot Aisle's cluster and consulting services can supercharge your
 						AI initiatives.
 					</p>
-					<Link
+					<AppLink
 						className="inline-block rounded-full bg-background px-12 py-5 font-bold text-foreground text-xl transition-transform hover:scale-105"
-						to="/contact"
+						href="/contact"
 					>
 						Contact Us Today
-					</Link>
+					</AppLink>
 
 					<div className="mt-16 border-white/20 border-t pt-16 text-center">
 						<p className="font-serif text-background/60 text-lg italic">

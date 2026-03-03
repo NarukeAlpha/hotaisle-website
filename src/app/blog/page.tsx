@@ -1,35 +1,8 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import { BlogIndex } from '@/components/blog/BlogIndex';
-import { type BlogPost, getAllBlogPosts } from '@/lib/content';
+import { getAllBlogPosts } from '@/lib/content';
 
 export default function BlogPage() {
-	const [posts, setPosts] = useState<BlogPost[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		let mounted = true;
-		async function loadPosts() {
-			const blogPosts = await getAllBlogPosts();
-			if (mounted) {
-				setPosts(blogPosts);
-				setLoading(false);
-			}
-		}
-		loadPosts().catch(() => {
-			if (mounted) {
-				setLoading(false);
-			}
-		});
-		return () => {
-			mounted = false;
-		};
-	}, []);
-
-	if (loading) {
-		return <div>Loading...</div>;
-	}
+	const posts = getAllBlogPosts();
 
 	return (
 		<div className="container mx-auto min-h-screen px-6 py-8 md:py-12">

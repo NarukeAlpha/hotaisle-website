@@ -1,5 +1,5 @@
 import { ArrowRight, BarChart2, Cpu, ExternalLink, FileText, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 const benchmarks = [
 	{
@@ -163,11 +163,12 @@ export default function BenchmarksPage() {
 			<div className="container relative z-20 mx-auto -mt-10 max-w-6xl px-6">
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{benchmarks.map((b) => (
-						<Link
+						<a
 							className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-arctic-blue/50 hover:shadow-xl"
+							href={b.url}
 							key={b.url}
+							rel="noopener noreferrer"
 							target="_blank"
-							to={b.url}
 						>
 							<div className="mb-4 flex items-start justify-between">
 								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors duration-300 group-hover:bg-arctic-blue/10 group-hover:text-arctic-blue">
@@ -190,7 +191,7 @@ export default function BenchmarksPage() {
 									size={14}
 								/>
 							</div>
-						</Link>
+						</a>
 					))}
 				</div>
 
@@ -202,12 +203,12 @@ export default function BenchmarksPage() {
 						and see firsthand how AMD is competitive in the world of high-performance
 						computing.
 					</p>
-					<Link
+					<AppLink
 						className="inline-flex rounded-full bg-arctic-blue px-8 py-3 font-bold text-white transition-all hover:scale-105 hover:bg-arctic-blue/90 dark:text-neutral-950"
-						to="/quick-start"
+						href="/quick-start"
 					>
 						Start Benchmarking Today
-					</Link>
+					</AppLink>
 				</div>
 			</div>
 		</div>

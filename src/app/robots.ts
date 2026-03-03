@@ -1,6 +1,12 @@
-import type { MetadataRoute } from 'next';
+interface RobotsConfig {
+	rules: {
+		allow: string;
+		userAgent: string;
+	};
+	sitemap: string;
+}
 
-export default function robots(): MetadataRoute.Robots {
+export default function robots(): RobotsConfig {
 	return {
 		rules: {
 			userAgent: '*',

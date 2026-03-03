@@ -1,44 +1,20 @@
-'use client';
-
 import { ChevronLeft, FileText } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
-import { getPageContent, type PageData } from '@/lib/content';
+import NotFoundPage from '@/app/not-found';
+import { AppLink } from '@/components/AppLink';
+import { getAllSlugs, getPageContent } from '@/lib/content';
 
-export default function PolicyPage() {
-	const { slug } = useParams<{ slug: string }>();
-	const [page, setPage] = useState<PageData | null>(null);
-	const [loading, setLoading] = useState(true);
+export const dynamicParams = false;
 
-	useEffect(() => {
-		let mounted = true;
-		async function loadPage() {
-			if (!slug) {
-				setLoading(false);
-				return;
-			}
-			const content = await getPageContent('policies', slug);
-			if (mounted) {
-				setPage(content);
-				setLoading(false);
-			}
-		}
-		loadPage().catch(() => {
-			if (mounted) {
-				setLoading(false);
-			}
-		});
-		return () => {
-			mounted = false;
-		};
-	}, [slug]);
+export function generateStaticParams(): Array<{ slug: string }> {
+	return getAllSlugs('policies').map((slug) => ({ slug }));
+}
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
+export default async function PolicyPage({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params;
+	const page = getPageContent('policies', slug);
 
 	if (!page) {
-		return <Navigate replace to="/404" />;
+		return <NotFoundPage />;
 	}
 
 	return (
@@ -46,13 +22,13 @@ export default function PolicyPage() {
 			{/* Breadcrumb / Back */}
 			{/* Breadcrumb / Back */}
 			<div className="sticky top-0 z-50 -mx-6 mb-8 border-transparent border-b bg-background/80 px-6 py-4 backdrop-blur-md transition-all data-[stuck=true]:border-border">
-				<Link
+				<AppLink
 					className="inline-flex items-center font-medium text-muted-foreground text-sm transition-colors hover:text-arctic-blue"
-					to="/policies"
+					href="/policies"
 				>
 					<ChevronLeft className="mr-1" size={16} />
 					Back to Policies
-				</Link>
+				</AppLink>
 			</div>
 
 			{/* Header */}

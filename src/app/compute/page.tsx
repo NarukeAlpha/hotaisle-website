@@ -1,5 +1,5 @@
 import { Server, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 
 const specs = [
 	{
@@ -66,18 +66,18 @@ export default function ComputePage() {
 						</p>
 
 						<div className="flex flex-wrap gap-4">
-							<Link
+							<AppLink
 								className="rounded-lg bg-foreground px-8 py-4 font-bold text-background transition-transform hover:scale-105 hover:opacity-90"
-								to="/quick-start"
+								href="/quick-start"
 							>
 								Reserve Now
-							</Link>
-							<Link
+							</AppLink>
+							<AppLink
 								className="rounded-lg border border-border px-8 py-4 font-bold text-foreground transition-colors hover:bg-muted"
-								to="#specs"
+								href="#specs"
 							>
 								View Specs
-							</Link>
+							</AppLink>
 						</div>
 					</div>
 

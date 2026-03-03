@@ -1,5 +1,5 @@
 import { Calendar } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AppLink } from '@/components/AppLink';
 import type { BlogPost } from '@/lib/content';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -13,10 +13,10 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 	return (
 		<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{posts.map((post) => (
-				<Link
+				<AppLink
 					className="group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg dark:hover:border-arctic-blue/50"
+					href={`/blog/${post.slug}`}
 					key={post.slug}
-					to={`/blog/${post.slug}`}
 				>
 					{/* Image */}
 					<div className="relative h-48 w-full overflow-hidden bg-muted">
@@ -63,7 +63,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 							))}
 						</div>
 					</div>
-				</Link>
+				</AppLink>
 			))}
 		</div>
 	);
