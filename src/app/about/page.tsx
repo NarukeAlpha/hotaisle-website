@@ -1,4 +1,14 @@
 import { Lightbulb, Linkedin, Users } from 'lucide-react';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Meet the Hot Aisle founders and learn how the company was built around transparent, high-performance AMD infrastructure.',
+		path: '/about',
+		title: 'About Hot Aisle',
+	});
+}
 
 export default function AboutPage() {
 	return (

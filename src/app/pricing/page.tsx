@@ -1,5 +1,15 @@
 import { Check, Server, Shield, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Transparent AMD GPU pricing from Hot Aisle with self-service hourly billing and no long-term contracts.',
+		path: '/pricing',
+		title: 'Pricing',
+	});
+}
 
 export default function PricingPage() {
 	return (

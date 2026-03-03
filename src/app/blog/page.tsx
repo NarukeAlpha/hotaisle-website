@@ -1,5 +1,15 @@
 import { BlogIndex } from '@/components/blog/BlogIndex';
 import { getAllBlogPosts } from '@/lib/content';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Latest news, technical writing, interviews, and product updates from Hot Aisle.',
+		path: '/blog',
+		title: 'Hot Aisle Blog',
+	});
+}
 
 export default function BlogPage() {
 	const posts = getAllBlogPosts();

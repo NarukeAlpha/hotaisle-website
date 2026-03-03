@@ -1,4 +1,16 @@
+import { createPageMetadata } from '@/lib/metadata';
 import MI355XContent from './MI355XContent';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Reserve AMD Instinct MI355X compute and review platform details for next-generation AI and HPC workloads.',
+		image: '/assets/mi355x/mi355ximage.png',
+		imageAlt: 'AMD MI355X',
+		path: '/mi355x',
+		title: 'AMD MI355X',
+	});
+}
 
 export default function MI355XPage() {
 	return <MI355XContent />;

@@ -1,4 +1,14 @@
 import { Activity, ArrowRight, Cpu, Globe, Network, ShieldCheck, Zap } from 'lucide-react';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Hot Aisle’s custom networking fabric for GPU infrastructure, including compute, storage, and management network layers.',
+		path: '/networking',
+		title: 'Networking Fabric',
+	});
+}
 
 const fabric = [
 	{

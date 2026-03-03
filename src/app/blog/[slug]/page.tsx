@@ -17,6 +17,43 @@ export function generateStaticParams(): Array<{ slug: string }> {
 	return getAllSlugs('blog').map((slug) => ({ slug }));
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params;
+	const post = getPageContent('blog', slug);
+
+	if (!post) {
+		return {};
+	}
+
+	const title = post.metaTitle ?? post.title;
+	const description = post.metaDescription ?? post.description ?? '';
+	const url = `https://hotaisle.xyz/blog/${post.slug}`;
+	const image = post.coverImage ?? '/hotaisle-logo.png';
+
+	return {
+		title,
+		description,
+		openGraph: {
+			title,
+			description,
+			type: 'article',
+			url,
+			images: [
+				{
+					alt: post.title,
+					url: image,
+				},
+			],
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title,
+			description,
+			images: [image],
+		},
+	};
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params;
 	const post = getPageContent('blog', slug);

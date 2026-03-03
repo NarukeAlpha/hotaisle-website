@@ -2,11 +2,31 @@ import { ChevronLeft, FileText } from 'lucide-react';
 import NotFoundPage from '@/app/not-found';
 import { AppLink } from '@/components/AppLink';
 import { getAllSlugs, getPageContent } from '@/lib/content';
+import { createPageMetadata } from '@/lib/metadata';
 
 export const dynamicParams = false;
 
 export function generateStaticParams(): Array<{ slug: string }> {
 	return getAllSlugs('policies').map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params;
+	const page = getPageContent('policies', slug);
+
+	if (!page) {
+		return {};
+	}
+
+	const title = page.metaTitle ?? page.title;
+	const description = page.metaDescription ?? page.description ?? '';
+
+	return createPageMetadata({
+		description,
+		path: `/policies/${page.slug}`,
+		title,
+		type: 'article',
+	});
 }
 
 export default async function PolicyPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -1,3 +1,14 @@
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Contact Hot Aisle for infrastructure, partnerships, reservations, or support.',
+		path: '/contact',
+		title: 'Contact Hot Aisle',
+	});
+}
+
 export default function ContactPage() {
 	return (
 		<div className="animation-fade-in min-h-screen bg-background px-6 py-16 text-foreground">

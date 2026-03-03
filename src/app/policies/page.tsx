@@ -1,5 +1,15 @@
 import { FileText, Info, Lock, Server, Shield, Users } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Legal documents, compliance information, and operational policies for Hot Aisle services.',
+		path: '/policies',
+		title: 'Legal and Policies',
+	});
+}
 
 const policies = [
 	{

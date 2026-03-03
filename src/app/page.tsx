@@ -2,6 +2,16 @@ import { AppLink } from '@/components/AppLink';
 import { PyramidHero } from '@/components/home/PyramidHero';
 import { SecuritySection } from '@/components/home/SecuritySection';
 import { VideoSection } from '@/components/home/VideoSection';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'AMD Exclusive AI Cloud. Deploy MI300X and MI355X GPUs in 60 seconds. $1.99/GPU/hr. No contracts, no commitments, no drama.',
+		path: '/',
+		title: 'Hot Aisle - AMD Exclusive AI Cloud',
+	});
+}
 
 export default function Home() {
 	return (

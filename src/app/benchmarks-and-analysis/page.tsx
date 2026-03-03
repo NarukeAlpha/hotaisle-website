@@ -1,5 +1,15 @@
 import { ArrowRight, BarChart2, Cpu, ExternalLink, FileText, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Independent benchmarks, performance analysis, and third-party references for AMD MI300X workloads and infrastructure.',
+		path: '/benchmarks-and-analysis',
+		title: 'Benchmarks and Analysis',
+	});
+}
 
 const benchmarks = [
 	{

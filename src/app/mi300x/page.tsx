@@ -1,5 +1,17 @@
 import { ArrowRight, BarChart2, Check, Cpu, Layers, Server, Share2, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'AMD Instinct MI300X specifications, deployment options, and performance characteristics for large-model inference and training.',
+		image: '/assets/blog/advancing-ai-in-the-cloud-the-dell-and-hot-aisle-partnership/header.webp',
+		imageAlt: 'AMD MI300X',
+		path: '/mi300x',
+		title: 'AMD MI300X',
+	});
+}
 
 export default function MI300XPage() {
 	return (

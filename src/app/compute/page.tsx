@@ -1,5 +1,15 @@
 import { Server, ShieldCheck } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Dell PowerEdge XE9680 infrastructure with 8x AMD MI300X GPUs, high-bandwidth memory, and dense networking for demanding AI workloads.',
+		path: '/compute',
+		title: 'Supercomputer Infrastructure',
+	});
+}
 
 const specs = [
 	{

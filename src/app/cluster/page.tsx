@@ -10,6 +10,16 @@ import {
 	Zap,
 } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Design and deploy AMD GPU clusters with Hot Aisle, from compact builds to large multi-node AI and HPC environments.',
+		path: '/cluster',
+		title: 'Cluster Design',
+	});
+}
 
 const clusters = [
 	{

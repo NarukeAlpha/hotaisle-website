@@ -9,6 +9,16 @@ import {
 	Video,
 	Zap,
 } from 'lucide-react';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Explore Hot Aisle’s Tier 5 Platinum data center footprint, security model, sustainability profile, and operational advantages.',
+		path: '/datacenter',
+		title: 'Datacenter Infrastructure',
+	});
+}
 
 const advantages = [
 	{

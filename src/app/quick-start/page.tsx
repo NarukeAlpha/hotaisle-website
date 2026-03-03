@@ -1,5 +1,15 @@
 import { BookOpen, Box, Code, Mail, Server, Terminal } from 'lucide-react';
 import CopyCommand from '@/components/CopyCommand';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'Get started with Hot Aisle in under 60 seconds, from SSH login through account setup and first workload.',
+		path: '/quick-start',
+		title: 'Quick Start',
+	});
+}
 
 export default function QuickStartPage() {
 	return (

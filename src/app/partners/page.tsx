@@ -1,4 +1,14 @@
 import { Cpu, Database, ExternalLink, Globe, Handshake, Server } from 'lucide-react';
+import { createPageMetadata } from '@/lib/metadata';
+
+export function generateMetadata() {
+	return createPageMetadata({
+		description:
+			'The Hot Aisle ecosystem across hardware, orchestration, networking, and performance engineering partners.',
+		path: '/partners',
+		title: 'Partners',
+	});
+}
 
 const introText = [
 	'Our partners are one of our most valuable assets, and our ecosystem reflects how we operate today: tight collaboration across hardware, orchestration, networking, and performance engineering.',
