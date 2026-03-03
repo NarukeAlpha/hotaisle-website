@@ -17,6 +17,8 @@ const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
+const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
+const MAX_REDIRECT_HOPS = 10;
 
 process.env.NODE_ENV = 'production';
 
@@ -66,11 +68,7 @@ if (typeof renderRoute !== 'function') {
 
 for (const routePath of exportedPaths) {
 	const requestPath = toRequestPath(routePath);
-	const htmlResponse = await renderRoute(
-		new Request(`${EXPORT_ORIGIN}${requestPath}`, {
-			headers: { accept: 'text/html' },
-		})
-	);
+	const htmlResponse = await renderStaticRoute(renderRoute, requestPath, 'text/html');
 
 	if (!htmlResponse.ok) {
 		throw new Error(`Failed to export ${routePath}: ${htmlResponse.status}`);
@@ -83,11 +81,7 @@ for (const routePath of exportedPaths) {
 	await mkdir(path.dirname(fullPath), { recursive: true });
 	await writeFile(fullPath, html, 'utf8');
 
-	const rscResponse = await renderRoute(
-		new Request(`${EXPORT_ORIGIN}${requestPath}`, {
-			headers: { accept: 'text/x-component' },
-		})
-	);
+	const rscResponse = await renderStaticRoute(renderRoute, requestPath, 'text/x-component');
 
 	if (!rscResponse.ok) {
 		throw new Error(`Failed to export RSC payload for ${routePath}: ${rscResponse.status}`);
@@ -167,6 +161,42 @@ function normalizeExportedHtml(html: string): string {
 	}
 
 	return `${htmlWithoutEmbeddedScripts}${normalizedEmbeddedScripts}`;
+}
+
+async function renderStaticRoute(
+	renderRoute: (request: Request) => Promise<Response>,
+	requestPath: string,
+	accept: string
+): Promise<Response> {
+	let currentUrl = new URL(requestPath, EXPORT_ORIGIN);
+
+	for (let hop = 0; hop < MAX_REDIRECT_HOPS; hop += 1) {
+		const response = await renderRoute(
+			new Request(currentUrl, {
+				headers: { accept },
+			})
+		);
+
+		if (!REDIRECT_STATUS_CODES.has(response.status)) {
+			return response;
+		}
+
+		const location = response.headers.get('location');
+		if (!location) {
+			throw new Error(`Redirect from ${currentUrl.pathname} missing location header`);
+		}
+
+		const nextUrl = new URL(location, currentUrl);
+		if (nextUrl.origin !== EXPORT_ORIGIN) {
+			throw new Error(
+				`External redirect while exporting ${currentUrl.pathname}: ${location}`
+			);
+		}
+
+		currentUrl = nextUrl;
+	}
+
+	throw new Error(`Too many redirects while exporting ${requestPath}`);
 }
 
 function normalizeRscPayload(html: string): string {
