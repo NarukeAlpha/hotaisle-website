@@ -306,7 +306,7 @@ Useful references:
 Connect with Andrey:
 - **LinkedIn:** [linkedin.com/in/andrey-cheptsov](https://www.linkedin.com/in/andrey-cheptsov)
 - **X (Twitter):** [@andrey_cheptsov](https://x.com/andrey_cheptsov)
-- **GitHub:** [github.com/vmiss33](https://github.com/vmiss33)
+- **GitHub:** [github.com/peterschmidt85](https://github.com/peterschmidt85)
 
 ---
 
