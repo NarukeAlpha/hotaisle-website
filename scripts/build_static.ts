@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { transform as transformWithEsbuild } from 'esbuild';
@@ -174,7 +174,7 @@ for (const routePath of exportedPaths) {
 	}
 
 	const rscPayload = await normalizeRscPayload(await rscResponse.text());
-	const html = await normalizeExportedHtml(rawHtml, rscPayload);
+	const html = await normalizeExportedHtml(rawHtml);
 	const outputPath = toOutputPath(routePath);
 	const fullPath = path.join(DIST_DIRECTORY, outputPath);
 
@@ -199,6 +199,8 @@ if (notFoundResponse.status === 404) {
 	const notFoundHtml = await normalizeExportedHtml(await notFoundResponse.text());
 	await writeFile(path.join(DIST_DIRECTORY, '404.html'), notFoundHtml, 'utf8');
 }
+
+await scrubExportedHtmlFiles(DIST_DIRECTORY);
 
 function toOutputPath(routePath: string): string {
 	if (routePath === '/') {
@@ -226,10 +228,10 @@ function toRscOutputPath(routePath: string): string {
 	return `${normalizedPath}.rsc`;
 }
 
-async function normalizeExportedHtml(html: string, rscPayload: string): Promise<string> {
+async function normalizeExportedHtml(html: string): Promise<string> {
 	const htmlDocument = stripTrailingContentAfterHtml(html);
-	const htmlWithRscPayload = injectInitialRscPayload(htmlDocument, rscPayload);
-	const htmlWithThemeScripts = injectThemeScripts(htmlWithRscPayload);
+	const htmlWithoutClientBootstrap = stripClientBootstrap(htmlDocument);
+	const htmlWithThemeScripts = injectThemeScripts(htmlWithoutClientBootstrap);
 
 	return await minifyExportedHtml(htmlWithThemeScripts);
 }
@@ -334,27 +336,43 @@ function injectThemeScripts(html: string): string {
 	return `${html.slice(0, headCloseIndex)}${themeScriptTag}${html.slice(headCloseIndex)}`;
 }
 
-function injectInitialRscPayload(html: string, rscPayload: string): string {
-	const bootstrapScriptMarker = '<script id="_R_">';
-	const bootstrapScriptIndex = html.indexOf(bootstrapScriptMarker);
-
-	if (bootstrapScriptIndex === -1) {
-		return html;
-	}
-
-	const inlineRscPayload = serializeInlineScriptValue({
-		params: {},
-		rsc: [rscPayload],
-	});
-
-	return `${html.slice(0, bootstrapScriptIndex)}<script>self.__VINEXT_RSC__=${inlineRscPayload};</script>${html.slice(bootstrapScriptIndex)}`;
+function stripClientBootstrap(html: string): string {
+	return html
+		.replace(
+			/<link rel="modulepreload" href="\/assets\/facade__virtual_vinext-rsc-entry-[^"]+" crossorigin=""\/>/g,
+			''
+		)
+		.replace(
+			/<link rel="modulepreload" href="\/assets\/framework-[^"]+" crossorigin=""\/>/g,
+			''
+		)
+		.replace(/<link rel="modulepreload" href="\/assets\/index-[^"]+" crossorigin=""\/>/g, '')
+		.replace(/<link rel="modulepreload" href="\/assets\/index-[^"]+" \/>/g, '')
+		.replace(/<script id="_R_">import\("\/assets\/index-[^"]+"\);<\/script>/g, '');
 }
 
-function serializeInlineScriptValue(value: unknown): string {
-	return JSON.stringify(value)
-		.replaceAll('<', '\\u003C')
-		.replaceAll('>', '\\u003E')
-		.replaceAll('&', '\\u0026');
+async function scrubExportedHtmlFiles(directory: string): Promise<void> {
+	const directoryEntries = await readdir(directory, { withFileTypes: true });
+
+	for (const directoryEntry of directoryEntries) {
+		const entryPath = path.join(directory, directoryEntry.name);
+
+		if (directoryEntry.isDirectory()) {
+			await scrubExportedHtmlFiles(entryPath);
+			continue;
+		}
+
+		if (!(directoryEntry.isFile() && entryPath.endsWith('.html'))) {
+			continue;
+		}
+
+		const html = await readFile(entryPath, 'utf8');
+		const strippedHtml = stripClientBootstrap(html);
+
+		if (strippedHtml !== html) {
+			await writeFile(entryPath, strippedHtml, 'utf8');
+		}
+	}
 }
 
 async function normalizeRscRecordLine(line: string): Promise<string> {
