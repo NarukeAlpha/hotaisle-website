@@ -3,126 +3,6 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import JsonLd from '@/components/seo/JsonLd';
 import './globals.css';
 
-const THEME_INIT_SCRIPT = `
-(() => {
-	const STORAGE_KEY = 'theme';
-	const DARK_CLASS = 'dark';
-	const LIGHT_CLASS = 'light';
-
-	const getStoredTheme = () => {
-		try {
-			return window.localStorage.getItem(STORAGE_KEY);
-		} catch {
-			return null;
-		}
-	};
-
-	const getPreferredTheme = () => {
-		const storedTheme = getStoredTheme();
-		if (storedTheme === DARK_CLASS || storedTheme === LIGHT_CLASS) {
-			return storedTheme;
-		}
-
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK_CLASS : LIGHT_CLASS;
-	};
-
-	const applyTheme = (theme) => {
-		const root = document.documentElement;
-		root.classList.remove(LIGHT_CLASS, DARK_CLASS);
-		root.classList.add(theme);
-		root.dataset.theme = theme;
-	};
-
-	applyTheme(getPreferredTheme());
-})();
-`;
-
-const THEME_TOGGLE_SCRIPT = `
-(() => {
-	const STORAGE_KEY = 'theme';
-	const DARK_CLASS = 'dark';
-	const LIGHT_CLASS = 'light';
-	const SELECTOR = '[data-theme-toggle]';
-
-	const getStoredTheme = () => {
-		try {
-			return window.localStorage.getItem(STORAGE_KEY);
-		} catch {
-			return null;
-		}
-	};
-
-	const persistTheme = (theme) => {
-		try {
-			window.localStorage.setItem(STORAGE_KEY, theme);
-		} catch {}
-	};
-
-	const getPreferredTheme = () => {
-		const storedTheme = getStoredTheme();
-		if (storedTheme === DARK_CLASS || storedTheme === LIGHT_CLASS) {
-			return storedTheme;
-		}
-
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK_CLASS : LIGHT_CLASS;
-	};
-
-	const applyTheme = (theme) => {
-		const root = document.documentElement;
-		root.classList.remove(LIGHT_CLASS, DARK_CLASS);
-		root.classList.add(theme);
-		root.dataset.theme = theme;
-
-		const nextTheme = theme === DARK_CLASS ? LIGHT_CLASS : DARK_CLASS;
-		for (const button of document.querySelectorAll(SELECTOR)) {
-			button.setAttribute('aria-label', 'Switch to ' + nextTheme + ' mode');
-			button.setAttribute('title', 'Switch to ' + nextTheme + ' mode');
-			const label = button.querySelector('[data-theme-label]');
-			if (label) {
-				label.textContent = theme === DARK_CLASS ? 'Dark' : 'Light';
-			}
-		}
-	};
-
-	const toggleTheme = () => {
-		const nextTheme = document.documentElement.classList.contains(DARK_CLASS)
-			? LIGHT_CLASS
-			: DARK_CLASS;
-		persistTheme(nextTheme);
-		applyTheme(nextTheme);
-	};
-
-	document.addEventListener('click', (event) => {
-		const target = event.target;
-		if (!(target instanceof Element)) {
-			return;
-		}
-
-		const button = target.closest(SELECTOR);
-		if (!(button instanceof HTMLButtonElement)) {
-			return;
-		}
-
-		toggleTheme();
-	});
-
-	const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-	const syncPreferredTheme = () => {
-		if (getStoredTheme() === null) {
-			applyTheme(getPreferredTheme());
-		}
-	};
-
-	if (typeof mediaQuery.addEventListener === 'function') {
-		mediaQuery.addEventListener('change', syncPreferredTheme);
-	} else if (typeof mediaQuery.addListener === 'function') {
-		mediaQuery.addListener(syncPreferredTheme);
-	}
-
-	applyTheme(getPreferredTheme());
-})();
-`;
-
 export const metadata = {
 	title: 'Hot Aisle - AMD Exclusive AI Cloud',
 	description:
@@ -159,9 +39,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
-		<html className="light" lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<head>
-				<script>{THEME_INIT_SCRIPT}</script>
+				<script src="/theme-toggle.js" />
 			</head>
 			<body>
 				<div className="flex min-h-screen bg-background text-foreground antialiased">
@@ -171,7 +51,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 						{children}
 					</main>
 				</div>
-				<script>{THEME_TOGGLE_SCRIPT}</script>
 			</body>
 		</html>
 	);

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 /* @vscode/css-language-service-ignore */
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
 	/* Arctic Light Theme */
