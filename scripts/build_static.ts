@@ -165,13 +165,7 @@ for (const routePath of exportedPaths) {
 	if (!htmlResponse.ok) {
 		throw new Error(`Failed to export ${routePath}: ${htmlResponse.status}`);
 	}
-
-	const html = await normalizeExportedHtml(await htmlResponse.text());
-	const outputPath = toOutputPath(routePath);
-	const fullPath = path.join(DIST_DIRECTORY, outputPath);
-
-	await mkdir(path.dirname(fullPath), { recursive: true });
-	await writeFile(fullPath, html, 'utf8');
+	const rawHtml = await htmlResponse.text();
 
 	const rscResponse = await renderStaticRoute(renderRoute, requestPath, 'text/x-component');
 
@@ -180,9 +174,19 @@ for (const routePath of exportedPaths) {
 	}
 
 	const rscPayload = await normalizeRscPayload(await rscResponse.text());
+	const html = await normalizeExportedHtml(rawHtml, rscPayload);
+	const outputPath = toOutputPath(routePath);
+	const fullPath = path.join(DIST_DIRECTORY, outputPath);
+
+	await mkdir(path.dirname(fullPath), { recursive: true });
+	await writeFile(fullPath, html, 'utf8');
 	const rscOutputPath = toRscOutputPath(routePath);
 
 	await writeFile(path.join(DIST_DIRECTORY, rscOutputPath), rscPayload, 'utf8');
+
+	if (routePath === '/') {
+		await writeFile(path.join(DIST_DIRECTORY, 'index.rsc'), rscPayload, 'utf8');
+	}
 }
 
 const notFoundResponse = await renderRoute(
@@ -222,9 +226,10 @@ function toRscOutputPath(routePath: string): string {
 	return `${normalizedPath}.rsc`;
 }
 
-async function normalizeExportedHtml(html: string): Promise<string> {
+async function normalizeExportedHtml(html: string, rscPayload: string): Promise<string> {
 	const htmlDocument = stripTrailingContentAfterHtml(html);
-	const htmlWithThemeScripts = injectThemeScripts(htmlDocument);
+	const htmlWithRscPayload = injectInitialRscPayload(htmlDocument, rscPayload);
+	const htmlWithThemeScripts = injectThemeScripts(htmlWithRscPayload);
 
 	return await minifyExportedHtml(htmlWithThemeScripts);
 }
@@ -327,6 +332,29 @@ function injectThemeScripts(html: string): string {
 	}
 
 	return `${html.slice(0, headCloseIndex)}${themeScriptTag}${html.slice(headCloseIndex)}`;
+}
+
+function injectInitialRscPayload(html: string, rscPayload: string): string {
+	const bootstrapScriptMarker = '<script id="_R_">';
+	const bootstrapScriptIndex = html.indexOf(bootstrapScriptMarker);
+
+	if (bootstrapScriptIndex === -1) {
+		return html;
+	}
+
+	const inlineRscPayload = serializeInlineScriptValue({
+		params: {},
+		rsc: [rscPayload],
+	});
+
+	return `${html.slice(0, bootstrapScriptIndex)}<script>self.__VINEXT_RSC__=${inlineRscPayload};</script>${html.slice(bootstrapScriptIndex)}`;
+}
+
+function serializeInlineScriptValue(value: unknown): string {
+	return JSON.stringify(value)
+		.replaceAll('<', '\\u003C')
+		.replaceAll('>', '\\u003E')
+		.replaceAll('&', '\\u0026');
 }
 
 async function normalizeRscRecordLine(line: string): Promise<string> {
