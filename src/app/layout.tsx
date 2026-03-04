@@ -40,9 +40,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head>
-				<script src="/theme-toggle.js" />
-			</head>
+			<head />
 			<body>
 				<div className="flex min-h-screen bg-background text-foreground antialiased">
 					<Sidebar />
@@ -51,6 +49,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 						{children}
 					</main>
 				</div>
+				<script src="/theme-toggle.js" />
 			</body>
 		</html>
 	);
