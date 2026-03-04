@@ -131,10 +131,6 @@ body {
 	text-decoration-thickness: 2px;
 }
 
-.prose strong + a {
-	margin-left: 0.15em;
-}
-
 .prose .heading-link {
 	text-decoration: none;
 }

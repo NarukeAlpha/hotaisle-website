@@ -170,14 +170,14 @@ export default function NetworkingPage() {
 						<h3 className="font-bold text-2xl">100G Internet</h3>
 					</div>
 					<p className="mb-6 text-muted-foreground">
-						Provided by{' '}
+						{'Provided by '}
 						<a
 							className="font-bold text-foreground hover:underline"
 							href="https://www.switch.com/switch-connect/"
 						>
 							Switch Connect
-						</a>{' '}
-						and{' '}
+						</a>
+						{' and '}
 						<a
 							className="font-bold text-foreground hover:underline"
 							href="https://www.megaport.com/"
