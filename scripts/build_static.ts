@@ -21,6 +21,7 @@ const MAX_REDIRECT_HOPS = 10;
 const RSC_TEXT_CHUNK_START_REGEX = /^[0-9a-z]+:T[0-9a-z]+,$/;
 const RSC_RECORD_START_REGEX = /^[0-9a-z]+:/;
 const RSC_RECORD_PREFIX_REGEX = /^([0-9a-z]+:)(.+)$/;
+const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
 const THEME_SCRIPT = `
 (() => {
 	const STORAGE_KEY = 'theme';
@@ -322,7 +323,28 @@ async function minifyExportedHtml(html: string): Promise<string> {
 	const htmlWithMinifiedScripts = await minifyInlineBlocks(html, 'script');
 	const htmlWithMinifiedStyles = await minifyInlineBlocks(htmlWithMinifiedScripts, 'style');
 
-	return htmlWithMinifiedStyles.replace(/>\s+</g, '><').trim();
+	return collapseInterTagWhitespaceOutsidePre(htmlWithMinifiedStyles).trim();
+}
+
+function collapseInterTagWhitespaceOutsidePre(html: string): string {
+	const preservedPreBlocks: string[] = [];
+	let protectedHtml = html;
+
+	protectedHtml = protectedHtml.replace(PRE_BLOCK_REGEX, (preBlock: string) => {
+		const placeholder = `__HOTAISLE_PRE_BLOCK_${preservedPreBlocks.length}__`;
+		preservedPreBlocks.push(preBlock);
+		return placeholder;
+	});
+
+	const collapsedHtml = protectedHtml.replace(/>\s+</g, '><');
+	let restoredHtml = collapsedHtml;
+
+	for (const [index, preBlock] of preservedPreBlocks.entries()) {
+		const placeholder = `__HOTAISLE_PRE_BLOCK_${index}__`;
+		restoredHtml = restoredHtml.replace(placeholder, preBlock);
+	}
+
+	return restoredHtml;
 }
 
 function injectThemeScripts(html: string): string {
