@@ -62,6 +62,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 		return <NotFoundPage />;
 	}
 
+	let prettyDate: string | undefined;
+	if (post.date) {
+		prettyDate = PUBLISH_DATE_FORMATTER.format(new Date(post.date));
+	}
+
 	return (
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			<div className="relative h-[50vh] min-h-100 w-full overflow-hidden border-border border-b bg-background">
@@ -107,9 +112,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 					<div className="flex flex-wrap items-center gap-6 font-medium text-muted-foreground">
 						<div className="flex items-center gap-2">
 							<Calendar className="text-arctic-blue" size={18} />
-							<time dateTime={post.date}>
-								{PUBLISH_DATE_FORMATTER.format(new Date(post.date))}
-							</time>
+							<time dateTime={post.date}>{prettyDate}</time>
 						</div>
 						{post.author && <p>By {post.author}</p>}
 					</div>
