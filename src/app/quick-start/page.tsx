@@ -113,12 +113,13 @@ export default function QuickStartPage() {
 					<div className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground">
 						<p>
 							Your VM already comes with{' '}
-							<strong className="text-foreground">ROCm</strong> (usually a pretty
-							recent version), and <strong className="text-foreground">Docker</strong>{' '}
-							(or Podman) is ready to roll since it’s the go-to for AMD tooling. AMD
-							themselves suggest using their containers for development, because,
-							let’s be real, installing everything by hand is still a major pain. The
-							good news is that their provided documentation is well polished.
+							<strong className="pl-0.5 text-foreground">ROCm</strong> (usually a
+							pretty recent version), and{' '}
+							<strong className="pl-0.5 text-foreground">Docker</strong> (or Podman)
+							is ready to roll since it’s the go-to for AMD tooling. AMD themselves
+							suggest using their containers for development, because, let’s be real,
+							installing everything by hand is still a major pain. The good news is
+							that their provided documentation is well polished.
 						</p>
 					</div>
 
