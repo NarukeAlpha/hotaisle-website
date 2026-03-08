@@ -3,6 +3,13 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import JsonLd from '@/components/seo/JsonLd';
 import './globals.css';
 
+const GTM_CONTAINER_ID = 'GTM-NK8WLZV8';
+const GTM_SCRIPT = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
+
 export const metadata = {
 	title: 'Hot Aisle - AMD Exclusive AI Cloud',
 	description:
@@ -40,8 +47,19 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head />
+			<head>
+				<script>{GTM_SCRIPT}</script>
+			</head>
 			<body>
+				<noscript>
+					<iframe
+						height="0"
+						src={`https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}`}
+						style={{ display: 'none', visibility: 'hidden' }}
+						title="Google Tag Manager"
+						width="0"
+					/>
+				</noscript>
 				<div className="flex min-h-screen bg-background text-foreground antialiased">
 					<Sidebar />
 					<main className="relative min-w-0 flex-1">
