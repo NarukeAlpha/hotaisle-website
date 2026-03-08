@@ -123,11 +123,11 @@ export default function QuickStartPage() {
 					</div>
 
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-						{/* Docker */}
+						{/* AMD */}
 						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
 							<div className="mb-4 flex items-center gap-3">
 								<Box className="h-5 w-5 shrink-0 text-arctic-blue" />
-								<h3 className="font-bold text-lg">Quick intro to Docker by AMD</h3>
+								<h3 className="font-bold text-lg">Quickstart with AMD</h3>
 							</div>
 							<p className="text-muted-foreground text-sm">
 								Pro tip: start your container with an external volume so your work
@@ -140,6 +140,26 @@ export default function QuickStartPage() {
 								target="_blank"
 							>
 								View Docker Guide <Terminal className="ml-1" size={14} />
+							</a>
+						</div>
+
+						{/* dstack */}
+						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
+							<div className="mb-4 flex items-center gap-3">
+								<Server className="h-5 w-5 shrink-0 text-arctic-blue" />
+								<h3 className="font-bold text-lg">Automate with dstack</h3>
+							</div>
+							<p className="text-muted-foreground text-sm">
+								Want to get the most out of our VMs (and save some cash) by
+								automating your deployment? Check out our tight API integration.
+							</p>
+							<a
+								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
+								href="https://dstack.ai/blog/hotaisle/"
+								rel="noopener"
+								target="_blank"
+							>
+								View dstack Integration <Terminal className="ml-1" size={14} />
 							</a>
 						</div>
 
@@ -179,26 +199,6 @@ export default function QuickStartPage() {
 								target="_blank"
 							>
 								View TinyGrad Repo <Terminal className="ml-1" size={14} />
-							</a>
-						</div>
-
-						{/* dstack */}
-						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
-							<div className="mb-4 flex items-center gap-3">
-								<Server className="h-5 w-5 shrink-0 text-arctic-blue" />
-								<h3 className="font-bold text-lg">Automate with dstack</h3>
-							</div>
-							<p className="text-muted-foreground text-sm">
-								Want to get the most out of our VMs (and save some cash) by
-								automating your deployment? Check out our tight API integration.
-							</p>
-							<a
-								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
-								href="https://dstack.ai/blog/hotaisle/"
-								rel="noopener"
-								target="_blank"
-							>
-								View dstack Integration <Terminal className="ml-1" size={14} />
 							</a>
 						</div>
 					</div>
