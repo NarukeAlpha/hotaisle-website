@@ -190,17 +190,6 @@ for (const routePath of exportedPaths) {
 	}
 }
 
-const notFoundResponse = await renderRoute(
-	new Request(`${EXPORT_ORIGIN}/__nonexistent_page_for_404__`, {
-		headers: { accept: 'text/html' },
-	})
-);
-
-if (notFoundResponse.status === 404) {
-	const notFoundHtml = await normalizeExportedHtml(await notFoundResponse.text());
-	await writeFile(path.join(DIST_DIRECTORY, '404.html'), notFoundHtml, 'utf8');
-}
-
 await scrubExportedHtmlFiles(DIST_DIRECTORY);
 
 function toOutputPath(routePath: string): string {
@@ -336,8 +325,7 @@ function collapseInterTagWhitespaceOutsidePre(html: string): string {
 		return placeholder;
 	});
 
-	const collapsedHtml = protectedHtml.replace(/>\s+</g, '><');
-	let restoredHtml = collapsedHtml;
+	let restoredHtml = protectedHtml.replace(/>\s+</g, '><');
 
 	for (const [index, preBlock] of preservedPreBlocks.entries()) {
 		const placeholder = `__HOTAISLE_PRE_BLOCK_${index}__`;
@@ -481,20 +469,18 @@ async function normalizeRscScriptNode(value: unknown[]): Promise<unknown[]> {
 		nextProps.children = await minifyInlineBlockContent('script', '', nextProps.children);
 	}
 
+	const dangerouslySetInnerHTML = nextProps.dangerouslySetInnerHTML;
 	if (
-		nextProps.dangerouslySetInnerHTML &&
-		typeof nextProps.dangerouslySetInnerHTML === 'object' &&
-		!Array.isArray(nextProps.dangerouslySetInnerHTML) &&
-		typeof nextProps.dangerouslySetInnerHTML.__html === 'string' &&
+		typeof dangerouslySetInnerHTML === 'object' &&
+		dangerouslySetInnerHTML !== null &&
+		!Array.isArray(dangerouslySetInnerHTML) &&
+		'__html' in dangerouslySetInnerHTML &&
+		typeof dangerouslySetInnerHTML.__html === 'string' &&
 		scriptType !== 'application/ld+json'
 	) {
 		nextProps.dangerouslySetInnerHTML = {
-			...nextProps.dangerouslySetInnerHTML,
-			__html: await minifyInlineBlockContent(
-				'script',
-				'',
-				nextProps.dangerouslySetInnerHTML.__html
-			),
+			...dangerouslySetInnerHTML,
+			__html: await minifyInlineBlockContent('script', '', dangerouslySetInnerHTML.__html),
 		};
 	}
 
