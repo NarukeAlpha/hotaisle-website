@@ -59,6 +59,39 @@ export default function QuickStartPage() {
 						<CopyCommand command="ssh admin.hotaisle.app" />
 					</div>
 
+					<p className="mt-4 max-w-xl text-center text-muted-foreground text-sm">
+						If you need a terminal app, use{' '}
+						<a
+							className="font-medium text-arctic-blue hover:underline"
+							href="https://www.cmux.dev/"
+							rel="noopener"
+							target="_blank"
+						>
+							cmux
+						</a>{' '}
+						on macOS,{' '}
+						<a
+							className="font-medium text-arctic-blue hover:underline"
+							href="https://ghostty.org/"
+							rel="noopener"
+							target="_blank"
+						>
+							Ghostty
+						</a>{' '}
+						on Linux,
+						<br />
+						and{' '}
+						<a
+							className="font-medium text-arctic-blue hover:underline"
+							href="https://wezterm.org/"
+							rel="noopener"
+							target="_blank"
+						>
+							WezTerm
+						</a>{' '}
+						on Windows.
+					</p>
+
 					<div className="mt-8 w-full max-w-xl space-y-6">
 						<div className="flex gap-4">
 							<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 font-bold text-sm text-white">
