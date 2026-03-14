@@ -77,7 +77,7 @@ export function Sidebar() {
 						<button
 							aria-label="Switch to dark mode"
 							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
-							data-hotaisle-theme-toggle
+							data-theme-toggle
 							title="Switch to dark mode"
 							type="button"
 						>

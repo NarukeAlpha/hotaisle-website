@@ -2,7 +2,7 @@ export function initializeThemeScript(): void {
 	const STORAGE_KEY = 'theme';
 	const DARK_CLASS = 'dark';
 	const LIGHT_CLASS = 'light';
-	const SELECTOR = '[data-theme-toggle]';
+	const THEME_TOGGLE_SELECTOR = '[data-theme-toggle]';
 
 	const getStoredTheme = () => {
 		try {
@@ -36,7 +36,7 @@ export function initializeThemeScript(): void {
 		root.dataset.theme = theme;
 
 		const nextTheme = theme === DARK_CLASS ? LIGHT_CLASS : DARK_CLASS;
-		for (const button of document.querySelectorAll(SELECTOR)) {
+		for (const button of document.querySelectorAll(THEME_TOGGLE_SELECTOR)) {
 			button.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
 			button.setAttribute('title', `Switch to ${nextTheme} mode`);
 			const label = button.querySelector('[data-theme-label]');
@@ -60,7 +60,7 @@ export function initializeThemeScript(): void {
 			return;
 		}
 
-		const button = target.closest(SELECTOR);
+		const button = target.closest(THEME_TOGGLE_SELECTOR);
 		if (!(button instanceof HTMLButtonElement)) {
 			return;
 		}
