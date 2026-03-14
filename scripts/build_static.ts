@@ -2,117 +2,31 @@ import { spawn } from 'node:child_process';
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { transform as transformWithEsbuild } from 'esbuild';
+import { minify as minifyWithRolldown } from 'rolldown/utils';
 import { appRouter } from '../node_modules/vinext/dist/routing/app-router.js';
-import { BLOG_POSTS } from '../src/generated/blog-data';
-import { POLICIES } from '../src/generated/static-content-data';
+import { BLOG_POSTS } from '../src/generated/blog-data.ts';
+import { POLICIES } from '../src/generated/static-content-data.ts';
 
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
-const THEME_ASSET_PATH = '/assets/theme.js';
-const THEME_ASSET_OUTPUT_PATH = path.join('assets', 'theme.js');
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
+const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const RSC_TEXT_CHUNK_START_REGEX = /^[0-9a-z]+:T[0-9a-z]+,$/;
 const RSC_RECORD_START_REGEX = /^[0-9a-z]+:/;
 const RSC_RECORD_PREFIX_REGEX = /^([0-9a-z]+:)(.+)$/;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
-const THEME_SCRIPT = `
-(() => {
-	const STORAGE_KEY = 'theme';
-	const DARK_CLASS = 'dark';
-	const LIGHT_CLASS = 'light';
-	const SELECTOR = '[data-theme-toggle]';
-
-	const getStoredTheme = () => {
-		try {
-			return window.localStorage.getItem(STORAGE_KEY);
-		} catch {
-			return null;
-		}
-	};
-
-	const persistTheme = (theme) => {
-		try {
-			window.localStorage.setItem(STORAGE_KEY, theme);
-		} catch {}
-	};
-
-	const getPreferredTheme = () => {
-		const storedTheme = getStoredTheme();
-		if (storedTheme === DARK_CLASS || storedTheme === LIGHT_CLASS) {
-			return storedTheme;
-		}
-
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK_CLASS : LIGHT_CLASS;
-	};
-
-	const applyTheme = (theme) => {
-		const root = document.documentElement;
-		root.classList.remove(LIGHT_CLASS, DARK_CLASS);
-		root.classList.add(theme);
-		root.dataset.theme = theme;
-
-		const nextTheme = theme === DARK_CLASS ? LIGHT_CLASS : DARK_CLASS;
-		for (const button of document.querySelectorAll(SELECTOR)) {
-			button.setAttribute('aria-label', 'Switch to ' + nextTheme + ' mode');
-			button.setAttribute('title', 'Switch to ' + nextTheme + ' mode');
-			const label = button.querySelector('[data-theme-label]');
-			if (label) {
-				label.textContent = theme === DARK_CLASS ? 'Dark' : 'Light';
-			}
-		}
-	};
-
-	const toggleTheme = () => {
-		const nextTheme = document.documentElement.classList.contains(DARK_CLASS)
-			? LIGHT_CLASS
-			: DARK_CLASS;
-		persistTheme(nextTheme);
-		applyTheme(nextTheme);
-	};
-
-	window.__toggleTheme = toggleTheme;
-
-	document.addEventListener('click', (event) => {
-		const target = event.target;
-		if (!(target instanceof Element)) {
-			return;
-		}
-
-		const button = target.closest(SELECTOR);
-		if (!(button instanceof HTMLButtonElement)) {
-			return;
-		}
-
-		toggleTheme();
-	});
-
-	const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-	const syncPreferredTheme = () => {
-		if (getStoredTheme() === null) {
-			applyTheme(getPreferredTheme());
-		}
-	};
-
-	if (typeof mediaQuery.addEventListener === 'function') {
-		mediaQuery.addEventListener('change', syncPreferredTheme);
-	} else if (typeof mediaQuery.addListener === 'function') {
-		mediaQuery.addListener(syncPreferredTheme);
-	}
-
-	applyTheme(getPreferredTheme());
-})();
-`;
+interface CssSegment {
+	isString: boolean;
+	value: string;
+}
 
 process.env.NODE_ENV = 'production';
-
-const MINIFIED_THEME_SCRIPT = await minifyInlineBlockContent('script', '', THEME_SCRIPT);
 
 await rm(DIST_DIRECTORY, { force: true, recursive: true });
 
@@ -131,7 +45,6 @@ if (exitCode !== 0) {
 }
 
 await cp(CLIENT_DIRECTORY, DIST_DIRECTORY, { force: true, recursive: true });
-await writeFile(path.join(DIST_DIRECTORY, THEME_ASSET_OUTPUT_PATH), MINIFIED_THEME_SCRIPT, 'utf8');
 
 const routes = await appRouter(APP_DIRECTORY);
 const exportedPaths = new Set<string>();
@@ -221,9 +134,8 @@ function toRscOutputPath(routePath: string): string {
 async function normalizeExportedHtml(html: string): Promise<string> {
 	const htmlDocument = stripTrailingContentAfterHtml(html);
 	const htmlWithoutClientBootstrap = stripClientBootstrap(htmlDocument);
-	const htmlWithThemeScripts = injectThemeScripts(htmlWithoutClientBootstrap);
 
-	return await minifyExportedHtml(htmlWithThemeScripts);
+	return await minifyExportedHtml(htmlWithoutClientBootstrap);
 }
 
 function stripTrailingContentAfterHtml(html: string): string {
@@ -333,17 +245,6 @@ function collapseInterTagWhitespaceOutsidePre(html: string): string {
 	}
 
 	return restoredHtml;
-}
-
-function injectThemeScripts(html: string): string {
-	const themeScriptTag = `<script src="${THEME_ASSET_PATH}"></script>`;
-	const headCloseIndex = html.indexOf('</head>');
-
-	if (headCloseIndex === -1) {
-		return html;
-	}
-
-	return `${html.slice(0, headCloseIndex)}${themeScriptTag}${html.slice(headCloseIndex)}`;
 }
 
 function stripClientBootstrap(html: string): string {
@@ -595,20 +496,125 @@ async function minifyInlineBlockContent(
 			return content.trim();
 		}
 
-		const result = await transformWithEsbuild(content, {
-			charset: 'utf8',
-			loader: 'js',
-			minify: true,
-			target: 'es2020',
-		});
-		return result.code.trim();
+		return await minifyInlineScript(content);
 	}
 
-	const result = await transformWithEsbuild(content, {
-		charset: 'utf8',
-		loader: 'css',
-		minify: true,
-		target: 'es2020',
+	return minifyInlineCss(content);
+}
+
+async function minifyInlineScript(content: string): Promise<string> {
+	const result = await minifyWithRolldown(INLINE_SCRIPT_FILE_NAME, content, {
+		module: false,
 	});
+
+	if (result.errors.length > 0) {
+		const [firstError] = result.errors;
+		throw new Error(firstError?.message ?? 'Rolldown failed to minify inline script');
+	}
+
 	return result.code.trim();
+}
+
+function minifyInlineCss(content: string): string {
+	const cssSegments = splitCssSegments(content);
+	let minifiedCss = '';
+
+	for (const cssSegment of cssSegments) {
+		minifiedCss += cssSegment.isString ? cssSegment.value : minifyCssSegment(cssSegment.value);
+	}
+
+	return minifiedCss.trim();
+}
+
+function splitCssSegments(content: string): CssSegment[] {
+	const segments: CssSegment[] = [];
+	let index = 0;
+	let segmentStart = 0;
+
+	while (index < content.length) {
+		const character = content[index] ?? '';
+		const nextCharacter = content[index + 1] ?? '';
+
+		if (isCssCommentStart(character, nextCharacter)) {
+			pushCssSegment(segments, false, content.slice(segmentStart, index));
+			index = skipCssComment(content, index + 2);
+			segmentStart = index;
+			continue;
+		}
+
+		if (isCssStringDelimiter(character)) {
+			pushCssSegment(segments, false, content.slice(segmentStart, index));
+			const stringEnd = findCssStringEnd(content, index + 1, character);
+			pushCssSegment(segments, true, content.slice(index, stringEnd));
+			index = stringEnd;
+			segmentStart = index;
+			continue;
+		}
+
+		index += 1;
+	}
+
+	pushCssSegment(segments, false, content.slice(segmentStart));
+
+	return segments;
+}
+
+function pushCssSegment(segments: CssSegment[], isString: boolean, value: string): void {
+	if (value.length === 0) {
+		return;
+	}
+
+	segments.push({ isString, value });
+}
+
+function isCssCommentStart(character: string, nextCharacter: string): boolean {
+	return character === '/' && nextCharacter === '*';
+}
+
+function isCssStringDelimiter(character: string): character is '"' | "'" {
+	return character === '"' || character === "'";
+}
+
+function skipCssComment(content: string, index: number): number {
+	let nextIndex = index;
+
+	while (nextIndex < content.length) {
+		const character = content[nextIndex] ?? '';
+		const nextCharacter = content[nextIndex + 1] ?? '';
+
+		if (character === '*' && nextCharacter === '/') {
+			return nextIndex + 2;
+		}
+
+		nextIndex += 1;
+	}
+
+	return nextIndex;
+}
+
+function findCssStringEnd(content: string, index: number, delimiter: '"' | "'"): number {
+	let nextIndex = index;
+
+	while (nextIndex < content.length) {
+		const character = content[nextIndex] ?? '';
+		if (character === '\\') {
+			nextIndex += 2;
+			continue;
+		}
+
+		if (character === delimiter) {
+			return nextIndex + 1;
+		}
+
+		nextIndex += 1;
+	}
+
+	return nextIndex;
+}
+
+function minifyCssSegment(segment: string): string {
+	return segment
+		.replace(/\s+/g, ' ')
+		.replace(/\s*([{}:;,>+~()])\s*/g, '$1')
+		.replace(/;}/g, '}');
 }
