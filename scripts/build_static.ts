@@ -11,15 +11,17 @@ const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
+const STATIC_DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist-static');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
 const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
+const DS_STORE_FILE_NAME = '.DS_Store';
+const RSC_FILE_EXTENSION = '.rsc';
+const VITE_METADATA_DIRECTORY_NAME = '.vite';
+const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
-const RSC_TEXT_CHUNK_START_REGEX = /^[0-9a-z]+:T[0-9a-z]+,$/;
-const RSC_RECORD_START_REGEX = /^[0-9a-z]+:/;
-const RSC_RECORD_PREFIX_REGEX = /^([0-9a-z]+:)(.+)$/;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
 interface CssSegment {
 	isString: boolean;
@@ -28,7 +30,7 @@ interface CssSegment {
 
 process.env.NODE_ENV = 'production';
 
-await rm(DIST_DIRECTORY, { force: true, recursive: true });
+await rm(STATIC_DIST_DIRECTORY, { force: true, recursive: true });
 
 const buildProcess = spawn('bun', ['run', 'vinext', 'build'], {
 	cwd: PROJECT_ROOT,
@@ -44,7 +46,11 @@ if (exitCode !== 0) {
 	throw new Error(`vinext build failed with exit code ${exitCode}`);
 }
 
-await cp(CLIENT_DIRECTORY, DIST_DIRECTORY, { force: true, recursive: true });
+await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
+	filter: (sourcePath: string) => !shouldExcludeFromStaticExport(sourcePath),
+	force: true,
+	recursive: true,
+});
 
 const routes = await appRouter(APP_DIRECTORY);
 const exportedPaths = new Set<string>();
@@ -80,30 +86,15 @@ for (const routePath of exportedPaths) {
 		throw new Error(`Failed to export ${routePath}: ${htmlResponse.status}`);
 	}
 	const rawHtml = await htmlResponse.text();
-
-	const rscResponse = await renderStaticRoute(renderRoute, requestPath, 'text/x-component');
-
-	if (!rscResponse.ok) {
-		throw new Error(`Failed to export RSC payload for ${routePath}: ${rscResponse.status}`);
-	}
-
-	const rscPayload = await normalizeRscPayload(await rscResponse.text());
 	const html = await normalizeExportedHtml(rawHtml);
 	const outputPath = toOutputPath(routePath);
-	const fullPath = path.join(DIST_DIRECTORY, outputPath);
+	const fullPath = path.join(STATIC_DIST_DIRECTORY, outputPath);
 
 	await mkdir(path.dirname(fullPath), { recursive: true });
 	await writeFile(fullPath, html, 'utf8');
-	const rscOutputPath = toRscOutputPath(routePath);
-
-	await writeFile(path.join(DIST_DIRECTORY, rscOutputPath), rscPayload, 'utf8');
-
-	if (routePath === '/') {
-		await writeFile(path.join(DIST_DIRECTORY, 'index.rsc'), rscPayload, 'utf8');
-	}
 }
 
-await scrubExportedHtmlFiles(DIST_DIRECTORY);
+await scrubExportedHtmlFiles(STATIC_DIST_DIRECTORY);
 
 function toOutputPath(routePath: string): string {
 	if (routePath === '/') {
@@ -120,15 +111,6 @@ function toRequestPath(routePath: string): string {
 	}
 
 	return routePath.endsWith('/') ? routePath : `${routePath}/`;
-}
-
-function toRscOutputPath(routePath: string): string {
-	if (routePath === '/') {
-		return '.rsc';
-	}
-
-	const normalizedPath = routePath.replace(/^\/+|\/+$/g, '');
-	return `${normalizedPath}.rsc`;
 }
 
 async function normalizeExportedHtml(html: string): Promise<string> {
@@ -181,43 +163,6 @@ async function renderStaticRoute(
 	}
 
 	throw new Error(`Too many redirects while exporting ${requestPath}`);
-}
-
-async function normalizeRscPayload(html: string): Promise<string> {
-	const lines = html.split('\n');
-	const normalizedLines: string[] = [];
-
-	for (let index = 0; index < lines.length; index += 1) {
-		const line = lines[index] ?? '';
-		if (
-			line.startsWith(':N') ||
-			line.startsWith(':W') ||
-			line.startsWith(':D') ||
-			line.startsWith(':J')
-		) {
-			continue;
-		}
-
-		if (!RSC_TEXT_CHUNK_START_REGEX.test(line)) {
-			normalizedLines.push(await normalizeRscRecordLine(line));
-			continue;
-		}
-
-		const contentLines: string[] = [];
-		let nextIndex = index + 1;
-
-		while (nextIndex < lines.length && !RSC_RECORD_START_REGEX.test(lines[nextIndex] ?? '')) {
-			contentLines.push(lines[nextIndex] ?? '');
-			nextIndex += 1;
-		}
-
-		const content = contentLines.join('\n');
-		normalizedLines.push(line);
-		normalizedLines.push(await normalizeRscTextChunk(content));
-		index = nextIndex - 1;
-	}
-
-	return normalizedLines.join('\n');
 }
 
 async function minifyExportedHtml(html: string): Promise<string> {
@@ -284,167 +229,6 @@ async function scrubExportedHtmlFiles(directory: string): Promise<void> {
 			await writeFile(entryPath, strippedHtml, 'utf8');
 		}
 	}
-}
-
-async function normalizeRscRecordLine(line: string): Promise<string> {
-	if (line.includes(':HL[')) {
-		return line.replaceAll('stylesheet', 'style');
-	}
-
-	const recordMatch = line.match(RSC_RECORD_PREFIX_REGEX);
-	if (!recordMatch) {
-		return line;
-	}
-
-	const [, prefix, serializedValue] = recordMatch;
-	if (!(serializedValue.startsWith('[') || serializedValue.startsWith('{'))) {
-		return line;
-	}
-
-	try {
-		const parsedValue = JSON.parse(serializedValue) as unknown;
-		const normalizedValue = await normalizeRscValue(parsedValue);
-		return `${prefix}${JSON.stringify(normalizedValue)}`;
-	} catch {
-		return line
-			.replaceAll('"rel":"stylesheet"', '"rel":"style"')
-			.replaceAll('\\"rel\\":\\"stylesheet\\"', '\\"rel\\":\\"style\\"');
-	}
-}
-
-async function normalizeRscValue(value: unknown): Promise<unknown> {
-	if (Array.isArray(value)) {
-		if (value[0] === '$' && value[1] === 'script') {
-			return await normalizeRscScriptNode(value);
-		}
-
-		if (value[0] === '$' && value[1] === 'style') {
-			return await normalizeRscStyleNode(value);
-		}
-
-		const normalizedItems: unknown[] = [];
-		for (const item of value) {
-			normalizedItems.push(await normalizeRscValue(item));
-		}
-		return normalizedItems;
-	}
-
-	if (!value || typeof value !== 'object') {
-		return value;
-	}
-
-	const normalizedEntries = await Promise.all(
-		Object.entries(value).map(async ([entryKey, entryValue]) => {
-			if (
-				entryKey === 'rel' &&
-				entryValue === 'stylesheet' &&
-				('data-rsc-css-href' in value || 'precedence' in value)
-			) {
-				return [entryKey, 'style'] as const;
-			}
-
-			return [entryKey, await normalizeRscValue(entryValue)] as const;
-		})
-	);
-
-	return Object.fromEntries(normalizedEntries);
-}
-
-async function normalizeRscScriptNode(value: unknown[]): Promise<unknown[]> {
-	const normalizedNode = [...value];
-	const props = normalizedNode[3];
-
-	if (!props || typeof props !== 'object' || Array.isArray(props)) {
-		return normalizedNode;
-	}
-
-	const nextProps: Record<string, unknown> = {};
-	for (const [entryKey, entryValue] of Object.entries(props)) {
-		nextProps[entryKey] = entryValue;
-	}
-
-	const scriptType =
-		typeof nextProps.type === 'string' ? nextProps.type.toLowerCase() : undefined;
-
-	if (typeof nextProps.children === 'string' && scriptType !== 'application/ld+json') {
-		nextProps.children = await minifyInlineBlockContent('script', '', nextProps.children);
-	}
-
-	const dangerouslySetInnerHTML = nextProps.dangerouslySetInnerHTML;
-	if (
-		typeof dangerouslySetInnerHTML === 'object' &&
-		dangerouslySetInnerHTML !== null &&
-		!Array.isArray(dangerouslySetInnerHTML) &&
-		'__html' in dangerouslySetInnerHTML &&
-		typeof dangerouslySetInnerHTML.__html === 'string' &&
-		scriptType !== 'application/ld+json'
-	) {
-		nextProps.dangerouslySetInnerHTML = {
-			...dangerouslySetInnerHTML,
-			__html: await minifyInlineBlockContent('script', '', dangerouslySetInnerHTML.__html),
-		};
-	}
-
-	normalizedNode[3] = await normalizeRscValue(nextProps);
-	return normalizedNode;
-}
-
-async function normalizeRscStyleNode(value: unknown[]): Promise<unknown[]> {
-	const normalizedNode = [...value];
-	const props = normalizedNode[3];
-
-	if (!props || typeof props !== 'object' || Array.isArray(props)) {
-		return normalizedNode;
-	}
-
-	const nextProps: Record<string, unknown> = {};
-	for (const [entryKey, entryValue] of Object.entries(props)) {
-		nextProps[entryKey] = entryValue;
-	}
-
-	if (typeof nextProps.children === 'string') {
-		nextProps.children = await minifyInlineBlockContent('style', '', nextProps.children);
-	}
-
-	normalizedNode[3] = await normalizeRscValue(nextProps);
-	return normalizedNode;
-}
-
-async function normalizeRscTextChunk(content: string): Promise<string> {
-	const trimmedContent = content.trim();
-	if (trimmedContent.length === 0) {
-		return '';
-	}
-
-	if (looksLikeJavaScriptTextChunk(trimmedContent)) {
-		return await minifyInlineBlockContent('script', '', trimmedContent);
-	}
-
-	if (looksLikeCssTextChunk(trimmedContent)) {
-		return await minifyInlineBlockContent('style', '', trimmedContent);
-	}
-
-	return trimmedContent;
-}
-
-function looksLikeJavaScriptTextChunk(content: string): boolean {
-	return (
-		content.startsWith('(()') ||
-		content.startsWith('!function') ||
-		content.includes('document.') ||
-		content.includes('window.') ||
-		content.includes('localStorage') ||
-		content.includes('matchMedia(')
-	);
-}
-
-function looksLikeCssTextChunk(content: string): boolean {
-	return (
-		content.includes('{') &&
-		content.includes('}') &&
-		(content.includes(':') || content.includes('@keyframes')) &&
-		!looksLikeJavaScriptTextChunk(content)
-	);
 }
 
 async function minifyInlineBlocks(html: string, tagName: 'script' | 'style'): Promise<string> {
@@ -617,4 +401,15 @@ function minifyCssSegment(segment: string): string {
 		.replace(/\s+/g, ' ')
 		.replace(/\s*([{}:;,>+~()])\s*/g, '$1')
 		.replace(/;}/g, '}');
+}
+
+function shouldExcludeFromStaticExport(sourcePath: string): boolean {
+	const entryName = path.basename(sourcePath);
+	return (
+		entryName === DS_STORE_FILE_NAME ||
+		entryName === VITE_METADATA_DIRECTORY_NAME ||
+		entryName === WRANGLER_CONFIG_FILE_NAME ||
+		entryName === '.rsc' ||
+		sourcePath.endsWith(RSC_FILE_EXTENSION)
+	);
 }

@@ -13,7 +13,8 @@
 		"dev": "bun run generate:content && (bun run watch:content & vinext dev)",
 		"build": "bun run scripts/build_static.ts",
 		"preview": "vinext start",
-		"deploy": "vinext deploy",
+		"preview:static": "bun run build && bun run scripts/preview_static.ts",
+		"deploy": "bun run build && vinext deploy --skip-build",
 		"check": "bun ./node_modules/ultracite/dist/index.js check",
 		"fix": "bun ./node_modules/ultracite/dist/index.js fix"
 	},
@@ -46,11 +47,12 @@
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^6.0.1",
 		"@vitejs/plugin-rsc": "^0.5.21",
+		"bun-types": "^1.3.10",
 		"rolldown": "^1.0.0-rc.9",
 		"sharp": "^0.34.5",
 		"tailwindcss": "^4.2.1",
 		"typescript": "^5.9.3",
-		"ultracite": "^7.3.0",
+		"ultracite": "^7.3.1",
 		"vinext": "^0.0.30",
 		"vite": "^8.0.0",
 		"wrangler": "^4.73.0"
