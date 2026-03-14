@@ -1,6 +1,7 @@
 import { ArrowLeft, Calendar } from 'lucide-react';
 import NotFoundPage from '@/app/not-found.tsx';
 import { AppLink } from '@/components/AppLink.tsx';
+import { BlogContent } from '@/components/blog/BlogContent.tsx';
 import { getAllSlugs, getPageContent } from '@/lib/content.ts';
 import './syntax-highlighting.css';
 
@@ -122,8 +123,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 			<article className="container relative z-20 mx-auto -mt-10 max-w-6xl px-6">
 				<div className="rounded-2xl border border-border bg-card p-8 shadow-xl md:p-12">
 					<div className="prose prose-lg max-w-none prose-img:rounded-lg prose-a:text-arctic-blue prose-blockquote:text-muted-foreground prose-code:text-arctic-blue prose-headings:text-foreground prose-strong:text-foreground text-foreground leading-relaxed prose-img:shadow-md">
-						{/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted repository content */}
-						<div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+						<BlogContent contentHtml={post.contentHtml} />
 					</div>
 				</div>
 

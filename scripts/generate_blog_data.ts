@@ -8,6 +8,7 @@ import rehypeStringify from 'rehype-stringify';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
+import sharp from 'sharp';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_DIR = path.join(CONTENT_DIR, 'blog');
@@ -17,12 +18,10 @@ const BLOG_ASSET_PREFIX = '/assets/blog/';
 const FILE_SUFFIX_REGEX = /\s[0-9a-f]{32}$/i;
 const MD_EXTENSION_REGEX = /\.md$/i;
 const DATE_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
-const MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/g;
-const FIRST_MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)]+)\)/;
-const MARKDOWN_LINK_REGEX = /\[([^\]]+)\]\(([^)]+)\)/g;
+const MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g;
+const FIRST_MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/;
+const MARKDOWN_LINK_REGEX = /(?<!!)\[([^\]]+)\]\(([^)]+)\)/g;
 const NOTION_NESTED_IMAGE_LINK_REGEX = /!\[\[([^\]]+)\]\(([^)]+)\)\]\(([^)]+)\)/g;
-const TAG_LINK_REGEX = /([^,]+?)\s*\(https?:\/\/[^)]+\)/g;
-const NOTION_LINK_VALUE_REGEX = /^(.*?)\s*\(https?:\/\/[^)]+\)$/;
 const EXTERNAL_OR_SPECIAL_LINK_REGEX = /^(?:https?:|mailto:|tel:|#|\/)/i;
 const LEADING_H1_REGEX = /^\s*#\s+(.+)\n+/;
 const NOTION_METADATA_LINE_REGEX = /^([A-Za-z][A-Za-z0-9 '&()._/+-]*):\s*(.*)$/;
@@ -32,40 +31,22 @@ const RELATIVE_PATH_PREFIX_REGEX = /^\.\//;
 const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 const NEW_LINE_SPLIT_REGEX = /\r?\n/;
 const IMAGE_EXTENSION_REGEX = /\.(?:avif|gif|jpe?g|png|svg|webp)(?:$|[?#])/i;
+const BLOG_HEADER_FILE_NAMES = ['header.jpg', 'header.png'] as const;
+const BLOG_IMAGE_TAG_REGEX = /<img\b([^>]*?)src="([^"]+)"([^>]*)>/g;
+const CLASS_ATTRIBUTE_REGEX = /\sclass="([^"]*)"/;
+const TITLE_ATTRIBUTE_REGEX = /\stitle="([^"]*)"/;
 const NOTION_MULTILINE_METADATA_KEYS = new Set(['description']);
 const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
 const EDGE_DASHES_REGEX = /^-+|-+$/g;
-const BLOG_HEADER_IMAGE_BY_SLUG: Record<string, string> = {
-	'gpu-orchestration-with-dstack': '/assets/blog/gpu-orchestration-with-dstack/header.jpg',
-	'hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust':
-		'/assets/blog/hot-aisle-achieves-soc-2-type-2-compliance-a-milestone-in-security-and-trust/header.jpg',
-	'soc-2-type-1-completed-hot-aisle-secures-initial-compliance-milestone':
-		'/assets/blog/soc-2-type-1-completed-hot-aisle-secures-initial-compliance-milestone/header.jpg',
-	'hot-aisle-red-hat-neural-magic-amd-open-ai-inference-mi300x':
-		'/assets/blog/hot-aisle-red-hat-neural-magic-amd-open-ai-inference-mi300x/header.jpg',
-	'empowering-developers-with-amd-ai-technologies-in-the-cloud':
-		'/assets/blog/empowering-developers-with-amd-ai-technologies-in-the-cloud/header.png',
-	'hot-aisle-democratizes-ai-with-amd-instinct-mi300x-gpus4o':
-		'/assets/blog/hot-aisle-democratizes-ai-with-amd-instinct-mi300x-gpus4o/header.png',
-	'hot-aisle-goes-100-green-with-switch-sustainability-certification':
-		'/assets/blog/hot-aisle-goes-100-green-with-switch-sustainability-certification/header.jpg',
-	'dr-moritz-lehmann-linkedin-hot-aisle-8x-amd-mi300x-fastest-fluidx3d-cfd':
-		'/assets/blog/dr-moritz-lehmann-linkedin-hot-aisle-8x-amd-mi300x-fastest-fluidx3d-cfd/header.png',
-	'advizex-enables-startup-hot-aisle-to-democratize-access-to-ai-and-supercomputing':
-		'/assets/blog/advizex-enables-startup-hot-aisle-to-democratize-access-to-ai-and-supercomputing/header.png',
-	'humans-in-ai-podcast-jon-stevens-democratizing-supercomputing':
-		'/assets/blog/humans-in-ai-podcast-jon-stevens-democratizing-supercomputing/header.png',
-	'response-to-ai-is-the-spark-igniting-a-new-era':
-		'/assets/blog/response-to-ai-is-the-spark-igniting-a-new-era/header.jpg',
-	'saurabh-kapoor-dell-technologies-jon-stevens-sc24-thecube':
-		'/assets/blog/saurabh-kapoor-dell-technologies-jon-stevens-sc24-thecube/header.png',
-	'jon-stevens-speaking-dell-technologies-sc24':
-		'/assets/blog/jon-stevens-speaking-dell-technologies-sc24/header.png',
-	hyperscalers: '/assets/blog/hyperscalers/header.jpg',
-	groundbreaking: '/assets/blog/groundbreaking/header.jpg',
-	cruising: '/assets/blog/cruising/header.jpg',
-};
+const WHITESPACE_REGEX = /\s+/g;
+const INLINE_IMAGE_CLASS = 'blog-inline-image';
+const PORTRAIT_IMAGE_CLASS = 'blog-inline-image--portrait';
+const MODAL_IMAGE_CLASS = 'blog-inline-image--modal';
+const SMALL_IMAGE_CLASS = 'blog-inline-image--small';
+const MODAL_IMAGE_HINT = 'modal';
+const SMALL_IMAGE_TITLE = 'small';
+const PORTRAIT_IMAGE_RATIO_THRESHOLD = 1;
 
 interface RawBlogPost {
 	author?: string;
@@ -102,6 +83,14 @@ interface GeneratedBlogPost {
 	tags: string[];
 	title: string;
 }
+
+interface BlogImageMetadata {
+	height: number;
+	isPortrait: boolean;
+	width: number;
+}
+
+const blogImageMetadataByUrl = new Map<string, BlogImageMetadata | null>();
 
 function normalizeMetadataKey(key: string): string {
 	return key.trim().toLowerCase();
@@ -163,35 +152,9 @@ function parseDateToIso(value: string | undefined): string {
 	return parsed.toISOString();
 }
 
-function stripNotionLinkValue(value: string | undefined): string | undefined {
-	if (!value) {
-		return undefined;
-	}
-
-	const match = value.trim().match(NOTION_LINK_VALUE_REGEX);
-	if (!match) {
-		return value.trim();
-	}
-
-	return match[1].trim();
-}
-
 function parseTags(value: string | undefined): string[] {
 	if (!value) {
 		return [];
-	}
-
-	const tags: string[] = [];
-	const fromLinks = value.matchAll(TAG_LINK_REGEX);
-	for (const match of fromLinks) {
-		const tag = match[1]?.trim();
-		if (tag) {
-			tags.push(tag);
-		}
-	}
-
-	if (tags.length > 0) {
-		return tags;
 	}
 
 	return value
@@ -273,6 +236,23 @@ function toAssetUrl(assetPath: string): string {
 		.map((segment) => toSlugSegment(segment))
 		.join('/');
 	return `${BLOG_ASSET_PREFIX}${encoded}`;
+}
+
+function resolveBlogHeaderImage(slug: string): string | undefined {
+	const headerDirectory = path.join(BLOG_DIR, slug);
+
+	if (!fs.existsSync(headerDirectory)) {
+		return undefined;
+	}
+
+	for (const fileName of BLOG_HEADER_FILE_NAMES) {
+		const headerPath = path.join(headerDirectory, fileName);
+		if (fs.existsSync(headerPath)) {
+			return `${BLOG_ASSET_PREFIX}${slug}/${fileName}`;
+		}
+	}
+
+	return undefined;
 }
 
 function parseNotionMetadataLine(line: string): { key: string; value: string } | null {
@@ -390,7 +370,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 	const description =
 		parsed.metadata.description?.trim() || extractDescription(parsed.contentMarkdown);
 	const tags = parseTags(parsed.metadata.tags);
-	const author = stripNotionLinkValue(parsed.metadata.author);
+	const author = parsed.metadata.author?.trim() || undefined;
 	const date = parseDateToIso(parsed.metadata.date);
 	const withoutDuplicateHeading = stripLeadingMatchingHeading(
 		parsed.contentMarkdown,
@@ -416,7 +396,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 		coverImagePath && !EXTERNAL_OR_SPECIAL_LINK_REGEX.test(coverImagePath)
 			? toAssetUrl(coverImagePath)
 			: coverImagePath;
-	const overriddenCoverImage = BLOG_HEADER_IMAGE_BY_SLUG[slug] ?? coverImage;
+	const headerImage = resolveBlogHeaderImage(slug);
 
 	return {
 		slug,
@@ -430,7 +410,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 		metaDescription: parsed.metadata['meta description'],
 		metaKeywords: parsed.metadata['meta keywords'],
 		contentMarkdown: normalizedContent,
-		coverImage: overriddenCoverImage,
+		coverImage: headerImage ?? coverImage,
 		sourceFileName: fileName,
 	};
 }
@@ -463,17 +443,14 @@ function rewriteMarkdownLinks(markdown: string, fileStemToSlug: Map<string, stri
 
 	const withImages = normalizedNestedImages.replaceAll(
 		MARKDOWN_IMAGE_REGEX,
-		(_match, alt, rawPath) => {
+		(_match, alt, rawPath, title) => {
 			const resolvedPath = resolveInternalMarkdownLink(rawPath, fileStemToSlug);
-			return `![${alt}](<${resolvedPath}>)`;
+			const titleSuffix = title ? ` "${title}"` : '';
+			return `![${alt}](${resolvedPath}${titleSuffix})`;
 		}
 	);
 
-	return withImages.replaceAll(MARKDOWN_LINK_REGEX, (match, label, rawPath) => {
-		if (match.startsWith('![')) {
-			return match;
-		}
-
+	return withImages.replaceAll(MARKDOWN_LINK_REGEX, (_match, label, rawPath) => {
 		const decoded = decodeMarkdownPath(rawPath);
 		if (EXTERNAL_OR_SPECIAL_LINK_REGEX.test(decoded)) {
 			return `[${label}](${rawPath})`;
@@ -499,6 +476,113 @@ async function renderMarkdown(markdown: string): Promise<string> {
 		.use(rehypeStringify)
 		.process(markdown);
 	return processedContent.toString();
+}
+
+function toPublicAssetPath(assetUrl: string): string | undefined {
+	if (!assetUrl.startsWith(BLOG_ASSET_PREFIX)) {
+		return undefined;
+	}
+
+	const relativeAssetPath = assetUrl.slice(BLOG_ASSET_PREFIX.length);
+	return path.join(PUBLIC_BLOG_ASSETS_DIR, relativeAssetPath);
+}
+
+async function getBlogImageMetadata(assetUrl: string): Promise<BlogImageMetadata | null> {
+	const cachedMetadata = blogImageMetadataByUrl.get(assetUrl);
+	if (cachedMetadata !== undefined) {
+		return cachedMetadata;
+	}
+
+	const publicAssetPath = toPublicAssetPath(assetUrl);
+	if (!(publicAssetPath && fs.existsSync(publicAssetPath))) {
+		blogImageMetadataByUrl.set(assetUrl, null);
+		return null;
+	}
+
+	const metadata = await sharp(publicAssetPath).metadata();
+	const { width, height } = metadata;
+	if (!(width && height)) {
+		blogImageMetadataByUrl.set(assetUrl, null);
+		return null;
+	}
+
+	const imageMetadata = {
+		width,
+		height,
+		isPortrait: height / width > PORTRAIT_IMAGE_RATIO_THRESHOLD,
+	};
+	blogImageMetadataByUrl.set(assetUrl, imageMetadata);
+	return imageMetadata;
+}
+
+function appendClassAttribute(attributes: string, nextClassName: string): string {
+	const classMatch = attributes.match(CLASS_ATTRIBUTE_REGEX);
+	if (!classMatch) {
+		return `${attributes} class="${nextClassName}"`;
+	}
+
+	const existingClasses = classMatch[1]?.trim();
+	const mergedClasses = existingClasses ? `${existingClasses} ${nextClassName}` : nextClassName;
+
+	return attributes.replace(CLASS_ATTRIBUTE_REGEX, ` class="${mergedClasses}"`);
+}
+
+function extractImageHints(attributes: string): {
+	cleanedAttributes: string;
+	hints: string[];
+} {
+	const titleMatch = attributes.match(TITLE_ATTRIBUTE_REGEX);
+	if (!titleMatch) {
+		return { cleanedAttributes: attributes, hints: [] };
+	}
+
+	const title = titleMatch[1]?.trim().toLowerCase() ?? '';
+	const cleanedAttributes = attributes.replace(TITLE_ATTRIBUTE_REGEX, '');
+	return {
+		cleanedAttributes,
+		hints: title.split(WHITESPACE_REGEX).filter(Boolean),
+	};
+}
+
+async function enhanceRenderedHtml(html: string): Promise<string> {
+	const matches = Array.from(html.matchAll(BLOG_IMAGE_TAG_REGEX));
+	if (matches.length === 0) {
+		return html;
+	}
+
+	let enhancedHtml = html;
+	for (const match of matches) {
+		const fullTag = match[0];
+		const beforeSrcAttributes = match[1] ?? '';
+		const src = match[2];
+		const afterSrcAttributes = match[3] ?? '';
+		const imageMetadata = await getBlogImageMetadata(src);
+		if (!imageMetadata) {
+			continue;
+		}
+
+		const { cleanedAttributes, hints } = extractImageHints(
+			`${beforeSrcAttributes}${afterSrcAttributes}`
+		);
+		const classNames = [INLINE_IMAGE_CLASS];
+		if (imageMetadata.isPortrait) {
+			classNames.push(PORTRAIT_IMAGE_CLASS);
+		}
+		if (hints.includes(SMALL_IMAGE_TITLE)) {
+			classNames.push(SMALL_IMAGE_CLASS);
+		}
+		if (hints.includes(MODAL_IMAGE_HINT)) {
+			classNames.push(MODAL_IMAGE_CLASS);
+		}
+		let mergedAttributes = appendClassAttribute(cleanedAttributes, classNames.join(' '));
+		if (hints.includes(MODAL_IMAGE_HINT)) {
+			mergedAttributes = `${mergedAttributes} role="button" tabindex="0" aria-haspopup="dialog"`;
+		}
+		const replacementTag = `<img${mergedAttributes} src="${src}" width="${imageMetadata.width}" height="${imageMetadata.height}">`;
+		enhancedHtml = enhancedHtml.replace(fullTag, replacementTag);
+	}
+
+	return enhancedHtml;
 }
 
 async function copyBlogAssets(
@@ -549,10 +633,13 @@ async function generateBlogData(): Promise<void> {
 		}
 	}
 
+	await copyBlogAssets(BLOG_DIR, PUBLIC_BLOG_ASSETS_DIR);
+
 	const renderedPosts: GeneratedBlogPost[] = [];
 	for (const post of posts) {
 		const rewrittenMarkdown = rewriteMarkdownLinks(post.contentMarkdown, fileStemToSlug);
-		const contentHtml = await renderMarkdown(rewrittenMarkdown);
+		const renderedMarkdown = await renderMarkdown(rewrittenMarkdown);
+		const contentHtml = await enhanceRenderedHtml(renderedMarkdown);
 		renderedPosts.push({
 			slug: post.slug,
 			title: post.title,
@@ -595,7 +682,6 @@ export const BLOG_POSTS: GeneratedBlogPost[] = ${JSON.stringify(renderedPosts, n
 
 	await fs.promises.mkdir(path.dirname(GENERATED_OUTPUT_PATH), { recursive: true });
 	await fs.promises.writeFile(GENERATED_OUTPUT_PATH, fileContents, 'utf8');
-	await copyBlogAssets(BLOG_DIR, PUBLIC_BLOG_ASSETS_DIR);
 }
 
 try {

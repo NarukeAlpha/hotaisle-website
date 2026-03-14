@@ -113,7 +113,7 @@ export const SEARCH_DATA: SearchResult[] = [
   {
     "title": "Hot Aisle Achieves SOC 2 Type 1 Compliance",
     "description": "Hot Aisle has officially completed its SOC 2 Type 1 audit, marking a key milestone in our commitment to security and compliance. This achievement validates the strength of our internal controls and processes for handling customer data. With Type 2 already in motion and expected in three months, we’re on track to meet the highest standards in cloud infrastructure security. Special thanks to Sprinto and ATOM for their guidance and support throughout the process.",
-    "url": "/blog/soc-2-type-1-completed-hot-aisle-secures-initial-compliance-milestone",
+    "url": "/blog/hot-aisle-secures-initial-compliance-milestone-soc-2-type-1-completed",
     "category": "Blog",
     "type": "Article"
   },
@@ -134,7 +134,7 @@ export const SEARCH_DATA: SearchResult[] = [
   {
     "title": "HOT AISLE DEMOCRATIZES AI WITH AMD INSTINCT™ MI3OOX GPUs",
     "description": "Hot Aisle partners with AMD to democratize AI and HPC, delivering MI300X GPU-powered infrastructure accessible for diverse computing workloads.",
-    "url": "/blog/hot-aisle-democratizes-ai-with-amd-instinct-mi300x-gpus4o",
+    "url": "/blog/hot-aisle-democratizes-ai-with-amd-instinct-mi300x-gpus",
     "category": "Blog",
     "type": "Article"
   },
@@ -190,14 +190,14 @@ export const SEARCH_DATA: SearchResult[] = [
   {
     "title": "Why Hot Aisle is Better than Hyperscalers: A Fun Breakdown",
     "description": "Hot Aisle offers personalized, high-performance compute with bare metal access, customized pricing, uptime reliability, and expert collaboration on cutting-edge tech.",
-    "url": "/blog/hyperscalers",
+    "url": "/blog/hot-aisle-is-better-than-hyperscalers",
     "category": "Blog",
     "type": "Article"
   },
   {
     "title": "AMD is doing something interesting…",
     "description": "Groundbreaking myths",
-    "url": "/blog/groundbreaking",
+    "url": "/blog/amd-groundbreaking-myths",
     "category": "Blog",
     "type": "Article"
   },

@@ -111,6 +111,22 @@ body {
 		0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
+.prose img.blog-inline-image--portrait {
+	max-width: 32rem;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.prose img.blog-inline-image--small {
+	max-width: 24rem;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.prose img.blog-inline-image--modal {
+	cursor: zoom-in;
+}
+
 .prose h1,
 .prose h2,
 .prose h3 {
