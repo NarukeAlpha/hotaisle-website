@@ -21,10 +21,9 @@ const DATE_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
 const MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g;
 const FIRST_MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/;
 const MARKDOWN_LINK_REGEX = /(?<!!)\[([^\]]+)\]\(([^)]+)\)/g;
-const NOTION_NESTED_IMAGE_LINK_REGEX = /!\[\[([^\]]+)\]\(([^)]+)\)\]\(([^)]+)\)/g;
 const EXTERNAL_OR_SPECIAL_LINK_REGEX = /^(?:https?:|mailto:|tel:|#|\/)/i;
 const LEADING_H1_REGEX = /^\s*#\s+(.+)\n+/;
-const NOTION_METADATA_LINE_REGEX = /^([A-Za-z][A-Za-z0-9 '&()._/+-]*):\s*(.*)$/;
+const LEGACY_METADATA_LINE_REGEX = /^([A-Za-z][A-Za-z0-9 '&()._/+-]*):\s*(.*)$/;
 const MARKDOWN_PARAGRAPH_SPLIT_REGEX = /\n\s*\n/;
 const MARKDOWN_INLINE_LINK_REGEX = /\[(.*?)\]\((.*?)\)/g;
 const RELATIVE_PATH_PREFIX_REGEX = /^\.\//;
@@ -35,7 +34,7 @@ const BLOG_HEADER_FILE_NAMES = ['header.jpg', 'header.png'] as const;
 const BLOG_IMAGE_TAG_REGEX = /<img\b([^>]*?)src="([^"]+)"([^>]*)>/g;
 const CLASS_ATTRIBUTE_REGEX = /\sclass="([^"]*)"/;
 const TITLE_ATTRIBUTE_REGEX = /\stitle="([^"]*)"/;
-const NOTION_MULTILINE_METADATA_KEYS = new Set(['description']);
+const LEGACY_MULTILINE_METADATA_KEYS = new Set(['description']);
 const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
 const EDGE_DASHES_REGEX = /^-+|-+$/g;
@@ -64,7 +63,7 @@ interface RawBlogPost {
 	title: string;
 }
 
-interface ParsedNotionMarkdown {
+interface ParsedLegacyMarkdown {
 	contentMarkdown: string;
 	metadata: Record<string, string>;
 	title: string;
@@ -255,8 +254,8 @@ function resolveBlogHeaderImage(slug: string): string | undefined {
 	return undefined;
 }
 
-function parseNotionMetadataLine(line: string): { key: string; value: string } | null {
-	const metadataLineMatch = line.match(NOTION_METADATA_LINE_REGEX);
+function parseLegacyMetadataLine(line: string): { key: string; value: string } | null {
+	const metadataLineMatch = line.match(LEGACY_METADATA_LINE_REGEX);
 	if (!metadataLineMatch) {
 		return null;
 	}
@@ -280,13 +279,14 @@ function canContinueMultilineMetadata(key: string | null, trimmedLine: string): 
 	if (!key) {
 		return false;
 	}
-	if (!NOTION_MULTILINE_METADATA_KEYS.has(key)) {
+	if (!LEGACY_MULTILINE_METADATA_KEYS.has(key)) {
 		return false;
 	}
 	return !trimmedLine.startsWith('#');
 }
 
-function parseNotionMarkdown(fileContents: string): ParsedNotionMarkdown {
+// Many existing blog posts still use this pre-frontmatter metadata header format.
+function parseLegacyMarkdown(fileContents: string): ParsedLegacyMarkdown {
 	const lines = fileContents.split(NEW_LINE_SPLIT_REGEX);
 	let lineIndex = 0;
 	let title = '';
@@ -305,7 +305,7 @@ function parseNotionMarkdown(fileContents: string): ParsedNotionMarkdown {
 	while (lineIndex < lines.length) {
 		const line = lines[lineIndex] ?? '';
 		const trimmedLine = line.trim();
-		const parsedMetadataLine = parseNotionMetadataLine(line);
+		const parsedMetadataLine = parseLegacyMetadataLine(line);
 		if (parsedMetadataLine) {
 			metadata[parsedMetadataLine.key] = parsedMetadataLine.value;
 			currentMetadataKey = parsedMetadataLine.key;
@@ -360,7 +360,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 				),
 				contentMarkdown: parsedMatter.content.trim(),
 			}
-		: parseNotionMarkdown(fileContents);
+		: parseLegacyMarkdown(fileContents);
 
 	const sourceStem = normalizeFileStem(fileName);
 	const metadataSlug = parsed.metadata.slug?.trim();
@@ -436,19 +436,11 @@ function resolveInternalMarkdownLink(rawPath: string, fileStemToSlug: Map<string
 }
 
 function rewriteMarkdownLinks(markdown: string, fileStemToSlug: Map<string, string>): string {
-	const normalizedNestedImages = markdown.replaceAll(
-		NOTION_NESTED_IMAGE_LINK_REGEX,
-		(_match, label, _linkPath, imagePath) => `![${label}](${imagePath})`
-	);
-
-	const withImages = normalizedNestedImages.replaceAll(
-		MARKDOWN_IMAGE_REGEX,
-		(_match, alt, rawPath, title) => {
-			const resolvedPath = resolveInternalMarkdownLink(rawPath, fileStemToSlug);
-			const titleSuffix = title ? ` "${title}"` : '';
-			return `![${alt}](${resolvedPath}${titleSuffix})`;
-		}
-	);
+	const withImages = markdown.replaceAll(MARKDOWN_IMAGE_REGEX, (_match, alt, rawPath, title) => {
+		const resolvedPath = resolveInternalMarkdownLink(rawPath, fileStemToSlug);
+		const titleSuffix = title ? ` "${title}"` : '';
+		return `![${alt}](${resolvedPath}${titleSuffix})`;
+	});
 
 	return withImages.replaceAll(MARKDOWN_LINK_REGEX, (_match, label, rawPath) => {
 		const decoded = decodeMarkdownPath(rawPath);
