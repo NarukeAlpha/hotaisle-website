@@ -1,17 +1,15 @@
 # Cruising to the finish line
 
-Slug: cruising
+Slug: cruising-to-the-finish-line
 Publish: Yes
 Meta Title: Hot Aisle: Cruising to the finish line
 Meta Description: Cruising to the finish line of our deployment
 Meta Keywords: super, computer, gpu, mi300x, dell, amd, advizex
-Author: Jon Stevens (https://www.notion.so/Jon-Stevens-db7c8d5f026b491fabeafb099326dffe?pvs=21)
+Author: Jon Stevens
 Date: 09/13/2024
 Description: Cruising to the finish line
 Featured: No
-Related to Authors Database (Posts): Untitled (https://www.notion.so/529cafc29d9a4ad982bfc7c66b96357a?pvs=21)
-Related to Tags Database (Posts): Untitled (https://www.notion.so/bcbccc65dca0458a856c085a83bafd26?pvs=21)
-Tags: Features (https://www.notion.so/Features-d966a39c81c74b59970eeef51ebc1f91?pvs=21)
+Tags: Features
 
 ## Introduction
 

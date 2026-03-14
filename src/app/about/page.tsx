@@ -48,7 +48,7 @@ export default function AboutPage() {
 									alt="Jon Stevens"
 									className="h-full w-full object-cover"
 									height={128}
-									src="/assets/about_index/jon.png"
+									src="/assets/about/jon.png"
 									width={128}
 								/>
 							</div>
@@ -75,7 +75,7 @@ export default function AboutPage() {
 									alt="Clint Armstrong"
 									className="h-full w-full object-cover"
 									height={128}
-									src="/assets/about_index/clint.png"
+									src="/assets/about/clint.png"
 									width={128}
 								/>
 							</div>

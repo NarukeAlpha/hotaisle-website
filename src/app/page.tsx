@@ -1,5 +1,5 @@
 import { AppLink } from '@/components/AppLink';
-import { PyramidHero } from '@/components/home/PyramidHero';
+import { ComputeHero } from '@/components/home/ComputeHero.tsx';
 import { SecuritySection } from '@/components/home/SecuritySection';
 import { VideoSection } from '@/components/home/VideoSection';
 import { createPageMetadata } from '@/lib/metadata';
@@ -16,7 +16,7 @@ export function generateMetadata() {
 export default function Home() {
 	return (
 		<div className="animation-fade-in min-h-screen overflow-x-hidden bg-background pb-20 text-foreground">
-			<PyramidHero />
+			<ComputeHero />
 
 			<SecuritySection />
 

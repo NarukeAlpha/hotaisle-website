@@ -106,7 +106,7 @@ export default function DatacenterPage() {
 								alt="Switch Datacenter Interior"
 								className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
 								height={1080}
-								src="/assets/datacentre/inside.png"
+								src="/assets/datacenter/inside.png"
 								width={1920}
 							/>
 						</div>
@@ -168,7 +168,7 @@ export default function DatacenterPage() {
 								alt="Switch Pyramid Datacenter Exterior"
 								className="h-full w-full object-cover"
 								height={1080}
-								src="/assets/datacentre/outside.png"
+								src="/assets/datacenter/outside.png"
 								width={1920}
 							/>
 							<div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-8">

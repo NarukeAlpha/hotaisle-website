@@ -1,7 +1,7 @@
 import { ArrowRight, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink';
 
-export function PyramidHero() {
+export function ComputeHero() {
 	const rackDepths = [16, -36, -88, -140, -192, -244, -296, -348];
 
 	return (
