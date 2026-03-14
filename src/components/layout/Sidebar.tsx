@@ -27,8 +27,8 @@ const NAV_ITEMS = [
 	{ href: '/mi300x', label: 'MI300X', icon: Cpu },
 	{ href: '/mi355x', label: 'MI355X', icon: Zap },
 	{ href: '/blog', label: 'Blog', icon: BookOpen },
-	{ href: '/policies', label: 'Policies', icon: Scale },
 	{ href: '/about', label: 'About Us', icon: Info },
+	{ href: '/policies', label: 'Policies', icon: Scale },
 ];
 
 export function Sidebar() {
