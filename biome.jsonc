@@ -1,6 +1,9 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"extends": ["ultracite/biome/core", "ultracite/biome/react"],
+	"files": {
+		"includes": ["!.*"]
+	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
@@ -25,6 +28,12 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"correctness": {
+				"useImportExtensions": {
+					"fix": "safe",
+					"level": "on"
+				}
+			},
 			"performance": {
 				"noImgElement": "off"
 			},
