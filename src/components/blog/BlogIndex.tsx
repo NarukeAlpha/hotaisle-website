@@ -1,5 +1,5 @@
-import { BlogList } from '@/components/blog/BlogList';
-import type { BlogPost } from '@/lib/content';
+import { BlogList } from '@/components/blog/BlogList.tsx';
+import type { BlogPost } from '@/lib/content.ts';
 
 interface BlogIndexProps {
 	posts: BlogPost[];

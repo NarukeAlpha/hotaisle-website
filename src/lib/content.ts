@@ -1,5 +1,5 @@
-import { BLOG_POSTS } from '@/generated/blog-data';
-import { POLICIES } from '@/generated/static-content-data';
+import { BLOG_POSTS } from '@/generated/blog-data.ts';
+import { POLICIES } from '@/generated/static-content-data.ts';
 
 export interface PageData {
 	author?: string;

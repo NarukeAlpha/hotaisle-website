@@ -1,6 +1,6 @@
 import { FileText, Info, Lock, Server, Shield, Users } from 'lucide-react';
-import { AppLink } from '@/components/AppLink';
-import { createPageMetadata } from '@/lib/metadata';
+import { AppLink } from '@/components/AppLink.tsx';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
 	return createPageMetadata({

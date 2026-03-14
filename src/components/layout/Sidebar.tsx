@@ -12,8 +12,8 @@ import {
 	Server,
 	Zap,
 } from 'lucide-react';
-import { AppLink } from '@/components/AppLink';
-import { cn } from '@/lib/utils';
+import { AppLink } from '@/components/AppLink.tsx';
+import { cn } from '@/lib/utils.ts';
 
 const NAV_ITEMS = [
 	{ href: '/quick-start', label: 'Quick Start', icon: Zap },

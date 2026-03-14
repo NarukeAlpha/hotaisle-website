@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react';
-import { AppLink } from '@/components/AppLink';
-import type { BlogPost } from '@/lib/content';
+import { AppLink } from '@/components/AppLink.tsx';
+import type { BlogPost } from '@/lib/content.ts';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',

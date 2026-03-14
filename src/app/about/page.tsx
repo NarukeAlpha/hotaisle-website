@@ -1,5 +1,5 @@
 import { Lightbulb, Linkedin, Users } from 'lucide-react';
-import { createPageMetadata } from '@/lib/metadata';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
 	return createPageMetadata({

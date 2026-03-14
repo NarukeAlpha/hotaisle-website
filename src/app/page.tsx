@@ -1,8 +1,8 @@
-import { AppLink } from '@/components/AppLink';
+import { AppLink } from '@/components/AppLink.tsx';
 import { ComputeHero } from '@/components/home/ComputeHero.tsx';
-import { SecuritySection } from '@/components/home/SecuritySection';
-import { VideoSection } from '@/components/home/VideoSection';
-import { createPageMetadata } from '@/lib/metadata';
+import { SecuritySection } from '@/components/home/SecuritySection.tsx';
+import { VideoSection } from '@/components/home/VideoSection.tsx';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
 	return createPageMetadata({

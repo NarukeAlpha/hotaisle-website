@@ -1,7 +1,7 @@
 import { ArrowLeft, Calendar } from 'lucide-react';
-import NotFoundPage from '@/app/not-found';
-import { AppLink } from '@/components/AppLink';
-import { getAllSlugs, getPageContent } from '@/lib/content';
+import NotFoundPage from '@/app/not-found.tsx';
+import { AppLink } from '@/components/AppLink.tsx';
+import { getAllSlugs, getPageContent } from '@/lib/content.ts';
 import './syntax-highlighting.css';
 
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {

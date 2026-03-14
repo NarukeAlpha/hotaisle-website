@@ -10,7 +10,7 @@ import {
 	Thermometer,
 	Zap,
 } from 'lucide-react';
-import { ClickableImage } from '@/components/ClickableImage';
+import { ClickableImage } from '@/components/ClickableImage.tsx';
 
 export default function MI355XContent() {
 	return (

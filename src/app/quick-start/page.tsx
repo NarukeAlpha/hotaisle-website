@@ -1,6 +1,6 @@
 import { BookOpen, Box, Code, Mail, Server, Terminal } from 'lucide-react';
-import CopyCommand from '@/components/CopyCommand';
-import { createPageMetadata } from '@/lib/metadata';
+import CopyCommand from '@/components/CopyCommand.tsx';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
 	return createPageMetadata({

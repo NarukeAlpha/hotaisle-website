@@ -1,6 +1,6 @@
-import { BlogIndex } from '@/components/blog/BlogIndex';
-import { getAllBlogPosts } from '@/lib/content';
-import { createPageMetadata } from '@/lib/metadata';
+import { BlogIndex } from '@/components/blog/BlogIndex.tsx';
+import { getAllBlogPosts } from '@/lib/content.ts';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
 	return createPageMetadata({

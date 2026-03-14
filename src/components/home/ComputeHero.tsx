@@ -1,5 +1,5 @@
 import { ArrowRight, Zap } from 'lucide-react';
-import { AppLink } from '@/components/AppLink';
+import { AppLink } from '@/components/AppLink.tsx';
 
 export function ComputeHero() {
 	const rackDepths = [16, -36, -88, -140, -192, -244, -296, -348];

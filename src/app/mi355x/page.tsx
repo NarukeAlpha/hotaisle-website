@@ -1,5 +1,5 @@
-import { createPageMetadata } from '@/lib/metadata';
-import MI355XContent from './MI355XContent';
+import { createPageMetadata } from '@/lib/metadata.ts';
+import MI355XContent from './MI355XContent.tsx';
 
 export function generateMetadata() {
 	return createPageMetadata({

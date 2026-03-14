@@ -1,7 +1,7 @@
-import type { AnchorHTMLAttributes, ReactNode } from 'react';
+import type * as React from 'react';
 
-interface AppLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-	children: ReactNode;
+interface AppLinkProps extends Omit<React.ComponentProps<'a'>, 'href'> {
+	children: React.ReactNode;
 	href: string;
 }
 

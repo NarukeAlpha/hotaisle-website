@@ -1,8 +1,8 @@
 import { ChevronLeft, FileText } from 'lucide-react';
-import NotFoundPage from '@/app/not-found';
-import { AppLink } from '@/components/AppLink';
-import { getAllSlugs, getPageContent } from '@/lib/content';
-import { createPageMetadata } from '@/lib/metadata';
+import NotFoundPage from '@/app/not-found.tsx';
+import { AppLink } from '@/components/AppLink.tsx';
+import { getAllSlugs, getPageContent } from '@/lib/content.ts';
+import { createPageMetadata } from '@/lib/metadata.ts';
 
 export const dynamicParams = false;
 

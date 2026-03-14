@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { BLOG_POSTS } from '../src/generated/blog-data';
-import { POLICIES } from '../src/generated/static-content-data';
-import { type SearchResult, STATIC_SEARCH_PAGES } from '../src/lib/search';
+import { BLOG_POSTS } from '../src/generated/blog-data.ts';
+import { POLICIES } from '../src/generated/static-content-data.ts';
+import { type SearchResult, STATIC_SEARCH_PAGES } from '../src/lib/search.ts';
 
 const GENERATED_OUTPUT_PATH = path.join(process.cwd(), 'src', 'generated', 'search-data.ts');
 

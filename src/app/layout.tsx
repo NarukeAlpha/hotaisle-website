@@ -1,8 +1,8 @@
-import type { ReactNode } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
-import JsonLd from '@/components/seo/JsonLd';
+import { Sidebar } from '@/components/layout/Sidebar.tsx';
+import JsonLd from '@/components/seo/JsonLd.tsx';
 import './globals.css';
-import { initializeThemeScript } from './theme-script';
+import type * as React from 'react';
+import { initializeThemeScript } from './theme-script.ts';
 
 const GTM_CONTAINER_ID = 'GTM-NK8WLZV8';
 const GTM_SCRIPT = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -46,7 +46,7 @@ export const metadata = {
 	},
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>

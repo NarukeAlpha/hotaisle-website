@@ -1,4 +1,4 @@
-import { getAllSlugs } from '@/lib/content';
+import { getAllSlugs } from '@/lib/content.ts';
 
 interface SitemapEntry {
 	changeFrequency: 'monthly' | 'weekly' | 'yearly';

@@ -1,5 +1,5 @@
 import { ArrowLeft, Compass, Home } from 'lucide-react';
-import { AppLink } from '@/components/AppLink';
+import { AppLink } from '@/components/AppLink.tsx';
 
 export default function NotFound() {
 	return (
