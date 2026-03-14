@@ -204,7 +204,7 @@ export const SEARCH_DATA: SearchResult[] = [
   {
     "title": "Cruising to the finish line",
     "description": "Cruising to the finish line",
-    "url": "/blog/cruising",
+    "url": "/blog/cruising-to-the-finish-line",
     "category": "Blog",
     "type": "Article"
   },

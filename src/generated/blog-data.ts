@@ -265,7 +265,7 @@ export const BLOG_POSTS: GeneratedBlogPost[] = [
     "metaKeywords": "super, computer, gpu, mi300x, dell, amd, advizex"
   },
   {
-    "slug": "cruising",
+    "slug": "cruising-to-the-finish-line",
     "title": "Cruising to the finish line",
     "description": "Cruising to the finish line",
     "contentHtml": "<hr>\n<p>After a bit more than a week, we have fully deployed our own high-performance super computing cluster. Now we are busy validating that everything works, checking network connections, and replacing parts that are dead on arrival.</p>\n<p>We expect the testing, validation and a bit of internal setup and configuration automation to continue for another week or two and then we will be ready to onboard customers full time. Build it and they will come, right?</p>\n<p>I’ve also been busy building out this blog, so that we can communicate our journey here instead of on third party websites. One thing you’ll notice is that like the rest of our website, it conveys a personal / human touch. We might use AI to help with grammar, but we won’t be publishing AI generated nonsense bric-a-brac. If you’re using AI to generate content to direct people to your website, why would you waste their time once they got there?</p>\n<h2 id=\"we-are-nearly-there\"><a class=\"heading-link\" href=\"#we-are-nearly-there\">We are nearly there</a></h2>\n<hr>\n<p>In this case, it appears as though one of the AMD MI300x GPUs went crazy and had a few loose screws. Dell immediately sent two technicians out to diagnose and fix it. The level of support they are giving us is breathtaking.</p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6447.jpeg\" alt=\"IMG_6447.jpeg\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6449.jpeg\" alt=\"IMG_6449.jpeg\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6480.jpeg\" alt=\"MI300x swap\"></p>\n<p>Holding this technology in your hands, its weight conveys its value.</p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6444.jpeg\" alt=\"mi300x in a bag\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6473.jpeg\" alt=\"heat sink\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6446.jpeg\" alt=\"mi300x in a bag\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6476.jpeg\" alt=\"baseboard\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6464.jpeg\" alt=\"gpus on the baseboard\"></p>\n<p><img src=\"/assets/blog/cruising-to-the-finish-line/img-6469.jpeg\" alt=\"mi300x stack\"></p>\n<p><a href=\"https://youtu.be/xVNIRBn7ru8\">https://youtu.be/xVNIRBn7ru8</a></p>",
@@ -274,7 +274,7 @@ export const BLOG_POSTS: GeneratedBlogPost[] = [
       "Features"
     ],
     "author": "Jon Stevens",
-    "coverImage": "/assets/blog/cruising/header.jpg",
+    "coverImage": "/assets/blog/cruising-to-the-finish-line/img-6447.jpeg",
     "metaTitle": "Hot Aisle: Cruising to the finish line",
     "metaDescription": "Cruising to the finish line of our deployment",
     "metaKeywords": "super, computer, gpu, mi300x, dell, amd, advizex"
