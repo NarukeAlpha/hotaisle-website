@@ -34,8 +34,12 @@ const NAV_ITEMS = [
 export function Sidebar() {
 	return (
 		<aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r bg-card md:flex md:flex-col">
-			<div className="relative flex h-16 w-full items-center border-b px-4">
-				<AppLink aria-label="Home" className="flex h-full items-center" href="/">
+			<div className="relative flex h-16 w-full items-center justify-center border-b px-4">
+				<AppLink
+					aria-label="Home"
+					className="flex h-full items-center justify-center"
+					href="/"
+				>
 					<div className="h-10 w-40">
 						<img
 							alt="Hot Aisle"
