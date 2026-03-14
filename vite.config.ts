@@ -1,15 +1,23 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { cloudflare } from '@cloudflare/vite-plugin';
+import tailwindcss from '@tailwindcss/vite';
 import vinext from 'vinext';
 import { defineConfig } from 'vite';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 export default defineConfig({
-	plugins: [vinext()],
+	plugins: [
+		tailwindcss(),
+		vinext(),
+		cloudflare({
+			viteEnvironment: {
+				childEnvironments: ['ssr'],
+				name: 'rsc',
+			},
+		}),
+	],
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, './src'),
+			'@': path.resolve(import.meta.dirname, './src'),
 		},
 	},
 });
