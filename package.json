@@ -14,7 +14,7 @@
 		"build": "bun run scripts/build_static.ts",
 		"preview": "vinext start",
 		"preview:static": "bun run build && bun run scripts/preview_static.ts",
-		"deploy": "bun run build && vinext deploy --skip-build",
+		"deploy": "bun run build && bun run wrangler deploy --config wrangler.jsonc",
 		"check": "bun ./node_modules/ultracite/dist/index.js check",
 		"fix": "bun ./node_modules/ultracite/dist/index.js fix"
 	},
