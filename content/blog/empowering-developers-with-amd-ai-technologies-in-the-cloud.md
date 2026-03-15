@@ -15,9 +15,4 @@ Tags: Interviews
 
 AMD TechTalk host Jim Greene, Director, EPYC Product Marketing, chats with Jon Stevens, CEO of Hot Aisle about his journey from pioneering large-scale Ethereum mining to founding Hot Aisle, a company focused on democratizing enterprise compute power. Discover how Jon's vision is reshaping the data center space, his insights on AMD's role in AI innovation, and the future of scalable infrastructure.
 
-<aside>
-💡
-
 [Listen now on Spotify](https://open.spotify.com/episode/4jE5cdbdyMO50LnNikqPeU)
-
-</aside>
