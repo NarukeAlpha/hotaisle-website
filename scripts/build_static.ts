@@ -17,7 +17,6 @@ const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
 const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
 const DS_STORE_FILE_NAME = '.DS_Store';
-const RSC_FILE_EXTENSION = '.rsc';
 const VITE_METADATA_DIRECTORY_NAME = '.vite';
 const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
@@ -194,17 +193,14 @@ function collapseInterTagWhitespaceOutsidePre(html: string): string {
 
 function stripClientBootstrap(html: string): string {
 	return html
+		.replace(/<link rel="preload" href="\/assets\/index-[^"]+\.css" as="style"\/>/g, '')
 		.replace(
-			/<link rel="modulepreload" href="\/assets\/facade__virtual_vinext-rsc-entry-[^"]+" crossorigin=""\/>/g,
+			/<link rel="modulepreload" href="\/assets\/[^"]+\.js"(?: crossorigin="")?\s*\/>/g,
 			''
 		)
-		.replace(
-			/<link rel="modulepreload" href="\/assets\/framework-[^"]+" crossorigin=""\/>/g,
-			''
-		)
-		.replace(/<link rel="modulepreload" href="\/assets\/index-[^"]+" crossorigin=""\/>/g, '')
-		.replace(/<link rel="modulepreload" href="\/assets\/index-[^"]+" \/>/g, '')
-		.replace(/<script id="_R_">import\("\/assets\/index-[^"]+"\);<\/script>/g, '');
+		.replace(/<script>self\.__VINEXT_RSC_PARAMS__=.*?<\/script>/g, '')
+		.replace(/<script>self\.__VINEXT_RSC_NAV__=.*?<\/script>/g, '')
+		.replace(/<script id="_R_">[\s\S]*?<\/script>/g, '');
 }
 
 async function scrubExportedHtmlFiles(directory: string): Promise<void> {
@@ -408,8 +404,6 @@ function shouldExcludeFromStaticExport(sourcePath: string): boolean {
 	return (
 		entryName === DS_STORE_FILE_NAME ||
 		entryName === VITE_METADATA_DIRECTORY_NAME ||
-		entryName === WRANGLER_CONFIG_FILE_NAME ||
-		entryName === '.rsc' ||
-		sourcePath.endsWith(RSC_FILE_EXTENSION)
+		entryName === WRANGLER_CONFIG_FILE_NAME
 	);
 }

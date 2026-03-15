@@ -279,15 +279,13 @@ export default function MI355XContent() {
 
 						{/* Tally Form */}
 						<div className="relative overflow-hidden rounded-3xl border-2 border-orange-500/20 bg-card p-2 shadow-2xl">
-							<div className="rounded-[20px] bg-background p-4 md:p-8">
+							<div className="rounded-[20px] bg-background p-4 text-slate-900 md:p-8 dark:text-slate-100">
 								<iframe
 									className="min-h-screen w-full rounded-xl border border-border"
 									frameBorder={0}
-									height={1000}
-									loading="lazy"
 									marginHeight={0}
 									marginWidth={0}
-									src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+									src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=0&dynamicHeight=1"
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
 								<p className="mt-4 text-center text-muted-foreground text-xs">
