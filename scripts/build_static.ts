@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { minify as minifyWithRolldown } from 'rolldown/utils';
@@ -93,6 +93,8 @@ for (const routePath of exportedPaths) {
 	await writeFile(fullPath, html, 'utf8');
 }
 
+await scrubExportedHtmlFiles(STATIC_DIST_DIRECTORY);
+
 function toOutputPath(routePath: string): string {
 	if (routePath === '/') {
 		return 'index.html';
@@ -112,7 +114,9 @@ function toRequestPath(routePath: string): string {
 
 async function normalizeExportedHtml(html: string): Promise<string> {
 	const htmlDocument = stripTrailingContentAfterHtml(html);
-	return await minifyExportedHtml(htmlDocument);
+	const htmlWithoutClientBootstrap = stripClientBootstrap(htmlDocument);
+
+	return await minifyExportedHtml(htmlWithoutClientBootstrap);
 }
 
 function stripTrailingContentAfterHtml(html: string): string {
@@ -185,6 +189,42 @@ function collapseInterTagWhitespaceOutsidePre(html: string): string {
 	}
 
 	return restoredHtml;
+}
+
+function stripClientBootstrap(html: string): string {
+	return html
+		.replace(/<link rel="preload" href="\/assets\/index-[^"]+\.css" as="style"\/>/g, '')
+		.replace(
+			/<link rel="modulepreload" href="\/assets\/[^"]+\.js"(?: crossorigin="")?\s*\/>/g,
+			''
+		)
+		.replace(/<script>self\.__VINEXT_RSC_PARAMS__=.*?<\/script>/g, '')
+		.replace(/<script>self\.__VINEXT_RSC_NAV__=.*?<\/script>/g, '')
+		.replace(/<script id="_R_">[\s\S]*?<\/script>/g, '');
+}
+
+async function scrubExportedHtmlFiles(directory: string): Promise<void> {
+	const directoryEntries = await readdir(directory, { withFileTypes: true });
+
+	for (const directoryEntry of directoryEntries) {
+		const entryPath = path.join(directory, directoryEntry.name);
+
+		if (directoryEntry.isDirectory()) {
+			await scrubExportedHtmlFiles(entryPath);
+			continue;
+		}
+
+		if (!(directoryEntry.isFile() && entryPath.endsWith('.html'))) {
+			continue;
+		}
+
+		const html = await readFile(entryPath, 'utf8');
+		const strippedHtml = stripClientBootstrap(html);
+
+		if (strippedHtml !== html) {
+			await writeFile(entryPath, strippedHtml, 'utf8');
+		}
+	}
 }
 
 async function minifyInlineBlocks(html: string, tagName: 'script' | 'style'): Promise<string> {
