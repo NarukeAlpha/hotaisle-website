@@ -62,7 +62,7 @@ export default function QuickStartPage() {
 					<p className="mt-4 max-w-xl text-center text-muted-foreground text-sm">
 						If you need a terminal app, use{' '}
 						<a
-							className="font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-arctic-blue hover:underline"
 							href="https://www.cmux.dev/"
 							rel="noopener"
 							target="_blank"
@@ -71,7 +71,7 @@ export default function QuickStartPage() {
 						</a>{' '}
 						on macOS,{' '}
 						<a
-							className="font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-arctic-blue hover:underline"
 							href="https://ghostty.org/"
 							rel="noopener"
 							target="_blank"
@@ -82,7 +82,7 @@ export default function QuickStartPage() {
 						<br />
 						and{' '}
 						<a
-							className="font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-arctic-blue hover:underline"
 							href="https://wezterm.org/"
 							rel="noopener"
 							target="_blank"
@@ -146,10 +146,10 @@ export default function QuickStartPage() {
 					<div className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground">
 						<p>
 							Your VM already comes with{' '}
-							<strong className="pl-0.5 text-foreground">ROCm</strong> (usually a
-							pretty recent version), and{' '}
-							<strong className="pl-0.5 text-foreground">Docker</strong> (or Podman)
-							is ready to roll since it’s the go-to for AMD tooling. AMD themselves
+							<strong className="mx-1 text-foreground">ROCm</strong> (usually a pretty
+							recent version), and{' '}
+							<strong className="mx-1 text-foreground">Docker</strong> (or Podman) is
+							ready to roll since it’s the go-to for AMD tooling. AMD themselves
 							suggest using their containers for development, because, let’s be real,
 							installing everything by hand is still a major pain. The good news is
 							that their provided documentation is well polished.
