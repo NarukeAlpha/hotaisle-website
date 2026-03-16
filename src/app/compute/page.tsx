@@ -70,9 +70,11 @@ export default function ComputePage() {
 							Dell PowerEdge <span className="text-arctic-blue">XE9680</span>
 						</h1>
 						<p className="mb-8 max-w-2xl font-light text-muted-foreground text-xl leading-relaxed md:text-2xl">
-							We offer remote access to the Dell PowerEdge XE9680 with{' '}
-							<strong>8x AMD MI300x GPUs</strong>. Best-in-class specifications for
-							your most demanding AI workloads.
+							We offer remote access to the Dell PowerEdge XE9680 with
+							<strong className="ml-1 font-semibold text-foreground">
+								8x AMD MI300x GPUs
+							</strong>
+							. Best-in-class specifications for your most demanding AI workloads.
 						</p>
 
 						<div className="flex flex-wrap gap-4">
