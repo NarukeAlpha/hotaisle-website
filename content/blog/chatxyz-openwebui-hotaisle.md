@@ -6,7 +6,8 @@ Publish: Yes
 Meta Title: Creating Your Own ChatXYZ Powered by Hot Aisle and Open WebUI
 Meta Description: Step-by-step guide to building a private ChatGPT-style interface using Open WebUI connected to a self-hosted vLLM server on Hot Aisle. Includes SSH tunneling and architecture overview.
 Meta Keywords: Hot Aisle, vLLM, Open WebUI, AMD MI300X, ROCm, self-hosted LLM, inference, SSH tunnel, GPU
-Author: Melissa PalmerDate: 03/17/2026
+Author: Melissa Palmer
+Date: 03/17/2026
 Description: A practical guide to building a private ChatXYZ style environment using Open WebUI and a self-hosted vLLM instance on Hot Aisle. Covers architecture, SSH tunneling, and connecting a local interface to GPU-hosted inference.
 Featured: No
 Tags: GPU, vLLM, Open WebUI, ROCm, Inference
@@ -51,6 +52,7 @@ This allows the GPU infrastructure to remain private while still providing a res
 
 The architecture looks like this:
 
+```
 Your Laptop
    │
    │  Open WebUI (browser interface)
@@ -64,6 +66,7 @@ Hot Aisle GPU VM
    │  Qwen 3.5 35B model
    ▼
 OpenAI-compatible API
+```
 
 In this setup:
 
@@ -207,3 +210,23 @@ One of the biggest advantages of this architecture is flexibility. If you deploy
 
 As open-weight models continue to improve, architectures like this make it possible to build powerful AI systems without relying on external APIs. With access to GPU infrastructure and tools like vLLM and Open WebUI, you can quickly deploy private AI environments tailored to your own needs.
 
+---
+
+## About the Author
+
+*This is a guest post from a friend of Hot Aisle. This content is not sponsored or paid.*
+
+**Melissa Palmer** is an infrastructure architect exploring the messy intersection of GPUs, software, and real-world workloads.
+
+Connect with Melissa:
+- **LinkedIn:** [linkedin.com/in/vmiss](https://www.linkedin.com/in/vmiss)
+- **X (Twitter):** [@vmiss33](https://x.com/vmiss33)
+- **GitHub:** [github.com/vmiss33](https://github.com/vmiss33)
+
+---
+
+## Contribute to Hot Aisle
+
+The Hot Aisle website is open source under the MIT License and welcomes contributions from the community. Whether you want to fix a typo, improve documentation, or share your own technical content, we'd love to have your input.
+
+**Visit our GitHub repository:** [github.com/hotaisle/hotaisle-website](https://github.com/hotaisle/hotaisle-website)
