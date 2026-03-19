@@ -90,6 +90,13 @@ export const SEARCH_DATA: SearchResult[] = [
     "category": "Page"
   },
   {
+    "title": "Creating Your Own ChatXYZ Powered by Hot Aisle and Open WebUI",
+    "description": "A practical guide to building a private ChatXYZ style environment using Open WebUI and a self-hosted vLLM instance on Hot Aisle. Covers architecture, SSH tunneling, and connecting a local interface to GPU-hosted inference.",
+    "url": "/blog/chatxyz-openwebui-hotaisle",
+    "category": "Blog",
+    "type": "Article"
+  },
+  {
     "title": "Orchestrating AMD GPUs with dstack",
     "description": "Step-by-step guide to configuring `dstack` with Hot Aisle for AMD MI300X provisioning, development, inference, and training workflows.",
     "url": "/blog/gpu-orchestration-with-dstack",

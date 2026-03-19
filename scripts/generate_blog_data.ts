@@ -11,7 +11,8 @@ import remarkRehype from 'remark-rehype';
 import sharp from 'sharp';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
-const BLOG_DIR = path.join(CONTENT_DIR, 'blog');
+const BLOG_CONTENT_DIR = path.join(CONTENT_DIR, 'blog');
+const BLOG_ASSET_SOURCE_DIR = path.join(BLOG_CONTENT_DIR, 'assets');
 const PUBLIC_BLOG_ASSETS_DIR = path.join(process.cwd(), 'public', 'assets', 'blog');
 const GENERATED_OUTPUT_PATH = path.join(process.cwd(), 'src', 'generated', 'blog-data.ts');
 const BLOG_ASSET_PREFIX = '/assets/blog/';
@@ -240,7 +241,7 @@ function toAssetUrl(assetPath: string): string {
 }
 
 function resolveBlogHeaderImage(slug: string): string | undefined {
-	const headerDirectory = path.join(BLOG_DIR, slug);
+	const headerDirectory = path.join(BLOG_ASSET_SOURCE_DIR, slug);
 
 	if (!fs.existsSync(headerDirectory)) {
 		return undefined;
@@ -611,14 +612,20 @@ async function copyBlogAssets(
 	}
 }
 
+async function resetBlogAssetOutputDirectory(): Promise<void> {
+	await fs.promises.rm(PUBLIC_BLOG_ASSETS_DIR, { force: true, recursive: true });
+}
+
 async function generateBlogData(): Promise<void> {
 	const posts: RawBlogPost[] = [];
 	const fileStemToSlug = new Map<string, string>();
 
-	if (fs.existsSync(BLOG_DIR)) {
-		const files = fs.readdirSync(BLOG_DIR).filter((fileName) => fileName.endsWith('.md'));
+	if (fs.existsSync(BLOG_CONTENT_DIR)) {
+		const files = fs
+			.readdirSync(BLOG_CONTENT_DIR)
+			.filter((fileName) => fileName.endsWith('.md'));
 		for (const fileName of files) {
-			const fullPath = path.join(BLOG_DIR, fileName);
+			const fullPath = path.join(BLOG_CONTENT_DIR, fileName);
 			const fileContents = fs.readFileSync(fullPath, 'utf8');
 			const parsed = parseBlogFile(fileName, fileContents);
 			if (!parsed.published) {
@@ -629,7 +636,8 @@ async function generateBlogData(): Promise<void> {
 		}
 	}
 
-	await copyBlogAssets(BLOG_DIR, PUBLIC_BLOG_ASSETS_DIR);
+	await resetBlogAssetOutputDirectory();
+	await copyBlogAssets(BLOG_ASSET_SOURCE_DIR, PUBLIC_BLOG_ASSETS_DIR);
 
 	const renderedPosts: GeneratedBlogPost[] = [];
 	for (const post of posts) {
