@@ -53,20 +53,14 @@ This allows the GPU infrastructure to remain private while still providing a res
 
 The architecture looks like this:
 
-```
-Your Laptop
-   │
-   │  Open WebUI (browser interface)
-   │
-   │  SSH Tunnel
-   ▼
-Hot Aisle GPU VM
-   │
-   │  vLLM inference server
-   │
-   │  Qwen 3.5 35B model
-   ▼
-OpenAI-compatible API
+```mermaid
+flowchart TD
+    laptop["<b>Your Laptop</b><br/>Open WebUI browser interface"]
+    tunnel["SSH Tunnel"]
+    gpu["<b>Hot Aisle GPU VM</b><br/>vLLM inference server<br/>Qwen 3.5 35B model"]
+    api["<b>OpenAI-compatible API</b>"]
+
+    laptop --> tunnel --> gpu --> api
 ```
 
 In this setup:
