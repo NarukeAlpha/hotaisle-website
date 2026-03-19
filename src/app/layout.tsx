@@ -52,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
+				<JsonLd />
 				<script>{COPY_COMMAND_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
 				<script>{GTM_SCRIPT}</script>
@@ -68,10 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				</noscript>
 				<div className="flex min-h-screen bg-background text-foreground antialiased">
 					<Sidebar />
-					<main className="relative min-w-0 flex-1">
-						<JsonLd />
-						{children}
-					</main>
+					<main className="relative min-w-0 flex-1">{children}</main>
 				</div>
 			</body>
 		</html>
