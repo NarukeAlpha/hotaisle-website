@@ -9,6 +9,7 @@ Author: Melissa Palmer
 Date: 02/26/2026
 Description: Step-by-step guide to connecting OpenCode to a self-hosted vLLM instance on Hot Aisle using an AMD MI300X GPU.  Includes tool calling flags, SSH tunneling, and how context length impacts KV cache and concurrency.
 Featured: No
+HA Footer: true
 Tags: GPU, vLLM, OpenCode, ROCm, Agents
 
 # Connecting OpenCode to vLLM on Hot Aisle
@@ -348,11 +349,3 @@ Connect with Melissa:
 - **LinkedIn:** [linkedin.com/in/vmiss](https://www.linkedin.com/in/vmiss)
 - **X (Twitter):** [@vmiss33](https://x.com/vmiss33)
 - **GitHub:** [github.com/vmiss33](https://github.com/vmiss33)
-
----
-
-## Contribute to Hot Aisle
-
-The Hot Aisle website is open source under the MIT License and welcomes contributions from the community. Whether you want to fix a typo, improve documentation, or share your own technical content, we'd love to have your input.
-
-**Visit our GitHub repository:** [github.com/hotaisle/hotaisle-website](https://github.com/hotaisle/hotaisle-website)

@@ -7,6 +7,7 @@ export interface PageData {
 	coverImage?: string;
 	date?: string;
 	description?: string;
+	haFooter?: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;

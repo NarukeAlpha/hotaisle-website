@@ -8,6 +8,7 @@ Author: Andrey Cheptsov
 Date: 03/02/2026
 Description: Step-by-step guide to configuring `dstack` with Hot Aisle for AMD MI300X provisioning, development, inference, and training workflows.
 Featured: No
+HA Footer: true
 Tags: GPU, Orchestration, dstack, AMD, MI300X
 
 # Orchestrating AMD GPUs with dstack
@@ -307,11 +308,3 @@ Connect with Andrey:
 - **LinkedIn:** [linkedin.com/in/andrey-cheptsov](https://www.linkedin.com/in/andrey-cheptsov)
 - **X (Twitter):** [@andrey_cheptsov](https://x.com/andrey_cheptsov)
 - **GitHub:** [github.com/peterschmidt85](https://github.com/peterschmidt85)
-
----
-
-## Contribute to Hot Aisle
-
-The Hot Aisle website is open source under the MIT License and welcomes contributions from the community. Whether you want to fix a typo, improve documentation, or share your own technical content, we'd love to have your input.
-
-**Visit our GitHub repository:** [github.com/hotaisle/hotaisle-website](https://github.com/hotaisle/hotaisle-website)

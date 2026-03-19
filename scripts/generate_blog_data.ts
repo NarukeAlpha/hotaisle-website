@@ -53,6 +53,7 @@ interface RawBlogPost {
 	coverImage?: string;
 	date: string;
 	description: string;
+	haFooter: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
@@ -75,6 +76,7 @@ interface GeneratedBlogPost {
 	coverImage?: string;
 	date: string;
 	description: string;
+	haFooter: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
@@ -367,6 +369,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 	const slug = slugify(metadataSlug || sourceStem);
 	const title = parsed.title || parsed.metadata.title || sourceStem;
 	const published = parseBooleanFlag(parsed.metadata.publish, true);
+	const haFooter = parseBooleanFlag(parsed.metadata['ha footer'], false);
 	const description =
 		parsed.metadata.description?.trim() || extractDescription(parsed.contentMarkdown);
 	const tags = parseTags(parsed.metadata.tags);
@@ -402,6 +405,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 		slug,
 		title,
 		description,
+		haFooter,
 		author,
 		date,
 		tags,
@@ -636,6 +640,7 @@ async function generateBlogData(): Promise<void> {
 			slug: post.slug,
 			title: post.title,
 			description: post.description,
+			haFooter: post.haFooter,
 			contentHtml,
 			date: post.date,
 			tags: post.tags,
@@ -661,6 +666,7 @@ export interface GeneratedBlogPost {
 	coverImage?: string;
 	date: string;
 	description: string;
+	haFooter: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
