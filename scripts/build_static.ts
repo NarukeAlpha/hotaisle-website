@@ -22,6 +22,9 @@ const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
+const BLOG_ROUTE_PREFIX = '/blog';
+const INDEX_HTML_SUFFIX_REGEX = /\/index\.html$/;
+const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 interface CssSegment {
 	isString: boolean;
 	value: string;
@@ -85,7 +88,7 @@ for (const routePath of exportedPaths) {
 		throw new Error(`Failed to export ${routePath}: ${htmlResponse.status}`);
 	}
 	const rawHtml = await htmlResponse.text();
-	const html = await normalizeExportedHtml(rawHtml);
+	const html = await normalizeExportedHtml(rawHtml, routePath);
 	const outputPath = toOutputPath(routePath);
 	const fullPath = path.join(STATIC_DIST_DIRECTORY, outputPath);
 
@@ -112,11 +115,17 @@ function toRequestPath(routePath: string): string {
 	return routePath.endsWith('/') ? routePath : `${routePath}/`;
 }
 
-async function normalizeExportedHtml(html: string): Promise<string> {
+async function normalizeExportedHtml(html: string, routePath: string): Promise<string> {
 	const htmlDocument = stripTrailingContentAfterHtml(html);
-	const htmlWithoutClientBootstrap = stripClientBootstrap(htmlDocument);
+	const htmlWithoutClientBootstrap = shouldStripClientBootstrap(routePath)
+		? stripClientBootstrap(htmlDocument)
+		: htmlDocument;
 
 	return await minifyExportedHtml(htmlWithoutClientBootstrap);
+}
+
+function shouldStripClientBootstrap(routePath: string): boolean {
+	return !(routePath === BLOG_ROUTE_PREFIX || routePath.startsWith(`${BLOG_ROUTE_PREFIX}/`));
 }
 
 function stripTrailingContentAfterHtml(html: string): string {
@@ -218,6 +227,11 @@ async function scrubExportedHtmlFiles(directory: string): Promise<void> {
 			continue;
 		}
 
+		const routePath = toRoutePathFromHtmlFile(entryPath);
+		if (!shouldStripClientBootstrap(routePath)) {
+			continue;
+		}
+
 		const html = await readFile(entryPath, 'utf8');
 		const strippedHtml = stripClientBootstrap(html);
 
@@ -225,6 +239,18 @@ async function scrubExportedHtmlFiles(directory: string): Promise<void> {
 			await writeFile(entryPath, strippedHtml, 'utf8');
 		}
 	}
+}
+
+function toRoutePathFromHtmlFile(entryPath: string): string {
+	const relativePath = path.relative(STATIC_DIST_DIRECTORY, entryPath);
+	if (relativePath === 'index.html') {
+		return '/';
+	}
+
+	const normalizedPath = relativePath
+		.replace(INDEX_HTML_SUFFIX_REGEX, '')
+		.replace(WINDOWS_PATH_SEPARATOR_REGEX, '/');
+	return `/${normalizedPath}`;
 }
 
 async function minifyInlineBlocks(html: string, tagName: 'script' | 'style'): Promise<string> {
