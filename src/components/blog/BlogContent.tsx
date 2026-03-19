@@ -1,7 +1,10 @@
 import { useId } from 'react';
+import { BlogAuthorCard } from '@/components/blog/BlogAuthorCard.tsx';
 import { BlogContentImageModal } from '@/components/blog/BlogContentImageModal.tsx';
+import type { BlogAuthorProfile } from '@/generated/blog-data.ts';
 
 interface BlogContentProps {
+	authorProfile?: BlogAuthorProfile;
 	contentHtml: string;
 	haFooter?: boolean;
 }
@@ -34,7 +37,7 @@ function HotAisleFooter() {
 	);
 }
 
-export function BlogContent({ contentHtml, haFooter = false }: BlogContentProps) {
+export function BlogContent({ authorProfile, contentHtml, haFooter = false }: BlogContentProps) {
 	const rootId = useId();
 
 	return (
@@ -42,6 +45,7 @@ export function BlogContent({ contentHtml, haFooter = false }: BlogContentProps)
 			<div id={rootId}>
 				{/** biome-ignore lint/security/noDangerouslySetInnerHtml: trusted repository content */}
 				<div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+				{authorProfile ? <BlogAuthorCard profile={authorProfile} /> : null}
 				{haFooter ? <HotAisleFooter /> : null}
 			</div>
 			<BlogContentImageModal rootId={rootId} />

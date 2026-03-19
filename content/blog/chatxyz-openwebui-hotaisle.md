@@ -210,16 +210,3 @@ One of the biggest advantages of this architecture is flexibility. If you deploy
 ![openwebui-huihui](chatxyz-openwebui-hotaisle/openwebui-huihui.png)
 
 As open-weight models continue to improve, architectures like this make it possible to build powerful AI systems without relying on external APIs. With access to GPU infrastructure and tools like vLLM and Open WebUI, you can quickly deploy private AI environments tailored to your own needs.
-
----
-
-## About the Author
-
-*This is a guest post from a friend of Hot Aisle. This content is not sponsored or paid.*
-
-**Melissa Palmer** is an infrastructure architect exploring the messy intersection of GPUs, software, and real-world workloads.
-
-Connect with Melissa:
-- **LinkedIn:** [linkedin.com/in/vmiss](https://www.linkedin.com/in/vmiss)
-- **X (Twitter):** [@vmiss33](https://x.com/vmiss33)
-- **GitHub:** [github.com/vmiss33](https://github.com/vmiss33)

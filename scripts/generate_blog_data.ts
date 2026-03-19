@@ -13,6 +13,7 @@ import sharp from 'sharp';
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_CONTENT_DIR = path.join(CONTENT_DIR, 'blog');
 const BLOG_ASSET_SOURCE_DIR = path.join(BLOG_CONTENT_DIR, 'assets');
+const BLOG_AUTHORS_PATH = path.join(BLOG_CONTENT_DIR, '0-authors.json');
 const PUBLIC_BLOG_ASSETS_DIR = path.join(process.cwd(), 'public', 'assets', 'blog');
 const GENERATED_OUTPUT_PATH = path.join(process.cwd(), 'src', 'generated', 'blog-data.ts');
 const BLOG_ASSET_PREFIX = '/assets/blog/';
@@ -47,9 +48,24 @@ const SMALL_IMAGE_CLASS = 'blog-inline-image--small';
 const MODAL_IMAGE_HINT = 'modal';
 const SMALL_IMAGE_TITLE = 'small';
 const PORTRAIT_IMAGE_RATIO_THRESHOLD = 1;
+const AUTHOR_SECTION_REGEX = /\n---\s*\n## About the Author[\s\S]*$/i;
+
+interface BlogAuthorLink {
+	label: string;
+	url: string;
+	value: string;
+}
+
+interface BlogAuthorProfile {
+	bio: string;
+	links: BlogAuthorLink[];
+	name: string;
+	note?: string;
+}
 
 interface RawBlogPost {
 	author?: string;
+	authorProfile?: BlogAuthorProfile;
 	contentMarkdown: string;
 	coverImage?: string;
 	date: string;
@@ -73,6 +89,7 @@ interface ParsedLegacyMarkdown {
 
 interface GeneratedBlogPost {
 	author?: string;
+	authorProfile?: BlogAuthorProfile;
 	contentHtml: string;
 	coverImage?: string;
 	date: string;
@@ -93,6 +110,74 @@ interface BlogImageMetadata {
 }
 
 const blogImageMetadataByUrl = new Map<string, BlogImageMetadata | null>();
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null;
+}
+
+function parseAuthorLink(value: unknown, authorName: string, linkIndex: number): BlogAuthorLink {
+	if (!isRecord(value)) {
+		throw new Error(`Author "${authorName}" link ${linkIndex} must be an object.`);
+	}
+
+	const { label, url } = value;
+	const linkValue = value.value;
+	if (typeof label !== 'string' || typeof url !== 'string' || typeof linkValue !== 'string') {
+		throw new Error(
+			`Author "${authorName}" link ${linkIndex} must include string label, url, and value fields.`
+		);
+	}
+
+	return {
+		label,
+		url,
+		value: linkValue,
+	};
+}
+
+function parseAuthorProfile(authorName: string, value: unknown): BlogAuthorProfile {
+	if (!isRecord(value)) {
+		throw new Error(`Author "${authorName}" must be an object.`);
+	}
+
+	const { bio, name, note } = value;
+	const links = value.links;
+	if (typeof name !== 'string' || typeof bio !== 'string') {
+		throw new Error(`Author "${authorName}" must include string name and bio fields.`);
+	}
+	if (!Array.isArray(links)) {
+		throw new Error(`Author "${authorName}" must include a links array.`);
+	}
+	if (note !== undefined && typeof note !== 'string') {
+		throw new Error(`Author "${authorName}" note must be a string when provided.`);
+	}
+
+	return {
+		name,
+		bio,
+		note,
+		links: links.map((link, index) => parseAuthorLink(link, authorName, index)),
+	};
+}
+
+function loadBlogAuthorProfiles(): Record<string, BlogAuthorProfile> {
+	if (!fs.existsSync(BLOG_AUTHORS_PATH)) {
+		return {};
+	}
+
+	const fileContents = fs.readFileSync(BLOG_AUTHORS_PATH, 'utf8');
+	const parsed = JSON.parse(fileContents) as unknown;
+	if (!isRecord(parsed)) {
+		throw new Error('content/blog/0-authors.json must contain a top-level object.');
+	}
+
+	const authorProfiles: Record<string, BlogAuthorProfile> = {};
+	for (const [authorName, authorValue] of Object.entries(parsed)) {
+		authorProfiles[authorName] = parseAuthorProfile(authorName, authorValue);
+	}
+
+	return authorProfiles;
+}
 
 function normalizeMetadataKey(key: string): string {
 	return key.trim().toLowerCase();
@@ -189,6 +274,10 @@ function stripLeadingMatchingHeading(contentMarkdown: string, title: string): st
 	}
 
 	return contentMarkdown.replace(LEADING_H1_REGEX, '');
+}
+
+function stripAuthorSection(contentMarkdown: string): string {
+	return contentMarkdown.replace(AUTHOR_SECTION_REGEX, '').trimEnd();
 }
 
 function decodeMarkdownPath(rawPath: string): string {
@@ -348,7 +437,11 @@ function parseLegacyMarkdown(fileContents: string): ParsedLegacyMarkdown {
 	};
 }
 
-function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
+function parseBlogFile(
+	authorProfiles: Record<string, BlogAuthorProfile>,
+	fileName: string,
+	fileContents: string
+): RawBlogPost {
 	const parsedMatter = matter(fileContents);
 	const frontmatter = parsedMatter.data as Record<string, unknown>;
 	const hasFrontmatter = Object.keys(frontmatter).length > 0;
@@ -380,7 +473,10 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 		parsed.contentMarkdown,
 		title
 	).trim();
-	const normalizedContent = withoutDuplicateHeading || parsed.contentMarkdown;
+	const authorProfile = author ? authorProfiles[author] : undefined;
+	const normalizedContent = authorProfile
+		? stripAuthorSection(withoutDuplicateHeading || parsed.contentMarkdown)
+		: withoutDuplicateHeading || parsed.contentMarkdown;
 
 	const imageMatches = normalizedContent.matchAll(MARKDOWN_IMAGE_REGEX);
 	let coverImagePath: string | undefined;
@@ -408,6 +504,7 @@ function parseBlogFile(fileName: string, fileContents: string): RawBlogPost {
 		description,
 		haFooter,
 		author,
+		authorProfile,
 		date,
 		tags,
 		published,
@@ -619,6 +716,7 @@ async function resetBlogAssetOutputDirectory(): Promise<void> {
 async function generateBlogData(): Promise<void> {
 	const posts: RawBlogPost[] = [];
 	const fileStemToSlug = new Map<string, string>();
+	const authorProfiles = loadBlogAuthorProfiles();
 
 	if (fs.existsSync(BLOG_CONTENT_DIR)) {
 		const files = fs
@@ -627,7 +725,7 @@ async function generateBlogData(): Promise<void> {
 		for (const fileName of files) {
 			const fullPath = path.join(BLOG_CONTENT_DIR, fileName);
 			const fileContents = fs.readFileSync(fullPath, 'utf8');
-			const parsed = parseBlogFile(fileName, fileContents);
+			const parsed = parseBlogFile(authorProfiles, fileName, fileContents);
 			if (!parsed.published) {
 				continue;
 			}
@@ -653,6 +751,7 @@ async function generateBlogData(): Promise<void> {
 			date: post.date,
 			tags: post.tags,
 			author: post.author,
+			authorProfile: post.authorProfile,
 			coverImage: post.coverImage,
 			metaTitle: post.metaTitle,
 			metaDescription: post.metaDescription,
@@ -670,6 +769,7 @@ async function generateBlogData(): Promise<void> {
 
 export interface GeneratedBlogPost {
 	author?: string;
+	authorProfile?: BlogAuthorProfile;
 	contentHtml: string;
 	coverImage?: string;
 	date: string;
@@ -681,6 +781,19 @@ export interface GeneratedBlogPost {
 	slug: string;
 	tags: string[];
 	title: string;
+}
+
+export interface BlogAuthorLink {
+	label: string;
+	url: string;
+	value: string;
+}
+
+export interface BlogAuthorProfile {
+	bio: string;
+	links: BlogAuthorLink[];
+	name: string;
+	note?: string;
 }
 
 export const BLOG_POSTS: GeneratedBlogPost[] = ${JSON.stringify(renderedPosts, null, 2)};

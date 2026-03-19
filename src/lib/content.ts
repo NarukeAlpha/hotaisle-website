@@ -1,8 +1,10 @@
+import type { BlogAuthorProfile } from '@/generated/blog-data.ts';
 import { BLOG_POSTS } from '@/generated/blog-data.ts';
 import { POLICIES } from '@/generated/static-content-data.ts';
 
 export interface PageData {
 	author?: string;
+	authorProfile?: BlogAuthorProfile;
 	contentHtml: string;
 	coverImage?: string;
 	date?: string;

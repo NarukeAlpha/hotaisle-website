@@ -1,0 +1,46 @@
+{
+	"Andrey Cheptsov": {
+		"name": "Andrey Cheptsov",
+		"note": "This is a guest post from a friend of Hot Aisle. This content is not sponsored or paid.",
+		"bio": "Andrey Cheptsov is the founder and a core maintainer of dstack, focused on open-source tooling for AI infrastructure orchestration across cloud and on-prem GPU environments.",
+		"links": [
+			{
+				"label": "LinkedIn",
+				"value": "linkedin.com/in/andrey-cheptsov",
+				"url": "https://www.linkedin.com/in/andrey-cheptsov"
+			},
+			{
+				"label": "X",
+				"value": "@andrey_cheptsov",
+				"url": "https://x.com/andrey_cheptsov"
+			},
+			{
+				"label": "GitHub",
+				"value": "github.com/peterschmidt85",
+				"url": "https://github.com/peterschmidt85"
+			}
+		]
+	},
+	"Melissa Palmer": {
+		"name": "Melissa Palmer",
+		"note": "This is a guest post from a friend of Hot Aisle. This content is not sponsored or paid.",
+		"bio": "Melissa Palmer is an infrastructure architect exploring the messy intersection of GPUs, software, and real-world workloads.",
+		"links": [
+			{
+				"label": "LinkedIn",
+				"value": "linkedin.com/in/vmiss",
+				"url": "https://www.linkedin.com/in/vmiss"
+			},
+			{
+				"label": "X",
+				"value": "@vmiss33",
+				"url": "https://x.com/vmiss33"
+			},
+			{
+				"label": "GitHub",
+				"value": "github.com/vmiss33",
+				"url": "https://github.com/vmiss33"
+			}
+		]
+	}
+}

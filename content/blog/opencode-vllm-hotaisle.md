@@ -336,16 +336,3 @@ Here are the main tools and resources used in this guide:
 My Fork of Hot Aisle's cloud-init-templates:
 
 - https://github.com/vmiss33/cloud-init-templates
-
----
-
-## About the Author
-
-*This is a guest post from a friend of Hot Aisle. This content is not sponsored or paid.*
-
-**Melissa Palmer** is an infrastructure architect exploring the messy intersection of GPUs, software, and real-world workloads.
-
-Connect with Melissa:
-- **LinkedIn:** [linkedin.com/in/vmiss](https://www.linkedin.com/in/vmiss)
-- **X (Twitter):** [@vmiss33](https://x.com/vmiss33)
-- **GitHub:** [github.com/vmiss33](https://github.com/vmiss33)
