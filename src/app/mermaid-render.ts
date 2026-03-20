@@ -8,6 +8,7 @@ const MERMAID_PROCESSED_ATTRIBUTE = 'data-processed';
 
 let renderTimer = 0;
 let isRendering = false;
+let hasStartedRendering = false;
 
 function getMermaidTheme() {
 	return document.documentElement.classList.contains(DARK_MODE_CLASS) ? 'dark' : 'default';
@@ -121,12 +122,25 @@ const mutationObserver = new MutationObserver((mutations) => {
 	}
 });
 
-scheduleRender();
-mutationObserver.observe(document.documentElement, {
-	attributeFilter: ['class'],
-	attributes: true,
-});
-mutationObserver.observe(document.body, {
-	childList: true,
-	subtree: true,
-});
+function startMermaidRendering(): void {
+	if (hasStartedRendering) {
+		return;
+	}
+
+	hasStartedRendering = true;
+	scheduleRender();
+	mutationObserver.observe(document.documentElement, {
+		attributeFilter: ['class'],
+		attributes: true,
+	});
+	mutationObserver.observe(document.body, {
+		childList: true,
+		subtree: true,
+	});
+}
+
+if (document.readyState === 'complete') {
+	window.setTimeout(startMermaidRendering, 0);
+} else {
+	window.addEventListener('load', startMermaidRendering, { once: true });
+}
