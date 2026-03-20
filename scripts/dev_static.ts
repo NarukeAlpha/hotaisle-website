@@ -27,14 +27,9 @@ const WATCH_TARGETS = [
 	{ path: path.join(PROJECT_ROOT, 'src', 'lib') },
 ] as const;
 
-interface ReloadSocket {
-	readyState: number;
-	send(data: string): void;
-}
-
 const host = process.env.HOST ?? DEFAULT_HOST;
 const port = Number.parseInt(process.env.PORT ?? `${DEFAULT_PORT}`, 10);
-const reloadClients = new Set<ReloadSocket>();
+const reloadClients = new Set<Bun.ServerWebSocket<undefined>>();
 
 let isBuilding = false;
 let pendingBuildReason: string | null = null;
@@ -71,6 +66,9 @@ const server = serve({
 	websocket: {
 		close(websocket) {
 			reloadClients.delete(websocket);
+		},
+		message(_websocket, _message) {
+			// Live reload only pushes server events; inbound messages are ignored.
 		},
 		open(websocket) {
 			reloadClients.add(websocket);

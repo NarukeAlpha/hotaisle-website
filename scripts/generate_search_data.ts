@@ -9,20 +9,24 @@ const GENERATED_OUTPUT_PATH = path.join(process.cwd(), 'src', 'generated', 'sear
 async function generateSearchData(): Promise<void> {
 	const results: SearchResult[] = [
 		...STATIC_SEARCH_PAGES,
-		...BLOG_POSTS.map((post) => ({
-			title: post.title,
-			description: post.description || 'Read our latest blog post.',
-			url: `/blog/${post.slug}`,
-			category: 'Blog',
-			type: 'Article',
-		})),
-		...POLICIES.map((policy) => ({
-			title: policy.title,
-			description: policy.description || 'Legal document.',
-			url: `/policies/${policy.slug}`,
-			category: 'Policy',
-			type: 'Legal',
-		})),
+		...BLOG_POSTS.map(
+			(post): SearchResult => ({
+				title: post.title,
+				description: post.description || 'Read our latest blog post.',
+				url: `/blog/${post.slug}`,
+				category: 'Blog',
+				type: 'Article',
+			})
+		),
+		...POLICIES.map(
+			(policy): SearchResult => ({
+				title: policy.title,
+				description: policy.description || 'Legal document.',
+				url: `/policies/${policy.slug}`,
+				category: 'Policy',
+				type: 'Legal',
+			})
+		),
 	];
 
 	const fileContents = `/* eslint-disable */
