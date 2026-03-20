@@ -22,7 +22,6 @@ const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
-const BLOG_ROUTE_PREFIX = '/blog';
 const INDEX_HTML_SUFFIX_REGEX = /\/index\.html$/;
 const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 interface CssSegment {
@@ -124,8 +123,8 @@ async function normalizeExportedHtml(html: string, routePath: string): Promise<s
 	return await minifyExportedHtml(htmlWithoutClientBootstrap);
 }
 
-function shouldStripClientBootstrap(routePath: string): boolean {
-	return !(routePath === BLOG_ROUTE_PREFIX || routePath.startsWith(`${BLOG_ROUTE_PREFIX}/`));
+function shouldStripClientBootstrap(_routePath: string): boolean {
+	return true;
 }
 
 function stripTrailingContentAfterHtml(html: string): string {

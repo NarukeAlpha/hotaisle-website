@@ -6,7 +6,6 @@ declare const Bun: typeof import('bun');
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const MERMAID_RENDER_ENTRY_PATH = path.join(PROJECT_ROOT, 'src', 'app', 'mermaid-render.ts');
 const VENDOR_DIRECTORY = path.join(PROJECT_ROOT, 'public', 'assets', 'vendor');
-const MERMAID_RENDER_OUTPUT_PATH = path.join(VENDOR_DIRECTORY, 'mermaid-render.js');
 
 await rm(VENDOR_DIRECTORY, { force: true, recursive: true });
 await mkdir(VENDOR_DIRECTORY, { recursive: true });
