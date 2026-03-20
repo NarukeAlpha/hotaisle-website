@@ -55,6 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<JsonLd />
 				<script>{COPY_COMMAND_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
+				<script src="/assets/vendor/mermaid-render.js" type="module" />
 				<script>{GTM_SCRIPT}</script>
 			</head>
 			<body>
