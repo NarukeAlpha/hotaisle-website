@@ -13,13 +13,11 @@ export function BlogAuthorCard({ profile }: BlogAuthorCardProps) {
 			{profile.note ? (
 				<p className="mb-4 text-muted-foreground italic">{profile.note}</p>
 			) : null}
-			<p className="mb-6">
-				<strong>{profile.name}</strong> {profile.bio}
-			</p>
+			<p className="mb-6">{profile.bio}</p>
 			<ul className="space-y-2">
 				{profile.links.map(({ label, url, value }) => (
 					<li key={label}>
-						<strong>{label}:</strong>{' '}
+						<strong className="mr-1">{label}:</strong>
 						<a href={url} rel="noopener" target="_blank">
 							{value}
 						</a>
