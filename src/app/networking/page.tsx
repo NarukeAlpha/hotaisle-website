@@ -187,12 +187,17 @@ export default function NetworkingPage() {
 						.
 					</p>
 					<div className="rounded-xl border border-border bg-background p-4 text-muted-foreground text-sm">
-						<strong className="text-foreground">Note:</strong> Public IPv4/v6 address is
-						included on all baremetal and VM servers. You may need to edit{' '}
-						<code className="rounded bg-muted px-1 py-0.5 text-arctic-blue">
-							ufw config
-						</code>{' '}
-						to open ports, which we can help with.
+						<span className="inline-label-group">
+							<strong className="text-foreground">Note:</strong>
+							<span>
+								Public IPv4/v6 address is included on all baremetal and VM servers.
+								You may need to edit{' '}
+								<code className="rounded bg-muted px-1 py-0.5 text-arctic-blue">
+									ufw config
+								</code>{' '}
+								to open ports, which we can help with.
+							</span>
+						</span>
 					</div>
 				</div>
 

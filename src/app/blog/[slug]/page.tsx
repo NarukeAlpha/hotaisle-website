@@ -115,7 +115,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 							<Calendar className="text-arctic-blue" size={18} />
 							<time dateTime={post.date}>{prettyDate}</time>
 						</div>
-						{post.author && <p>By {post.author}</p>}
+						{post.author ? (
+							<p>
+								<span className="inline-label-group">
+									<span>By:</span>
+									{post.authorProfile ? (
+										<a
+											className="font-semibold text-foreground underline-offset-2 hover:text-arctic-blue hover:underline"
+											href="#about-the-author"
+										>
+											{post.author}
+										</a>
+									) : (
+										<strong className="font-semibold text-foreground">
+											{post.author}
+										</strong>
+									)}
+								</span>
+							</p>
+						) : null}
 					</div>
 				</div>
 			</div>

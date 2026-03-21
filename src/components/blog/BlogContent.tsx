@@ -24,14 +24,16 @@ function HotAisleFooter() {
 				documentation, or share your own technical content, we'd love to have your input.
 			</p>
 			<p>
-				<strong>Visit our GitHub repository:</strong>{' '}
-				<a
-					href="https://github.com/hotaisle/hotaisle-website"
-					rel="noopener"
-					target="_blank"
-				>
-					github.com/hotaisle/hotaisle-website
-				</a>
+				<span className="inline-label-group">
+					<strong>Visit our GitHub repository:</strong>
+					<a
+						href="https://github.com/hotaisle/hotaisle-website"
+						rel="noopener"
+						target="_blank"
+					>
+						github.com/hotaisle/hotaisle-website
+					</a>
+				</span>
 			</p>
 		</section>
 	);

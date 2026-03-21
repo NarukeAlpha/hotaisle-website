@@ -11,6 +11,7 @@ Agents must follow:
 - Ask for clarification if instructions are ambiguous.
 - When unsure, prefer retrieval-led reasoning over pre-training-led reasoning
 - Write code that is **accessible, performant, type-safe, and maintainable**. Focus on clarity and explicit intent over brevity.
+- Automated commit messages should be in the format of Conventional Commits
 
 ### Environment
 - Package manager: bun (never anything else)

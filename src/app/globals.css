@@ -98,6 +98,14 @@ body {
 	background-color: var(--background);
 }
 
+.inline-label-group {
+	display: inline;
+}
+
+.inline-label-group > :not(:last-child) {
+	margin-right: 0.25rem;
+}
+
 /* Global Prose Enhancements */
 .prose img {
 	width: 100%;
@@ -167,6 +175,11 @@ body {
 	color: var(--arctic-blue);
 	background-color: var(--secondary);
 	border-radius: 0.25rem;
+}
+
+.prose code::before,
+.prose code::after {
+	content: none;
 }
 
 .prose pre {
