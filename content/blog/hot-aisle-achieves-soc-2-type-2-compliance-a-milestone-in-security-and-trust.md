@@ -15,7 +15,7 @@ Tags: Announcements
 
 At Hot Aisle, transparency, trust, and reliability are core to everything we build. Today, we’re proud to announce that we have successfully completed **SOC 2 Type 2 compliance**—a major milestone in our commitment to providing the most secure, dependable, and developer-first cloud experience.
 
-Our journey toward full SOC 2 compliance began with [achieving **SOC 2 Type 1**](Hot%20Aisle%20Achieves%20SOC%202%20Type%201%20Compliance%20224973133dfc80bf9298e97948305239.md), which validated that we had the right security and operational controls designed and in place. Type 1 was an important first step—it proved our commitment to building a secure foundation for customers and set the stage for the Type 2 audit. With that groundwork established, we were able to demonstrate not just that our controls exist, but that we consistently operate them over time—culminating in today’s Type 2 milestone.
+Our journey toward full SOC 2 compliance began with [achieving **SOC 2 Type 1**](/blog/hot-aisle-secures-initial-compliance-milestone-soc-2-type-1-completed), which validated that we had the right security and operational controls designed and in place. Type 1 was an important first step—it proved our commitment to building a secure foundation for customers and set the stage for the Type 2 audit. With that groundwork established, we were able to demonstrate not just that our controls exist, but that we consistently operate them over time—culminating in today’s Type 2 milestone.
 
 ### **What This Means**
 
