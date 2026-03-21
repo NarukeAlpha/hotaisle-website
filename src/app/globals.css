@@ -113,14 +113,14 @@ body {
 
 .prose img.blog-inline-image--portrait {
 	max-width: 32rem;
-	margin-right: auto;
-	margin-left: auto;
+	margin-right: 0;
+	margin-left: 0;
 }
 
 .prose img.blog-inline-image--small {
 	max-width: 24rem;
-	margin-right: auto;
-	margin-left: auto;
+	margin-right: 0;
+	margin-left: 0;
 }
 
 .prose img.blog-inline-image--modal {
