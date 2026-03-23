@@ -224,8 +224,8 @@ export default function HotAisleHero() {
 					</div>
 				</div>
 
-				<div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl items-start px-5 pt-20 pb-20 sm:px-5 sm:pt-24 lg:px-6 lg:pt-60">
-					<div className="max-w-3xl lg:-translate-x-40">
+				<div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl items-start px-5 pt-20 pb-20 sm:px-5 sm:pt-24 md:px-8 lg:px-10 lg:pt-60">
+					<div className="w-full min-w-0 max-w-3xl">
 						<img
 							alt="Hot Aisle"
 							className="animation-fade-in mb-8 h-16 w-auto object-contain sm:h-20"
@@ -246,7 +246,7 @@ export default function HotAisleHero() {
 							AMD exclusive AI Cloud
 						</div>
 
-						<h1 className="animation-fade-in max-w-4xl font-semibold text-5xl tracking-tight sm:text-6xl lg:text-7xl">
+						<h1 className="animation-fade-in max-w-4xl font-semibold text-5xl tracking-tight sm:text-6xl xl:text-7xl">
 							Deploy MI300X GPUs
 							<span
 								className="block bg-clip-text text-transparent"

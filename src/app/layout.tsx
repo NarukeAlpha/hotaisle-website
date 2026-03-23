@@ -4,6 +4,7 @@ import './globals.css';
 import type * as React from 'react';
 import { initializeCopyCommandScript } from './copy-command-script.ts';
 import { initializeHeroStarsScript } from './hero-stars-script.ts';
+import { initializeMobileNavScript } from './mobile-nav-script.ts';
 import { initializeThemeScript } from './theme-script.ts';
 
 const GTM_CONTAINER_ID = 'GTM-NK8WLZV8';
@@ -14,6 +15,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
 const COPY_COMMAND_SCRIPT = `(${initializeCopyCommandScript.toString()})();`;
 const HERO_STARS_SCRIPT = `(${initializeHeroStarsScript.toString()})();`;
+const MOBILE_NAV_SCRIPT = `(${initializeMobileNavScript.toString()})();`;
 const THEME_SCRIPT = `(${initializeThemeScript.toString()})();`;
 
 export const metadata = {
@@ -57,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<JsonLd />
 				<script>{COPY_COMMAND_SCRIPT}</script>
 				<script>{HERO_STARS_SCRIPT}</script>
+				<script>{MOBILE_NAV_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
 				<script src="/assets/vendor/mermaid-render.js" type="module" />
 				<script>{GTM_SCRIPT}</script>
@@ -71,7 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 						width="0"
 					/>
 				</noscript>
-				<div className="flex min-h-screen bg-background text-foreground antialiased">
+				<div className="flex min-h-screen flex-col bg-background text-foreground antialiased lg:flex-row">
 					<Sidebar />
 					<main className="relative min-w-0 flex-1">{children}</main>
 				</div>
