@@ -5,6 +5,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Hot Aisle’s custom networking fabric for GPU infrastructure, including compute, storage, and management network layers.',
+		image: '/assets/compute/racks.png',
+		imageAlt: 'Hot Aisle networking fabric',
 		path: '/networking',
 		title: 'Networking Fabric',
 	});

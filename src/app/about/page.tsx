@@ -5,6 +5,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Meet the Hot Aisle founders and learn how the company was built around transparent, high-performance AMD infrastructure.',
+		image: '/assets/og/hot-aisle-share.png',
+		imageAlt: 'Hot Aisle branded share image',
 		path: '/about',
 		title: 'About Hot Aisle',
 	});

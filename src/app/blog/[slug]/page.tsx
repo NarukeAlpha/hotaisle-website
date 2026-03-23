@@ -29,20 +29,32 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 	const title = post.metaTitle ?? post.title;
 	const description = post.metaDescription ?? post.description ?? '';
 	const url = `https://hotaisle.xyz/blog/${post.slug}`;
-	const image = post.coverImage ?? '/hotaisle-logo.png';
+	const image = post.coverImage ?? '/assets/og/hot-aisle-share.png';
+	const publishedTime = post.date ? new Date(post.date).toISOString() : undefined;
+	const authors = post.author ? [post.author] : undefined;
+	const tags = post.tags?.length ? post.tags : undefined;
 
 	return {
 		title,
 		description,
+		alternates: {
+			canonical: url,
+		},
 		openGraph: {
 			title,
 			description,
+			locale: 'en_US',
 			type: 'article',
 			url,
+			publishedTime,
+			authors,
+			tags,
 			images: [
 				{
 					alt: post.title,
+					height: 630,
 					url: image,
+					width: 1200,
 				},
 			],
 		},

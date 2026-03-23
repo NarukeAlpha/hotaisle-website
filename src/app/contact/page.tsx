@@ -4,6 +4,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Contact Hot Aisle for infrastructure, partnerships, reservations, or support.',
+		image: '/assets/og/hot-aisle-share.png',
+		imageAlt: 'Hot Aisle branded share image',
 		path: '/contact',
 		title: 'Contact Hot Aisle',
 	});

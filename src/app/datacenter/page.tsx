@@ -15,6 +15,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Explore Hot Aisle’s Tier 5 Platinum data center footprint, security model, sustainability profile, and operational advantages.',
+		image: '/assets/datacenter/inside.png',
+		imageAlt: 'Hot Aisle data center interior',
 		path: '/datacenter',
 		title: 'Datacenter Infrastructure',
 	});

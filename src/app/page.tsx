@@ -8,6 +8,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'AMD Exclusive AI Cloud. Deploy MI300X and MI355X GPUs in 60 seconds. $1.99/GPU/hr. No contracts, no commitments, no drama.',
+		image: '/assets/og/hot-aisle-share.png',
+		imageAlt: 'Hot Aisle branded share image',
 		path: '/',
 		title: 'Hot Aisle - AMD Exclusive AI Cloud',
 	});

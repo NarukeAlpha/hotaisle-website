@@ -6,7 +6,7 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'AMD Instinct MI300X specifications, deployment options, and performance characteristics for large-model inference and training.',
-		image: '/assets/blog/advancing-ai-in-the-cloud-the-dell-and-hot-aisle-partnership/header.webp',
+		image: '/assets/mi300x/mi300x-hero.png',
 		imageAlt: 'AMD MI300X',
 		path: '/mi300x',
 		title: 'AMD MI300X',

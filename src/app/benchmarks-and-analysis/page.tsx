@@ -6,6 +6,8 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Independent benchmarks, performance analysis, and third-party references for AMD MI300X workloads and infrastructure.',
+		image: '/assets/mi300x/mi300x-hero.png',
+		imageAlt: 'AMD MI300X benchmarks and analysis',
 		path: '/benchmarks-and-analysis',
 		title: 'Benchmarks and Analysis',
 	});
