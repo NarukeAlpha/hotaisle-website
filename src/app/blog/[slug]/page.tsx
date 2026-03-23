@@ -40,6 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 		alternates: {
 			canonical: url,
 		},
+		robots: {
+			follow: true,
+			index: true,
+		},
 		openGraph: {
 			title,
 			description,
@@ -62,7 +66,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 			card: 'summary_large_image',
 			title,
 			description,
-			images: [image],
+			images: [
+				{
+					alt: post.title,
+					height: 630,
+					url: image,
+					width: 1200,
+				},
+			],
 		},
 	};
 }

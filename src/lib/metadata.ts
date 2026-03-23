@@ -31,6 +31,10 @@ export function createPageMetadata({
 		alternates: {
 			canonical: url,
 		},
+		robots: {
+			follow: true,
+			index: true,
+		},
 		openGraph: {
 			title,
 			description,
@@ -51,7 +55,14 @@ export function createPageMetadata({
 			card: 'summary_large_image',
 			title,
 			description,
-			images: [image],
+			images: [
+				{
+					alt: imageAlt,
+					height: DEFAULT_IMAGE_HEIGHT,
+					url: image,
+					width: DEFAULT_IMAGE_WIDTH,
+				},
+			],
 		},
 	};
 }

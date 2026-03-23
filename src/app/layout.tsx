@@ -26,6 +26,10 @@ export const metadata = {
 	alternates: {
 		canonical: 'https://hotaisle.xyz',
 	},
+	robots: {
+		follow: true,
+		index: true,
+	},
 	openGraph: {
 		title: 'Hot Aisle - AMD Exclusive AI Cloud',
 		description:
@@ -47,7 +51,14 @@ export const metadata = {
 		card: 'summary_large_image',
 		description:
 			'AMD GPU cloud for AI and HPC workloads. MI300X instances, cluster design, networking, and direct human support.',
-		images: ['/assets/og/hot-aisle-share.png'],
+		images: [
+			{
+				alt: 'Hot Aisle branded share image',
+				height: 630,
+				url: '/assets/og/hot-aisle-share.png',
+				width: 1200,
+			},
+		],
 		title: 'Hot Aisle - AMD Exclusive AI Cloud',
 	},
 	icons: {
