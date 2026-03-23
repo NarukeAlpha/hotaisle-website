@@ -57,7 +57,7 @@
 		"tailwindcss": "^4.2.2",
 		"typescript": "^5.9.3",
 		"ultracite": "^7.3.2",
-		"vinext": "^0.0.33",
+		"vinext": "^0.0.34",
 		"vite": "^8.0.1",
 		"wrangler": "^4.76.0"
 	}

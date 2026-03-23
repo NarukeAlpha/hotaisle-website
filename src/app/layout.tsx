@@ -3,6 +3,7 @@ import JsonLd from '@/components/seo/JsonLd.tsx';
 import './globals.css';
 import type * as React from 'react';
 import { initializeCopyCommandScript } from './copy-command-script.ts';
+import { initializeHeroStarsScript } from './hero-stars-script.ts';
 import { initializeThemeScript } from './theme-script.ts';
 
 const GTM_CONTAINER_ID = 'GTM-NK8WLZV8';
@@ -12,6 +13,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
 const COPY_COMMAND_SCRIPT = `(${initializeCopyCommandScript.toString()})();`;
+const HERO_STARS_SCRIPT = `(${initializeHeroStarsScript.toString()})();`;
 const THEME_SCRIPT = `(${initializeThemeScript.toString()})();`;
 
 export const metadata = {
@@ -54,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<head>
 				<JsonLd />
 				<script>{COPY_COMMAND_SCRIPT}</script>
+				<script>{HERO_STARS_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
 				<script src="/assets/vendor/mermaid-render.js" type="module" />
 				<script>{GTM_SCRIPT}</script>

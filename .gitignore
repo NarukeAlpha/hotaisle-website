@@ -45,5 +45,6 @@ worker
 
 # typescript
 *.tsbuildinfo
+.tsbuild/*
 next-env.d.ts
 public/assets/vendor

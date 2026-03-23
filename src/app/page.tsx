@@ -1,5 +1,5 @@
 import { AppLink } from '@/components/AppLink.tsx';
-import { ComputeHero } from '@/components/home/ComputeHero.tsx';
+import HotAisleHero from '@/components/home/HotAisleHero.tsx';
 import { SecuritySection } from '@/components/home/SecuritySection.tsx';
 import { VideoSection } from '@/components/home/VideoSection.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
@@ -16,7 +16,7 @@ export function generateMetadata() {
 export default function Home() {
 	return (
 		<div className="animation-fade-in min-h-screen overflow-x-hidden bg-background pb-20 text-foreground">
-			<ComputeHero />
+			<HotAisleHero />
 
 			<SecuritySection />
 

@@ -1,13 +1,16 @@
 {
 	"compilerOptions": {
 		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"emitDeclarationOnly": true,
+		"outDir": ".tsbuild/node",
 		"target": "ESNext",
 		"lib": ["ESNext", "DOM"],
 		"types": ["node", "bun-types"],
 		"skipLibCheck": true,
 		"module": "ESNext",
 		"moduleResolution": "bundler",
-		"noEmit": true,
 		"allowImportingTsExtensions": true,
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
