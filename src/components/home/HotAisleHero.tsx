@@ -224,8 +224,8 @@ export default function HotAisleHero() {
 					</div>
 				</div>
 
-				<div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl items-start px-5 pt-16 pb-20 sm:px-5 sm:pt-20 md:px-8 lg:px-10 lg:pt-40">
-					<div className="w-full min-w-0 max-w-3xl">
+				<div className="relative z-10 flex min-h-[88vh] max-w-3xl items-start px-5 pt-16 pb-20 sm:px-5 sm:pt-20 md:px-8 lg:ml-20 lg:px-10 lg:pt-40 xl:ml-32">
+					<div className="w-full min-w-0">
 						<img
 							alt="Hot Aisle"
 							className="animation-fade-in mb-8 h-16 w-auto object-contain sm:h-20"
