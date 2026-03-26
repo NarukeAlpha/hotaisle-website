@@ -55,7 +55,7 @@ export function Navbar() {
 								className="h-8 w-auto object-contain"
 								height={32}
 								src="/hotaisle-logo.svg"
-								width={130}
+								width={104}
 							/>
 						</AppLink>
 
@@ -130,7 +130,7 @@ export function Navbar() {
 							className="h-8 w-auto object-contain"
 							height={32}
 							src="/hotaisle-logo.svg"
-							width={130}
+							width={104}
 						/>
 						<button
 							aria-label="Close navigation menu"
