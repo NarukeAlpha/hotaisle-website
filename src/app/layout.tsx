@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar.tsx';
 import JsonLd from '@/components/seo/JsonLd.tsx';
 import './globals.css';
 import type * as React from 'react';
+import { initializeBlogImageModalScript } from './blog-image-modal-script.ts';
 import { initializeCopyCommandScript } from './copy-command-script.ts';
 import { initializeHeroStarsScript } from './hero-stars-script.ts';
 import { initializeMobileNavScript } from './mobile-nav-script.ts';
@@ -14,6 +15,7 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`;
+const BLOG_IMAGE_MODAL_SCRIPT = `(${initializeBlogImageModalScript.toString()})();`;
 const COPY_COMMAND_SCRIPT = `(${initializeCopyCommandScript.toString()})();`;
 const HERO_STARS_SCRIPT = `(${initializeHeroStarsScript.toString()})();`;
 const MOBILE_NAV_SCRIPT = `(${initializeMobileNavScript.toString()})();`;
@@ -73,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 		<html lang="en" suppressHydrationWarning>
 			<head>
 				<JsonLd />
+				<script>{BLOG_IMAGE_MODAL_SCRIPT}</script>
 				<script>{COPY_COMMAND_SCRIPT}</script>
 				<script>{HERO_STARS_SCRIPT}</script>
 				<script>{MOBILE_NAV_SCRIPT}</script>

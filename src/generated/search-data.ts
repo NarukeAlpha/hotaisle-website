@@ -90,6 +90,13 @@ export const SEARCH_DATA: SearchResult[] = [
     "category": "Page"
   },
   {
+    "title": "SOC2 Is Broken — And The Entire Industry Knows It",
+    "description": "Our honest take on why SOC2 is a fundamentally flawed compliance framework, and what that means for you.",
+    "url": "/blog/soc2-is-broken",
+    "category": "Blog",
+    "type": "Article"
+  },
+  {
     "title": "Creating Your Own ChatXYZ Powered by Hot Aisle and Open WebUI",
     "description": "A practical guide to building a private ChatXYZ style environment using Open WebUI and a self-hosted vLLM instance on Hot Aisle. Covers architecture, SSH tunneling, and connecting a local interface to GPU-hosted inference.",
     "url": "/blog/chatxyz-openwebui-hotaisle",

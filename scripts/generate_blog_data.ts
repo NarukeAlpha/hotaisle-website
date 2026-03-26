@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeExternalLinks from 'rehype-external-links';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
@@ -43,9 +44,7 @@ const EDGE_DASHES_REGEX = /^-+|-+$/g;
 const WHITESPACE_REGEX = /\s+/g;
 const INLINE_IMAGE_CLASS = 'blog-inline-image';
 const PORTRAIT_IMAGE_CLASS = 'blog-inline-image--portrait';
-const MODAL_IMAGE_CLASS = 'blog-inline-image--modal';
 const SMALL_IMAGE_CLASS = 'blog-inline-image--small';
-const MODAL_IMAGE_HINT = 'modal';
 const SMALL_IMAGE_TITLE = 'small';
 const PORTRAIT_IMAGE_RATIO_THRESHOLD = 1;
 const AUTHOR_SECTION_REGEX = /\n---\s*\n## About the Author[\s\S]*$/i;
@@ -559,6 +558,7 @@ async function renderMarkdown(markdown: string): Promise<string> {
 	const processedContent = await remark()
 		.use(remarkGfm)
 		.use(remarkRehype)
+		.use(rehypeExternalLinks, { target: '_blank', rel: ['noopener', 'noreferrer'] })
 		.use(rehypeSlug)
 		.use(rehypeAutolinkHeadings, {
 			behavior: 'wrap',
@@ -665,13 +665,8 @@ async function enhanceRenderedHtml(html: string): Promise<string> {
 		if (hints.includes(SMALL_IMAGE_TITLE)) {
 			classNames.push(SMALL_IMAGE_CLASS);
 		}
-		if (hints.includes(MODAL_IMAGE_HINT)) {
-			classNames.push(MODAL_IMAGE_CLASS);
-		}
 		let mergedAttributes = appendClassAttribute(cleanedAttributes, classNames.join(' '));
-		if (hints.includes(MODAL_IMAGE_HINT)) {
-			mergedAttributes = `${mergedAttributes} role="button" tabindex="0" aria-haspopup="dialog"`;
-		}
+		mergedAttributes = `${mergedAttributes} role="button" tabindex="0" aria-haspopup="dialog"`;
 		const replacementTag = `<img${mergedAttributes} src="${src}" width="${imageMetadata.width}" height="${imageMetadata.height}">`;
 		enhancedHtml = enhancedHtml.replace(fullTag, replacementTag);
 	}
