@@ -6,31 +6,31 @@ export function SecuritySection() {
 					Trusted by Industry Leaders & Secure by Design
 				</p>
 				<div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
+					<div className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
 						<img
 							alt="Dell Technologies Authorized Partner"
-							className="h-full object-contain"
-							height={80}
+							className="h-24 w-auto object-contain"
+							height={96}
 							src="/assets/home/dellauthpartner.png"
-							width={80}
+							width={192}
 						/>
 					</div>
-					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
+					<a className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md" href="/blog/soc2-is-broken">
 						<img
 							alt="SOC2 Type 2 & HIPAA Compliant"
-							className="h-full object-contain"
-							height={80}
+							className="h-24 w-auto object-contain"
+							height={96}
 							src="/assets/home/so2andhipaa.png"
-							width={80}
+							width={192}
 						/>
-					</div>
-					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
+					</a>
+					<div className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
 						<img
 							alt="AMD Partner"
-							className="h-full object-contain"
-							height={80}
+							className="h-24 w-auto object-contain"
+							height={96}
 							src="/assets/home/AMDpartner.png"
-							width={80}
+							width={192}
 						/>
 					</div>
 				</div>
