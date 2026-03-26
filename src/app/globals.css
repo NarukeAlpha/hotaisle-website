@@ -92,6 +92,10 @@
 	--color-arctic-blue: var(--hot-orange); /* Backward compatibility alias */
 }
 
+html {
+	scrollbar-gutter: stable;
+}
+
 body {
 	font-family:
 		-apple-system,

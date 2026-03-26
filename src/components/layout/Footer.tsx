@@ -24,13 +24,13 @@ const FOOTER_COLUMNS = [
 			{ href: '/mi300x', label: 'MI300X' },
 			{ href: '/mi355x', label: 'MI355X' },
 			{ href: '/benchmarks-and-analysis', label: 'Benchmarks' },
-			{ href: '/partners', label: 'Partners' },
 		],
 	},
 	{
 		heading: 'Company',
 		links: [
 			{ href: '/about', label: 'About Us' },
+			{ href: '/partners', label: 'Partners' },
 			{ href: '/blog', label: 'Blog' },
 			{ href: '/policies', label: 'Policies' },
 		],
@@ -90,9 +90,15 @@ export function Footer() {
 					<div className="flex items-center gap-4">
 						<AppLink
 							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-							href="/policies"
+							href="/policies/privacy-policy"
 						>
 							Privacy
+						</AppLink>
+						<AppLink
+							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+							href="/policies/terms-of-service"
+						>
+							Terms
 						</AppLink>
 						<AppLink
 							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
