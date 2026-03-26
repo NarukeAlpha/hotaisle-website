@@ -1,4 +1,5 @@
-import { Sidebar } from '@/components/layout/Sidebar.tsx';
+import { Footer } from '@/components/layout/Footer.tsx';
+import { Navbar } from '@/components/layout/Navbar.tsx';
 import JsonLd from '@/components/seo/JsonLd.tsx';
 import './globals.css';
 import type * as React from 'react';
@@ -89,9 +90,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 						width="0"
 					/>
 				</noscript>
-				<div className="flex min-h-screen flex-col bg-background text-foreground antialiased lg:flex-row">
-					<Sidebar />
+				<div className="flex min-h-screen flex-col bg-background text-foreground antialiased">
+					<Navbar />
 					<main className="relative min-w-0 flex-1">{children}</main>
+					<Footer />
 				</div>
 			</body>
 		</html>

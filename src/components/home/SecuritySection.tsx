@@ -1,51 +1,36 @@
 export function SecuritySection() {
 	return (
-		<section className="border-neutral-200 border-y bg-neutral-100 py-12 dark:border-neutral-800 dark:bg-neutral-900">
-			<div className="container mx-auto px-6">
-				<p className="mb-8 text-center font-semibold text-neutral-500 text-sm uppercase tracking-widest">
+		<section className="border-t border-border/60 bg-muted/30 py-14">
+			<div className="mx-auto max-w-7xl px-6">
+				<p className="mb-10 text-center font-medium text-muted-foreground text-xs uppercase tracking-widest">
 					Trusted by Industry Leaders & Secure by Design
 				</p>
-				<div className="flex flex-wrap items-center justify-center gap-12 opacity-80 grayscale transition-all duration-500 hover:grayscale-0 md:gap-24">
-					{/*
-                        Use a white background container for logos to ensure they look good in dark mode
-                        if they are typical corporate JPGs with white backgrounds.
-                        We'll make them 'cards' or just a strip if they are transparent.
-                        User said "they are jpg with white backgrounds".
-                        So we need to contain them or mix-blend them.
-                        "mix-blend-multiply" works great on white backgrounds to make them transparent on light graphics,
-                        but on dark mode, we need a white container.
-                    */}
-
-					{/* Partner: Dell */}
-					<div className="flex h-24 items-center justify-center rounded-lg bg-white px-8 py-3 shadow-sm transition-shadow hover:shadow-md">
+				<div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
 						<img
 							alt="Dell Technologies Authorized Partner"
 							className="h-full object-contain"
-							height={100}
+							height={80}
 							src="/assets/home/dellauthpartner.png"
-							width={100}
+							width={80}
 						/>
 					</div>
-
-					{/* SOC2 & HIPAA */}
-					<div className="flex h-24 items-center justify-center rounded-lg bg-white px-8 py-3 shadow-sm transition-shadow hover:shadow-md">
+					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
 						<img
 							alt="SOC2 Type 2 & HIPAA Compliant"
 							className="h-full object-contain"
-							height={100}
+							height={80}
 							src="/assets/home/so2andhipaa.png"
-							width={100}
+							width={80}
 						/>
 					</div>
-
-					{/* Partner: AMD */}
-					<div className="flex h-24 items-center justify-center rounded-lg bg-white px-8 py-3 shadow-sm transition-shadow hover:shadow-md">
+					<div className="flex h-20 items-center justify-center rounded-xl bg-white px-8 py-3 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
 						<img
 							alt="AMD Partner"
 							className="h-full object-contain"
-							height={100}
+							height={80}
 							src="/assets/home/AMDpartner.png"
-							width={100}
+							width={80}
 						/>
 					</div>
 				</div>

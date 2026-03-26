@@ -48,3 +48,4 @@ worker
 .tsbuild/*
 next-env.d.ts
 public/assets/vendor
+.claude/settings.local.json

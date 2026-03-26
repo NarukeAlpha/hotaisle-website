@@ -1,4 +1,5 @@
 import { AppLink } from '@/components/AppLink.tsx';
+import { FeaturesSection } from '@/components/home/FeaturesSection.tsx';
 import HotAisleHero from '@/components/home/HotAisleHero.tsx';
 import { SecuritySection } from '@/components/home/SecuritySection.tsx';
 import { VideoSection } from '@/components/home/VideoSection.tsx';
@@ -22,17 +23,26 @@ export default function Home() {
 
 			<SecuritySection />
 
+			<FeaturesSection />
+
 			<VideoSection />
 
 			{/* Footer CTA */}
-			<section className="bg-hot-orange py-24 text-center text-white">
-				<h2 className="mb-8 font-bold text-4xl">Ready to Accelerate?</h2>
-				<AppLink
-					className="inline-flex rounded-full bg-white px-8 py-4 font-bold text-hot-orange text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:bg-neutral-100"
-					href="/quick-start"
-				>
-					Launch Instance
-				</AppLink>
+			<section className="border-t border-border/60 py-24 text-center">
+				<div className="mx-auto max-w-2xl px-6">
+					<h2 className="mb-4 font-bold text-3xl tracking-tight sm:text-4xl">
+						Ready to accelerate?
+					</h2>
+					<p className="mb-8 text-muted-foreground text-lg">
+						Launch a GPU instance in under 60 seconds. No contracts required.
+					</p>
+					<AppLink
+						className="inline-flex items-center gap-2 rounded-xl bg-hot-orange px-8 py-4 font-semibold text-base text-white shadow-lg shadow-orange-950/20 transition hover:-translate-y-0.5 hover:bg-orange-500"
+						href="/quick-start"
+					>
+						Launch Instance
+					</AppLink>
+				</div>
 			</section>
 		</div>
 	);
