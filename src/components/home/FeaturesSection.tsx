@@ -4,7 +4,7 @@ import { AppLink } from '@/components/AppLink.tsx';
 const FEATURES = [
 	{
 		description:
-			'Built exclusively for AMD MI300X and MI355X. No NVIDIA tax. Pure AMD performance tuned for large AI workloads.',
+			'Built exclusively for AMD MI300X. No NVIDIA tax. Pure AMD performance tuned for large AI workloads.',
 		icon: Cpu,
 		label: 'AMD Exclusive',
 		title: 'AMD-Only Infrastructure',
