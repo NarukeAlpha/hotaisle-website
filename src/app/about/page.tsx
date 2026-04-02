@@ -1,4 +1,5 @@
-import { Lightbulb, Linkedin, Users } from 'lucide-react';
+import { Lightbulb, Users } from 'lucide-react';
+import { LinkedinIcon } from '@/components/icons/LinkedinIcon.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
@@ -65,7 +66,7 @@ export default function AboutPage() {
 								rel="noopener noreferrer"
 								target="_blank"
 							>
-								<Linkedin size={18} />
+								<LinkedinIcon size={18} />
 								Connect on LinkedIn
 							</a>
 						</div>
@@ -94,7 +95,7 @@ export default function AboutPage() {
 								rel="noopener noreferrer"
 								target="_blank"
 							>
-								<Linkedin size={18} />
+								<LinkedinIcon size={18} />
 								Connect on LinkedIn
 							</a>
 						</div>
