@@ -187,7 +187,7 @@ curl -X 'POST' \
   }'
 ```
 
-![](./opencode-vllm-hotaisle/cloud-init results.png)
+![cloud init results](./opencode-vllm-hotaisle/cloud-init results.png)
 
 **Take note of the IP address of your VM at this step.**
 
@@ -197,7 +197,7 @@ Between deploying the VM and starting vLLM, it will take about five minutes.  Mo
 cloud-init status
 ```
 
-![](./opencode-vllm-hotaisle/cloud-init-status.png)
+![cloud init status](./opencode-vllm-hotaisle/cloud-init-status.png)
 
 Check the status of vLLM with the following command:
 
@@ -205,7 +205,7 @@ Check the status of vLLM with the following command:
 docker logs -f vllm
 ```
 
-![](./opencode-vllm-hotaisle/02-model-loaded.png)
+![model loaded](./opencode-vllm-hotaisle/02-model-loaded.png)
 
 The Application startup complete line indicates the model has completed loading.
 
@@ -226,7 +226,7 @@ curl http://localhost:8000/v1/completions \
 
 Here's the type of output you are looking for, an entertaining haiku:
 
-![](./opencode-vllm-hotaisle/03-model-test.png)
+![model test](./opencode-vllm-hotaisle/03-model-test.png)
 
 ## Create OpenCode Configuration File
 
@@ -282,27 +282,27 @@ where x.x.x.x is the IP of your Hot Aisle VM.
 
 Launch OpenCode, and type /connect, then hit enter.
 
-![](./opencode-vllm-hotaisle/opencode-connect.png)
+![opencode connect](./opencode-vllm-hotaisle/opencode-connect.png)
 
 Note: I personally use the OpenCode extension in VS Code.
 
 Scroll all the way down to the bottom and look for "Hot Aisle vLLM (Qwen3 Coder)".  This was in our configuration file.
 
-![](./opencode-vllm-hotaisle/opencode connection.png)
+![opencode connection](./opencode-vllm-hotaisle/opencode connection.png)
 
 You do not need an API key, so if you are prompted for one just enter some text, I like to use "dummy".
 
-![](./opencode-vllm-hotaisle/open-code-api-connect.png)
+![opencode api connect](./opencode-vllm-hotaisle/open-code-api-connect.png)
 
 Select the model you wish to use.
 
-![](./opencode-vllm-hotaisle/opencode-model-connect.png)
+![opencode model connect](./opencode-vllm-hotaisle/opencode-model-connect.png)
 
 The text **Hot Aisle vLLM (Qwen 3 Coder)** is the name I gave this provider in the configuration file, and **Qwen3-Coder 30B A3B Instruct** is the model we are using, which was also specified in the configuration file.  You may see different values here based on your setup.
 
 Going forward, OpenCode will remember your selection. OpenCode is now connected to the model and ready to receive prompts.
 
-![](./opencode-vllm-hotaisle/opencode-connected.png)
+![opencode connected](./opencode-vllm-hotaisle/opencode-connected.png)
 
 ## Other Helpful Hints
 
@@ -314,7 +314,7 @@ The most useful command to know out of the gate if you are going to experiment w
 rocm-smi
 ```
 
-![](./opencode-vllm-hotaisle/rocm-smi.png)
+![rocm-smi](./opencode-vllm-hotaisle/rocm-smi.png)
 
 ROCm System Management Interface allows you to monitor your GPU.  ROCm or Radeon Open Compute is AMD's GPU software platform.  This command is comparable to nvidia-smi if you have used NVIDIA hardware in the past.
 

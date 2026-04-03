@@ -90,6 +90,13 @@ export const SEARCH_DATA: SearchResult[] = [
     "category": "Page"
   },
   {
+    "title": "Hot Aisle Goes 100% Green with Switch Sustainability Certification",
+    "description": "Hot Aisle Inc. has achieved 100% renewable energy certification through Switch, ensuring all operations at their data center run on sustainable, green energy. By retiring 781 Renewable Energy Credits in 2025, Switch has verified that Hot Aisle’s energy use is fully offset by renewable sources. This certification aligns with Greenpeace’s principles of locality, additionality, and sustainability, reinforcing Hot Aisle’s commitment to eco-friendly computing. As demand for AI and HPC compute grows, Hot Aisle is dedicated to delivering high-performance solutions while minimizing environmental impact.",
+    "url": "/blog/hot-aisle-goes-100-green-with-switch-sustainability-certification-2025",
+    "category": "Blog",
+    "type": "Article"
+  },
+  {
     "title": "SOC2 Is Broken — And The Entire Industry Knows It",
     "description": "Our honest take on why SOC2 is a fundamentally flawed compliance framework, and what that means for you.",
     "url": "/blog/soc2-is-broken",
@@ -155,7 +162,7 @@ export const SEARCH_DATA: SearchResult[] = [
   {
     "title": "Hot Aisle Goes 100% Green with Switch Sustainability Certification",
     "description": "Hot Aisle Inc. has achieved 100% renewable energy certification through Switch, ensuring all operations at their data center run on sustainable, green energy. By retiring 267 Renewable Energy Credits in 2024, Switch has verified that Hot Aisle’s energy use is fully offset by renewable sources. This certification aligns with Greenpeace’s principles of locality, additionality, and sustainability, reinforcing Hot Aisle’s commitment to eco-friendly computing. As demand for AI and HPC compute grows, Hot Aisle is dedicated to delivering high-performance solutions while minimizing environmental impact.",
-    "url": "/blog/hot-aisle-goes-100-green-with-switch-sustainability-certification",
+    "url": "/blog/hot-aisle-goes-100-green-with-switch-sustainability-certification-2024",
     "category": "Blog",
     "type": "Article"
   },
