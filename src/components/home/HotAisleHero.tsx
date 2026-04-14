@@ -259,7 +259,7 @@ export default function HotAisleHero() {
 						{/* CTAs */}
 						<div className="animation-fade-in mt-10 flex flex-wrap items-center justify-center gap-4">
 							<AppLink
-								className="group inline-flex items-center gap-2 rounded-xl bg-hot-orange px-7 py-3.5 font-semibold text-base text-white shadow-lg shadow-orange-950/30 transition hover:-translate-y-0.5 hover:bg-orange-500"
+								className="group inline-flex items-center gap-2 rounded-xl bg-orange-700 px-7 py-3.5 font-semibold text-base text-white shadow-lg shadow-orange-950/30 transition hover:-translate-y-0.5 hover:bg-orange-600"
 								href="/quick-start"
 							>
 								Start Now
