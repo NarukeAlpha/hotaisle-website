@@ -44,8 +44,9 @@ vLLM runs inside a Docker container on the Hot Aisle VM and exposes an OpenAI-co
 
 Essentially, the architecture looks like this:
 
-```
-OpenCode → SSH Tunnel → Hot Aisle VM → vLLM → GPU → Model
+```mermaid
+flowchart LR
+    opencode[OpenCode] --> ssh[SSH Tunnel] --> vm[Hot Aisle VM] --> vllm[vLLM] --> gpu[GPU] --> model[Model]
 ```
 
 Now, let's walk through getting started.
@@ -54,7 +55,7 @@ Now, let's walk through getting started.
 
 Hot Aisle is simple to get started with.  You can start with issuing the following command at your terminal:
 
-```
+```bash
 ssh admin.hotaisle.app
 ```
 

@@ -1,10 +1,12 @@
 import { ArrowLeft, Calendar } from 'lucide-react';
+import { preinitModule } from 'react-dom';
 import NotFoundPage from '@/app/not-found.tsx';
 import { AppLink } from '@/components/AppLink.tsx';
 import { BlogContent } from '@/components/blog/BlogContent.tsx';
 import { getAllSlugs, getPageContent } from '@/lib/content.ts';
 import './syntax-highlighting.css';
 
+const MERMAID_RENDER_SCRIPT_URL = '/assets/vendor/mermaid-render.js';
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',
 	month: 'long',
@@ -89,6 +91,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 	let prettyDate: string | undefined;
 	if (post.date) {
 		prettyDate = PUBLISH_DATE_FORMATTER.format(new Date(post.date));
+	}
+	const shouldLoadMermaid = post.hasMermaid ?? false;
+	if (shouldLoadMermaid) {
+		preinitModule(MERMAID_RENDER_SCRIPT_URL, { as: 'script' });
 	}
 
 	return (
