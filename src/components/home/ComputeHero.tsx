@@ -98,12 +98,12 @@ export function ComputeHero() {
 					/>
 				</div>
 				<p className="mx-auto mb-10 max-w-2xl font-light text-muted-foreground text-xl md:text-3xl">
-					<span className="font-semibold text-hot-orange">AMD Exclusive AI Cloud</span>
+					<span className="font-semibold text-orange-700">AMD Exclusive AI Cloud</span>
 				</p>
 
 				<div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
 					<AppLink
-						className="group relative overflow-hidden rounded-full bg-hot-orange px-8 py-4 font-bold text-lg text-white shadow-hot-orange/30 shadow-lg transition-all hover:scale-105 hover:shadow-hot-orange/50"
+						className="group relative overflow-hidden rounded-full bg-orange-700 px-8 py-4 font-bold text-lg text-white shadow-hot-orange/30 shadow-lg transition-all hover:scale-105 hover:bg-orange-600 hover:shadow-hot-orange/50"
 						href="/quick-start"
 					>
 						<div className="absolute inset-0 translate-y-full bg-white/20 transition-transform duration-300 group-hover:translate-y-0" />

@@ -48,6 +48,7 @@ const SMALL_IMAGE_CLASS = 'blog-inline-image--small';
 const SMALL_IMAGE_TITLE = 'small';
 const PORTRAIT_IMAGE_RATIO_THRESHOLD = 1;
 const AUTHOR_SECTION_REGEX = /\n---\s*\n## About the Author[\s\S]*$/i;
+const MERMAID_FENCE_REGEX = /```mermaid\b/i;
 
 interface BlogAuthorLink {
 	label: string;
@@ -70,6 +71,7 @@ interface RawBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
+	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
@@ -94,6 +96,7 @@ interface GeneratedBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
+	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
@@ -502,6 +505,7 @@ function parseBlogFile(
 		title,
 		description,
 		haFooter,
+		hasMermaid: MERMAID_FENCE_REGEX.test(normalizedContent),
 		author,
 		authorProfile,
 		date,
@@ -742,6 +746,7 @@ async function generateBlogData(): Promise<void> {
 			title: post.title,
 			description: post.description,
 			haFooter: post.haFooter,
+			hasMermaid: post.hasMermaid,
 			contentHtml,
 			date: post.date,
 			tags: post.tags,
@@ -770,6 +775,7 @@ export interface GeneratedBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
+	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;

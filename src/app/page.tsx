@@ -37,7 +37,7 @@ export default function Home() {
 						Launch a GPU instance in under 60 seconds. No contracts required.
 					</p>
 					<AppLink
-						className="inline-flex items-center gap-2 rounded-xl bg-hot-orange px-8 py-4 font-semibold text-base text-white shadow-lg shadow-orange-950/20 transition hover:-translate-y-0.5 hover:bg-orange-500"
+						className="inline-flex items-center gap-2 rounded-xl bg-orange-700 px-8 py-4 font-semibold text-base text-white shadow-lg shadow-orange-950/20 transition hover:-translate-y-0.5 hover:bg-orange-600"
 						href="/quick-start"
 					>
 						Launch Instance

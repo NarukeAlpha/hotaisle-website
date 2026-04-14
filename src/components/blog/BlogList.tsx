@@ -47,7 +47,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 						<div className="flex flex-1 flex-col p-6">
 							<div className="mb-3 flex items-center gap-2 text-muted-foreground text-xs">
 								{isLatest ? (
-									<span className="rounded-full bg-hot-orange px-2 py-1 font-semibold text-[10px] text-white uppercase tracking-[0.2em]">
+									<span className="rounded-full bg-orange-700 px-2 py-1 font-semibold text-[10px] text-white uppercase tracking-[0.2em]">
 										Latest
 									</span>
 								) : null}
