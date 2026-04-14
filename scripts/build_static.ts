@@ -6,6 +6,7 @@ import { minify as minifyWithRolldown } from 'rolldown/utils';
 import { appRouter } from '../node_modules/vinext/dist/routing/app-router.js';
 import { BLOG_POSTS } from '../src/generated/blog-data.ts';
 import { POLICIES } from '../src/generated/static-content-data.ts';
+import { createSitemapXml } from './generate_sitemap.ts';
 
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
@@ -13,6 +14,7 @@ const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const STATIC_DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist-static');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
+const SITEMAP_FILE_NAME = 'sitemap.xml';
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
 const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
@@ -22,6 +24,8 @@ const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
+const STYLESHEET_LINK_REGEX = /<link rel="stylesheet" href="([^"]+)"([^>]*)>/g;
+const STYLESHEET_PRELOAD_REGEX = /<link rel="preload" href="([^"]+\.css)" as="style"[^>]*\/?>/g;
 const INDEX_HTML_SUFFIX_REGEX = /\/index\.html$/;
 const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 interface CssSegment {
@@ -52,6 +56,8 @@ await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
 	force: true,
 	recursive: true,
 });
+
+await writeSitemapFiles();
 
 const routes = await appRouter(APP_DIRECTORY);
 const exportedPaths = new Set<string>();
@@ -119,12 +125,33 @@ async function normalizeExportedHtml(html: string, routePath: string): Promise<s
 	const htmlWithoutClientBootstrap = shouldStripClientBootstrap(routePath)
 		? stripClientBootstrap(htmlDocument)
 		: htmlDocument;
+	const htmlWithOptimizedStyles = shouldInlineStyles(routePath)
+		? await inlineStylesheetLinks(htmlWithoutClientBootstrap)
+		: htmlWithoutClientBootstrap;
 
-	return await minifyExportedHtml(htmlWithoutClientBootstrap);
+	return await minifyExportedHtml(htmlWithOptimizedStyles);
+}
+
+async function writeSitemapFiles(): Promise<void> {
+	const sitemapXml = createSitemapXml();
+	const outputPaths = [
+		path.join(DIST_DIRECTORY, SITEMAP_FILE_NAME),
+		path.join(CLIENT_DIRECTORY, SITEMAP_FILE_NAME),
+		path.join(STATIC_DIST_DIRECTORY, SITEMAP_FILE_NAME),
+	];
+
+	for (const outputPath of outputPaths) {
+		await mkdir(path.dirname(outputPath), { recursive: true });
+		await writeFile(outputPath, sitemapXml, 'utf8');
+	}
 }
 
 function shouldStripClientBootstrap(_routePath: string): boolean {
 	return true;
+}
+
+function shouldInlineStyles(routePath: string): boolean {
+	return routePath === '/';
 }
 
 function stripTrailingContentAfterHtml(html: string): string {
@@ -201,7 +228,7 @@ function collapseInterTagWhitespaceOutsidePre(html: string): string {
 
 function stripClientBootstrap(html: string): string {
 	return html
-		.replace(/<link rel="preload" href="\/assets\/index-[^"]+\.css" as="style"\/>/g, '')
+		.replace(STYLESHEET_PRELOAD_REGEX, '')
 		.replace(
 			/<link rel="modulepreload" href="\/assets\/[^"]+\.js"(?: crossorigin="")?\s*\/>/g,
 			''
@@ -209,6 +236,39 @@ function stripClientBootstrap(html: string): string {
 		.replace(/<script>self\.__VINEXT_RSC_PARAMS__=.*?<\/script>/g, '')
 		.replace(/<script>self\.__VINEXT_RSC_NAV__=.*?<\/script>/g, '')
 		.replace(/<script id="_R_">[\s\S]*?<\/script>/g, '');
+}
+
+async function inlineStylesheetLinks(html: string): Promise<string> {
+	const stylesheetMatches = [...html.matchAll(STYLESHEET_LINK_REGEX)];
+
+	if (stylesheetMatches.length === 0) {
+		return html;
+	}
+
+	let transformedHtml = html;
+
+	for (const stylesheetMatch of stylesheetMatches) {
+		const [fullMatch, href] = stylesheetMatch;
+		const stylesheetPath = toLocalAssetPath(href);
+
+		if (!stylesheetPath) {
+			continue;
+		}
+
+		const stylesheetContents = await readFile(stylesheetPath, 'utf8');
+		const inlineTag = `<style data-inline-stylesheet-href="${href}">${stylesheetContents}</style>`;
+		transformedHtml = transformedHtml.replace(fullMatch, inlineTag);
+	}
+
+	return transformedHtml;
+}
+
+function toLocalAssetPath(href: string): string | null {
+	if (!href.startsWith('/assets/')) {
+		return null;
+	}
+
+	return path.join(STATIC_DIST_DIRECTORY, href.slice(1));
 }
 
 async function scrubExportedHtmlFiles(directory: string): Promise<void> {
