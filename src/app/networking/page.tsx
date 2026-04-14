@@ -39,7 +39,7 @@ const fabric = [
 		speed: '100 Gbps',
 		desc: 'Broadcom 57504 Quad Port 10/25GbE Adapters with Dell PowerSwitch Z9664F at 100G.',
 		icon: Activity,
-		color: 'text-hot-orange',
+		color: 'text-orange-700',
 		links: [
 			{ label: 'Broadcom 57504', url: 'https://docs.broadcom.com/doc/957504-N425G-DS' },
 			{

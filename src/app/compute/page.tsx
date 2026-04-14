@@ -250,7 +250,7 @@ export default function ComputePage() {
 									</div>
 								</li>
 								<li className="flex items-center gap-4 rounded-xl border border-border bg-background p-4 shadow-sm">
-									<Server className="h-8 w-8 text-hot-orange" />
+									<Server className="h-8 w-8 text-orange-700" />
 									<div>
 										<div className="font-bold text-foreground text-lg">
 											On-Site Parts Locker
