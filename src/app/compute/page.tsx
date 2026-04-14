@@ -72,11 +72,13 @@ export default function ComputePage() {
 							Dell PowerEdge <span className="text-arctic-blue">XE9680</span>
 						</h1>
 						<p className="mb-8 max-w-2xl font-light text-muted-foreground text-xl leading-relaxed md:text-2xl">
-							We offer remote access to the Dell PowerEdge XE9680 with
-							<strong className="ml-1 font-semibold text-foreground">
+							<span>We offer remote access to the Dell PowerEdge XE9680 with </span>
+							<strong className="font-semibold text-foreground">
 								8x AMD MI300x GPUs
 							</strong>
-							. Best-in-class specifications for your most demanding AI workloads.
+							<span>
+								. Best-in-class specifications for your most demanding AI workloads.
+							</span>
 						</p>
 
 						<div className="flex flex-wrap gap-4">
@@ -227,9 +229,11 @@ export default function ComputePage() {
 								and for us.
 							</h2>
 							<p className="text-muted-foreground text-xl leading-relaxed">
-								All of our servers are backed by a{' '}
-								<strong>Dell ProSupport Next Business Day warranty</strong>, and we
-								have a parts locker on site to eliminate downtime.
+								<span>All of our servers are backed by a </span>
+								<strong>Dell ProSupport Next Business Day warranty</strong>
+								<span>
+									, and we have a parts locker on site to eliminate downtime.
+								</span>
 							</p>
 
 							<ul className="space-y-4">
