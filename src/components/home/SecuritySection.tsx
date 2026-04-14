@@ -12,7 +12,7 @@ export function SecuritySection() {
 							className="h-24 w-auto object-contain"
 							height={96}
 							src="/assets/home/dellauthpartner.png"
-							width={192}
+							width={331}
 						/>
 					</div>
 					<a
@@ -24,7 +24,7 @@ export function SecuritySection() {
 							className="h-24 w-auto object-contain"
 							height={96}
 							src="/assets/home/so2andhipaa.png"
-							width={192}
+							width={151}
 						/>
 					</a>
 					<div className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
@@ -33,7 +33,7 @@ export function SecuritySection() {
 							className="h-24 w-auto object-contain"
 							height={96}
 							src="/assets/home/AMDpartner.png"
-							width={192}
+							width={337}
 						/>
 					</div>
 				</div>
