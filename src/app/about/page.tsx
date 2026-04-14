@@ -1,5 +1,6 @@
 import { Lightbulb, Users } from 'lucide-react';
 import { LinkedinIcon } from '@/components/icons/LinkedinIcon.tsx';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
@@ -47,7 +48,7 @@ export default function AboutPage() {
 						{/* Jon */}
 						<div className="group rounded-2xl border border-border bg-background p-8 text-center shadow-sm transition-all hover:shadow-lg">
 							<div className="relative mx-auto mb-6 h-32 w-32 overflow-hidden rounded-full border-4 border-background bg-muted shadow-inner transition-transform duration-500 group-hover:scale-105">
-								<img
+								<OptimizedImage
 									alt="Jon Stevens"
 									className="h-full w-full object-cover"
 									height={128}
@@ -74,7 +75,7 @@ export default function AboutPage() {
 						{/* Clint */}
 						<div className="group rounded-2xl border border-border bg-background p-8 text-center shadow-sm transition-all hover:shadow-lg">
 							<div className="relative mx-auto mb-6 h-32 w-32 overflow-hidden rounded-full border-4 border-background bg-muted shadow-inner transition-transform duration-500 group-hover:scale-105">
-								<img
+								<OptimizedImage
 									alt="Clint Armstrong"
 									className="h-full w-full object-cover"
 									height={128}

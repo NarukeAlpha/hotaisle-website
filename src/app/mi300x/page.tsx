@@ -1,5 +1,6 @@
 import { ArrowRight, BarChart2, Check, Cpu, Layers, Server, Share2, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink.tsx';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
@@ -90,7 +91,7 @@ export default function MI300XPage() {
 						</div>
 						<div className="relative w-full flex-1">
 							<div className="relative flex aspect-square items-center justify-center">
-								<img
+								<OptimizedImage
 									alt="AMD Instinct MI300X"
 									className="relative z-20 mx-auto w-full max-w-2xl drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
 									height={745}
