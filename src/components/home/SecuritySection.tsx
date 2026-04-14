@@ -1,3 +1,5 @@
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
+
 export function SecuritySection() {
 	return (
 		<section className="border-border/60 border-t bg-muted/30 py-14">
@@ -7,9 +9,10 @@ export function SecuritySection() {
 				</p>
 				<div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
 					<div className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
-						<img
+						<OptimizedImage
 							alt="Dell Technologies Authorized Partner"
 							className="h-24 w-auto object-contain"
+							decoding="async"
 							height={96}
 							src="/assets/home/dellauthpartner.png"
 							width={331}
@@ -19,18 +22,20 @@ export function SecuritySection() {
 						className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md"
 						href="/blog/soc2-is-broken"
 					>
-						<img
+						<OptimizedImage
 							alt="SOC2 Type 2 & HIPAA Compliant"
 							className="h-24 w-auto object-contain"
+							decoding="async"
 							height={96}
 							src="/assets/home/so2andhipaa.png"
 							width={151}
 						/>
 					</a>
 					<div className="flex h-32 items-center justify-center rounded-xl bg-white px-8 py-4 shadow-sm ring-1 ring-border/40 transition-shadow hover:shadow-md">
-						<img
+						<OptimizedImage
 							alt="AMD Partner"
 							className="h-24 w-auto object-contain"
+							decoding="async"
 							height={96}
 							src="/assets/home/AMDpartner.png"
 							width={337}

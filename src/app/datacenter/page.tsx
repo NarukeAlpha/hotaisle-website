@@ -9,6 +9,7 @@ import {
 	Video,
 	Zap,
 } from 'lucide-react';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
@@ -104,7 +105,7 @@ export default function DatacenterPage() {
 					{/* Hero Image - Inside View */}
 					<div className="relative w-full flex-1">
 						<div className="relative aspect-video overflow-hidden rounded-2xl border-4 border-background shadow-2xl">
-							<img
+							<OptimizedImage
 								alt="Switch Datacenter Interior"
 								className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
 								height={1080}
@@ -166,7 +167,7 @@ export default function DatacenterPage() {
 							className="relative overflow-hidden rounded-2xl border-4 border-background shadow-2xl"
 							style={{ aspectRatio: '4/3' }}
 						>
-							<img
+							<OptimizedImage
 								alt="Switch Pyramid Datacenter Exterior"
 								className="h-full w-full object-cover"
 								height={1080}

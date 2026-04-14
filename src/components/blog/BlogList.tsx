@@ -1,5 +1,6 @@
 import { Calendar } from 'lucide-react';
 import { AppLink } from '@/components/AppLink.tsx';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import type { BlogPost } from '@/lib/content.ts';
 import { cn } from '@/lib/utils.ts';
 
@@ -29,7 +30,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 						{/* Image */}
 						<div className="relative h-48 w-full overflow-hidden bg-muted">
 							{post.coverImage ? (
-								<img
+								<OptimizedImage
 									alt={post.title}
 									className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
 									height={200}

@@ -3,6 +3,7 @@ import { preinitModule } from 'react-dom';
 import NotFoundPage from '@/app/not-found.tsx';
 import { AppLink } from '@/components/AppLink.tsx';
 import { BlogContent } from '@/components/blog/BlogContent.tsx';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { getAllSlugs, getPageContent } from '@/lib/content.ts';
 import './syntax-highlighting.css';
 
@@ -102,7 +103,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 			<div className="relative h-[50vh] min-h-100 w-full overflow-hidden border-border border-b bg-background">
 				{post.coverImage && (
 					<div className="absolute inset-0">
-						<img
+						<OptimizedImage
 							alt={post.title}
 							className="h-full w-full object-cover"
 							height={720}

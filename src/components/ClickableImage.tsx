@@ -1,3 +1,5 @@
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
+
 interface ImageData {
 	alt: string;
 	height: number;
@@ -17,7 +19,7 @@ export function ClickableImage({
 	imgClassName?: string;
 }) {
 	return (
-		<img
+		<OptimizedImage
 			alt={alt}
 			className={className.length > 0 ? `${className} ${imgClassName}` : imgClassName}
 			height={height}

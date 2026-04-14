@@ -188,7 +188,7 @@ curl -X 'POST' \
   }'
 ```
 
-![cloud init results](./opencode-vllm-hotaisle/cloud-init results.png)
+![cloud init results](./opencode-vllm-hotaisle/cloud-init-results.png)
 
 **Take note of the IP address of your VM at this step.**
 
@@ -289,7 +289,7 @@ Note: I personally use the OpenCode extension in VS Code.
 
 Scroll all the way down to the bottom and look for "Hot Aisle vLLM (Qwen3 Coder)".  This was in our configuration file.
 
-![opencode connection](./opencode-vllm-hotaisle/opencode connection.png)
+![opencode connection](./opencode-vllm-hotaisle/opencode-connection.png)
 
 You do not need an API key, so if you are prompted for one just enter some text, I like to use "dummy".
 

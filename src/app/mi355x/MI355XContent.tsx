@@ -40,7 +40,7 @@ export default function MI355XContent() {
 					>
 						Reserve Now <ArrowRight className="ml-2" size={20} />
 					</a>
-					<p className="mt-4 font-bold text-orange-500 text-xs uppercase tracking-widest">
+					<p className="mt-4 font-bold text-orange-700 text-xs uppercase tracking-widest">
 						🔥 Scroll to the bottom to reserve 🔥
 					</p>
 				</div>
@@ -62,7 +62,7 @@ export default function MI355XContent() {
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-600">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
 								<Thermometer size={24} />
 							</div>
 							<h2 className="font-black text-4xl">DIRECT LIQUID COOLED DESIGN</h2>
@@ -89,7 +89,7 @@ export default function MI355XContent() {
 				<section className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
 					<div>
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-600">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
 								<Server size={24} />
 							</div>
 							<h2 className="font-black text-4xl">INDUSTRY-STANDARD FORM FACTOR</h2>
@@ -162,7 +162,7 @@ export default function MI355XContent() {
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-600">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
 								<Layers size={24} />
 							</div>
 							<h2 className="font-black text-4xl leading-tight">
@@ -194,7 +194,7 @@ export default function MI355XContent() {
 				{/* Additional Features Grid */}
 				<section className="grid grid-cols-1 gap-8 md:grid-cols-3">
 					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<UploadIcon className="mb-6 h-12 w-12 text-orange-600" />
+						<UploadIcon className="mb-6 h-12 w-12 text-orange-700" />
 						<h3 className="mb-3 font-bold text-xl">K8s Integration</h3>
 						<p className="text-muted-foreground">
 							AMD GPU Operator simplifies deployment in Kubernetes. Day-0 support
@@ -202,7 +202,7 @@ export default function MI355XContent() {
 						</p>
 					</div>
 					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<ShieldCheck className="mb-6 h-12 w-12 text-orange-600" />
+						<ShieldCheck className="mb-6 h-12 w-12 text-orange-700" />
 						<h3 className="mb-3 font-bold text-xl">Advanced Security</h3>
 						<p className="text-muted-foreground">
 							Verify hardware authenticity, secure multitenant GPU sharing, and
@@ -210,7 +210,7 @@ export default function MI355XContent() {
 						</p>
 					</div>
 					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<Network className="mb-6 h-12 w-12 text-orange-600" />
+						<Network className="mb-6 h-12 w-12 text-orange-700" />
 						<h3 className="mb-3 font-bold text-xl">Scalable Networking</h3>
 						<p className="text-muted-foreground">
 							Ethernet-based AI and HPC networking enables massive hyperclass
@@ -257,19 +257,19 @@ export default function MI355XContent() {
 							</p>
 							<div className="grid grid-cols-1 gap-4 text-left md:grid-cols-3">
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
 										<Lock size={20} />
 									</div>
 									<span className="font-medium">Priority Allocation</span>
 								</div>
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
 										<Zap size={20} />
 									</div>
 									<span className="font-medium">Exclusive Hardware Updates</span>
 								</div>
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
 										<CreditCard size={20} />
 									</div>
 									<span className="font-medium">$100 Deposit</span>

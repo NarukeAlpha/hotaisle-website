@@ -1,10 +1,7 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
 import { BLOG_POSTS } from '../src/generated/blog-data.ts';
 import { POLICIES } from '../src/generated/static-content-data.ts';
 
 const BASE_URL = 'https://hotaisle.xyz';
-const OUTPUT_PATH = path.join(process.cwd(), 'public', 'sitemap.xml');
 const CURRENT_ISO_DATE = new Date().toISOString();
 const STATIC_ROUTES = [
 	'',
@@ -87,9 +84,11 @@ ${xmlEntries}
 `;
 }
 
-const entries = [...createStaticRouteEntries(), ...createBlogEntries(), ...createPolicyEntries()];
-
-await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
-await writeFile(OUTPUT_PATH, toSitemapXml(entries), 'utf8');
-
-console.log('Generated sitemap.xml.');
+export function createSitemapXml(): string {
+	const entries = [
+		...createStaticRouteEntries(),
+		...createBlogEntries(),
+		...createPolicyEntries(),
+	];
+	return toSitemapXml(entries);
+}

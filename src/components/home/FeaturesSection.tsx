@@ -74,7 +74,7 @@ export function FeaturesSection() {
 								key={feature.title}
 							>
 								<div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-hot-orange/10">
-									<Icon className="h-5 w-5 text-hot-orange" />
+									<Icon className="h-5 w-5 text-orange-700" />
 								</div>
 								<div className="mb-1 font-semibold text-orange-700 text-xs uppercase tracking-wider">
 									{feature.label}

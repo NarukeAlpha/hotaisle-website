@@ -9,7 +9,7 @@ export function VideoSection() {
 					<div className="flex-1 text-center md:text-left">
 						<h2 className="mb-6 font-black text-4xl tracking-tight md:text-5xl">
 							Just $1.99/hr. <br />
-							<span className="text-hot-orange">Zero Commitment.</span>
+							<span className="text-orange-700">Zero Commitment.</span>
 						</h2>
 						<p className="mb-8 text-muted-foreground text-xl leading-relaxed">
 							Stop paying for idle GPUs. With Hot Aisle, you get instant access to raw
@@ -23,7 +23,7 @@ export function VideoSection() {
 								'High Performance',
 							].map((item) => (
 								<li className="flex items-center gap-3 font-medium" key={item}>
-									<div className="flex h-6 w-6 items-center justify-center rounded-full bg-hot-orange/20 text-hot-orange">
+									<div className="flex h-6 w-6 items-center justify-center rounded-full bg-hot-orange/20 text-orange-700">
 										<Play fill="currentColor" size={10} />
 									</div>
 									{item}

@@ -1,5 +1,6 @@
 import { ArrowRight, BarChart2, Check, Cpu, Layers, Server, Share2, Zap } from 'lucide-react';
 import { AppLink } from '@/components/AppLink.tsx';
+import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { createPageMetadata } from '@/lib/metadata.ts';
 
 export function generateMetadata() {
@@ -32,7 +33,7 @@ export default function MI300XPage() {
 				<div className="container relative z-10 mx-auto max-w-7xl">
 					<div className="flex flex-col items-center gap-16 lg:flex-row">
 						<div className="flex-1">
-							<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 font-bold text-orange-600 text-xs uppercase tracking-widest dark:text-orange-400">
+							<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 font-bold text-orange-700 text-xs uppercase tracking-widest dark:text-orange-400">
 								<Zap className="fill-current" size={12} /> AMD Instinct™ Accelerator
 							</div>
 							<h1 className="mb-6 font-black text-5xl leading-tight tracking-tighter md:text-8xl">
@@ -90,7 +91,7 @@ export default function MI300XPage() {
 						</div>
 						<div className="relative w-full flex-1">
 							<div className="relative flex aspect-square items-center justify-center">
-								<img
+								<OptimizedImage
 									alt="AMD Instinct MI300X"
 									className="relative z-20 mx-auto w-full max-w-2xl drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]"
 									height={745}
@@ -109,7 +110,7 @@ export default function MI300XPage() {
 				{/* Leading-Edge Discrete GPU */}
 				<section className="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
 					<div className="md:col-span-4">
-						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-500">
+						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-700">
 							<Cpu size={32} />
 						</div>
 						<h3 className="mb-4 font-black text-3xl">
@@ -134,7 +135,7 @@ export default function MI300XPage() {
 						</p>
 						<div className="not-prose my-8 rounded-xl border-orange-500 border-l-4 bg-muted/30 p-6">
 							<h4 className="mb-2 flex items-center font-bold text-foreground">
-								<BarChart2 className="mr-2 text-orange-500" size={18} /> Performance
+								<BarChart2 className="mr-2 text-orange-700" size={18} /> Performance
 								Leap
 							</h4>
 							<p className="text-sm">
@@ -157,7 +158,7 @@ export default function MI300XPage() {
 				{/* Designed to Accelerate */}
 				<section className="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
 					<div className="md:col-span-4">
-						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-500">
+						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-700">
 							<Zap size={32} />
 						</div>
 						<h3 className="mb-4 font-black text-3xl">
@@ -190,7 +191,7 @@ export default function MI300XPage() {
 
 						<div className="relative z-10 mx-auto mb-16 max-w-3xl text-center">
 							<div className="mb-6 inline-block rounded-full bg-muted p-3">
-								<Layers className="text-orange-500" size={32} />
+								<Layers className="text-orange-700" size={32} />
 							</div>
 							<h2 className="mb-6 font-black text-4xl">
 								Based on 4th Gen Infinity Architecture
@@ -205,7 +206,7 @@ export default function MI300XPage() {
 						<div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2">
 							<div>
 								<h3 className="mb-4 flex items-center gap-2 font-bold text-xl">
-									<Share2 className="text-orange-500" size={24} /> Multi-Chip
+									<Share2 className="text-orange-700" size={24} /> Multi-Chip
 									Architecture
 								</h3>
 								<p className="mb-6 text-muted-foreground">
@@ -248,7 +249,7 @@ export default function MI300XPage() {
 
 							<div>
 								<h3 className="mb-4 flex items-center gap-2 font-bold text-xl">
-									<Server className="text-orange-500" size={24} /> Coherent Shared
+									<Server className="text-orange-700" size={24} /> Coherent Shared
 									Memory
 								</h3>
 								<p className="mb-6 text-muted-foreground">
@@ -297,7 +298,7 @@ export default function MI300XPage() {
 						Platform, and the AMD ROCm™ software platform, visit AMD.com/INSTINCT.
 					</p>
 					<AppLink
-						className="inline-flex items-center font-bold text-orange-500 hover:underline"
+						className="inline-flex items-center font-bold text-orange-700 hover:text-orange-800 hover:underline"
 						href="/quick-start"
 					>
 						Ready to deploy? Get started now <ArrowRight className="ml-2" size={16} />

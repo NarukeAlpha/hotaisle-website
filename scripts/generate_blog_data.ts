@@ -10,6 +10,7 @@ import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import sharp from 'sharp';
+import { getModernImageVariants } from '../src/lib/image-optimization.ts';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_CONTENT_DIR = path.join(CONTENT_DIR, 'blog');
@@ -671,7 +672,12 @@ async function enhanceRenderedHtml(html: string): Promise<string> {
 		}
 		let mergedAttributes = appendClassAttribute(cleanedAttributes, classNames.join(' '));
 		mergedAttributes = `${mergedAttributes} role="button" tabindex="0" aria-haspopup="dialog"`;
-		const replacementTag = `<img${mergedAttributes} src="${src}" width="${imageMetadata.width}" height="${imageMetadata.height}">`;
+		const imgTag = `<img${mergedAttributes} src="${src}" width="${imageMetadata.width}" height="${imageMetadata.height}">`;
+		const modernVariants = getModernImageVariants(src);
+		const replacementTag =
+			modernVariants.length === 0
+				? imgTag
+				: `<picture>${modernVariants.map((variant) => `<source srcset="${variant.src}" type="${variant.type}">`).join('')}${imgTag}</picture>`;
 		enhancedHtml = enhancedHtml.replace(fullTag, replacementTag);
 	}
 
@@ -704,12 +710,27 @@ async function copyBlogAssets(
 		}
 
 		await fs.promises.mkdir(path.dirname(destinationPath), { recursive: true });
+
+		const [sourceStats, destinationStats] = await Promise.all([
+			fs.promises.stat(sourcePath),
+			fs.promises.stat(destinationPath).catch(() => null),
+		]);
+		const shouldSkipCopy =
+			destinationStats &&
+			destinationStats.size === sourceStats.size &&
+			destinationStats.mtimeMs >= sourceStats.mtimeMs;
+
+		if (shouldSkipCopy) {
+			continue;
+		}
+
 		await fs.promises.copyFile(sourcePath, destinationPath);
+		await fs.promises.utimes(destinationPath, sourceStats.atime, sourceStats.mtime);
 	}
 }
 
 async function resetBlogAssetOutputDirectory(): Promise<void> {
-	await fs.promises.rm(PUBLIC_BLOG_ASSETS_DIR, { force: true, recursive: true });
+	await fs.promises.mkdir(PUBLIC_BLOG_ASSETS_DIR, { recursive: true });
 }
 
 async function generateBlogData(): Promise<void> {
