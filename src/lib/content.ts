@@ -10,7 +10,6 @@ export interface PageData {
 	date?: string;
 	description?: string;
 	haFooter?: boolean;
-	hasMermaid?: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;

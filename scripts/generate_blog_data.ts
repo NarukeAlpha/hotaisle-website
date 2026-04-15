@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import matter from 'gray-matter';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -11,6 +12,11 @@ import remarkGfm from 'remark-gfm';
 import remarkRehype from 'remark-rehype';
 import sharp from 'sharp';
 import { getModernImageVariants } from '../src/lib/image-optimization.ts';
+import {
+	isGeneratedMermaidDiagramFile,
+	renderMermaidMarkdownToImageMarkdown,
+	shouldSkipMermaidDiagramGeneration,
+} from './render_mermaid_diagrams.ts';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_CONTENT_DIR = path.join(CONTENT_DIR, 'blog');
@@ -48,7 +54,11 @@ const SMALL_IMAGE_CLASS = 'blog-inline-image--small';
 const SMALL_IMAGE_TITLE = 'small';
 const PORTRAIT_IMAGE_RATIO_THRESHOLD = 1;
 const AUTHOR_SECTION_REGEX = /\n---\s*\n## About the Author[\s\S]*$/i;
-const MERMAID_FENCE_REGEX = /```mermaid\b/i;
+const MERMAID_DIAGRAM_TITLE = 'mermaid-diagram';
+const MERMAID_PARAGRAPH_WRAPPER_REGEX = /<p>(<div class="mermaid-diagram">[\s\S]*?<\/div>)<\/p>/g;
+const MERMAID_LIGHT_SVG_SUFFIX_REGEX = /-light\.svg$/;
+const SVG_VIEWBOX_REGEX = /\bviewBox="[^"]*?\s([\d.]+)\s([\d.]+)"/i;
+const SVG_MAX_WIDTH_STYLE_REGEX = /\bmax-width:\s*([\d.]+)px/i;
 
 interface BlogAuthorLink {
 	label: string;
@@ -71,13 +81,13 @@ interface RawBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
-	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
 	published: boolean;
 	slug: string;
 	sourceFileName: string;
+	sourceModifiedAtMs: number;
 	tags: string[];
 	title: string;
 }
@@ -96,7 +106,6 @@ interface GeneratedBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
-	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
@@ -111,7 +120,13 @@ interface BlogImageMetadata {
 	width: number;
 }
 
+interface MermaidDiagramMetadata {
+	height: number;
+	width: number;
+}
+
 const blogImageMetadataByUrl = new Map<string, BlogImageMetadata | null>();
+const mermaidDiagramMetadataByUrl = new Map<string, MermaidDiagramMetadata | null>();
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === 'object' && value !== null;
@@ -505,7 +520,6 @@ function parseBlogFile(
 		title,
 		description,
 		haFooter,
-		hasMermaid: MERMAID_FENCE_REGEX.test(normalizedContent),
 		author,
 		authorProfile,
 		date,
@@ -646,6 +660,42 @@ async function getBlogImageMetadata(assetUrl: string): Promise<BlogImageMetadata
 	return imageMetadata;
 }
 
+function parseMermaidDiagramMetadata(svgContent: string): MermaidDiagramMetadata | null {
+	const viewBoxMatch = svgContent.match(SVG_VIEWBOX_REGEX);
+	const viewBoxWidth = Number.parseFloat(viewBoxMatch?.[1] ?? '');
+	const viewBoxHeight = Number.parseFloat(viewBoxMatch?.[2] ?? '');
+
+	if (!(viewBoxWidth > 0 && viewBoxHeight > 0)) {
+		return null;
+	}
+
+	const maxWidthMatch = svgContent.match(SVG_MAX_WIDTH_STYLE_REGEX);
+	const maxWidth = Number.parseFloat(maxWidthMatch?.[1] ?? '');
+
+	return {
+		width: maxWidth > 0 ? maxWidth : viewBoxWidth,
+		height: viewBoxHeight,
+	};
+}
+
+function getMermaidDiagramMetadata(assetUrl: string): MermaidDiagramMetadata | null {
+	const cachedMetadata = mermaidDiagramMetadataByUrl.get(assetUrl);
+	if (cachedMetadata !== undefined) {
+		return cachedMetadata;
+	}
+
+	const blogAssetPath = toBlogAssetPath(assetUrl);
+	if (!(blogAssetPath && fs.existsSync(blogAssetPath))) {
+		mermaidDiagramMetadataByUrl.set(assetUrl, null);
+		return null;
+	}
+
+	const svgContent = fs.readFileSync(blogAssetPath, 'utf8');
+	const metadata = parseMermaidDiagramMetadata(svgContent);
+	mermaidDiagramMetadataByUrl.set(assetUrl, metadata);
+	return metadata;
+}
+
 function appendClassAttribute(attributes: string, nextClassName: string): string {
 	const classMatch = attributes.match(CLASS_ATTRIBUTE_REGEX);
 	if (!classMatch) {
@@ -675,6 +725,14 @@ function extractImageHints(attributes: string): {
 	};
 }
 
+function toDarkMermaidDiagramSource(sourcePath: string): string {
+	if (!MERMAID_LIGHT_SVG_SUFFIX_REGEX.test(sourcePath)) {
+		return sourcePath;
+	}
+
+	return sourcePath.replace(MERMAID_LIGHT_SVG_SUFFIX_REGEX, '-dark.svg');
+}
+
 async function enhanceRenderedHtml(html: string): Promise<string> {
 	const matches = Array.from(html.matchAll(BLOG_IMAGE_TAG_REGEX));
 	if (matches.length === 0) {
@@ -687,14 +745,32 @@ async function enhanceRenderedHtml(html: string): Promise<string> {
 		const beforeSrcAttributes = match[1] ?? '';
 		const src = match[2];
 		const afterSrcAttributes = match[3] ?? '';
+		const imageAttributes = `${beforeSrcAttributes}${afterSrcAttributes}`;
+		const isMermaidDiagram =
+			imageAttributes.includes(`title="${MERMAID_DIAGRAM_TITLE}"`) ||
+			imageAttributes.includes(`title='${MERMAID_DIAGRAM_TITLE}'`);
+
+		if (isMermaidDiagram) {
+			const cleanedAttributes = imageAttributes.replace(TITLE_ATTRIBUTE_REGEX, '');
+			const darkSource = toDarkMermaidDiagramSource(src);
+			const diagramMetadata = getMermaidDiagramMetadata(src);
+			const sizeAttributes = diagramMetadata
+				? ` width="${diagramMetadata.width}" height="${diagramMetadata.height}" style="width: ${diagramMetadata.width}px; max-width: 100%; height: auto;"`
+				: '';
+			const imageTag = `<picture><source srcset="${darkSource}" media="(prefers-color-scheme: dark)"><img${appendClassAttribute(cleanedAttributes, 'mermaid-diagram__image')} src="${src}"${sizeAttributes}></picture>`;
+			enhancedHtml = enhancedHtml.replace(
+				fullTag,
+				`<div class="mermaid-diagram">${imageTag}</div>`
+			);
+			continue;
+		}
+
 		const imageMetadata = await getBlogImageMetadata(src);
 		if (!imageMetadata) {
 			continue;
 		}
 
-		const { cleanedAttributes, hints } = extractImageHints(
-			`${beforeSrcAttributes}${afterSrcAttributes}`
-		);
+		const { cleanedAttributes, hints } = extractImageHints(imageAttributes);
 		const classNames = [INLINE_IMAGE_CLASS];
 		if (imageMetadata.isPortrait) {
 			classNames.push(PORTRAIT_IMAGE_CLASS);
@@ -713,7 +789,27 @@ async function enhanceRenderedHtml(html: string): Promise<string> {
 		enhancedHtml = enhancedHtml.replace(fullTag, replacementTag);
 	}
 
-	return enhancedHtml;
+	return enhancedHtml.replace(MERMAID_PARAGRAPH_WRAPPER_REGEX, '$1');
+}
+
+async function syncGeneratedMermaidAssets(slug: string, generatedFiles: string[]): Promise<void> {
+	const assetDirectory = path.join(BLOG_ASSET_SOURCE_DIR, slug);
+	await fs.promises.mkdir(assetDirectory, { recursive: true });
+
+	const expectedFileNames = new Set(generatedFiles);
+
+	const existingFiles = await readdir(assetDirectory, { withFileTypes: true });
+	for (const existingFile of existingFiles) {
+		if (!(existingFile.isFile() && isGeneratedMermaidDiagramFile(existingFile.name))) {
+			continue;
+		}
+
+		if (expectedFileNames.has(existingFile.name)) {
+			continue;
+		}
+
+		await rm(path.join(assetDirectory, existingFile.name), { force: true });
+	}
 }
 
 async function generateBlogData(): Promise<void> {
@@ -732,22 +828,37 @@ async function generateBlogData(): Promise<void> {
 			if (!parsed.published) {
 				continue;
 			}
-			posts.push(parsed);
+			const sourceModifiedAtMs = fs.statSync(fullPath).mtimeMs;
+			posts.push({
+				...parsed,
+				sourceModifiedAtMs,
+			});
 			fileStemToSlug.set(normalizeFileStem(fileName).toLowerCase(), parsed.slug);
 		}
 	}
 
 	const renderedPosts: GeneratedBlogPost[] = [];
+	const shouldGenerateMermaidDiagrams = !shouldSkipMermaidDiagramGeneration();
 	for (const post of posts) {
 		const rewrittenMarkdown = rewriteMarkdownLinks(post.contentMarkdown, fileStemToSlug);
-		const renderedMarkdown = await renderMarkdown(rewrittenMarkdown);
+		const blogAssetDirectory = path.join(BLOG_ASSET_SOURCE_DIR, post.slug);
+		const { markdown: markdownWithRenderedMermaid, generatedFiles: mermaidFiles } =
+			await renderMermaidMarkdownToImageMarkdown(
+				rewrittenMarkdown,
+				post.slug,
+				blogAssetDirectory,
+				post.sourceModifiedAtMs
+			);
+		if (shouldGenerateMermaidDiagrams) {
+			await syncGeneratedMermaidAssets(post.slug, mermaidFiles);
+		}
+		const renderedMarkdown = await renderMarkdown(markdownWithRenderedMermaid);
 		const contentHtml = await enhanceRenderedHtml(renderedMarkdown);
 		renderedPosts.push({
 			slug: post.slug,
 			title: post.title,
 			description: post.description,
 			haFooter: post.haFooter,
-			hasMermaid: post.hasMermaid,
 			contentHtml,
 			date: post.date,
 			tags: post.tags,
@@ -776,7 +887,6 @@ export interface GeneratedBlogPost {
 	date: string;
 	description: string;
 	haFooter: boolean;
-	hasMermaid: boolean;
 	metaDescription?: string;
 	metaKeywords?: string;
 	metaTitle?: string;
