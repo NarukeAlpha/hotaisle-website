@@ -28,7 +28,7 @@ export default function MI355XContent() {
 						MI355X
 					</h1>
 					<p className="mx-auto mb-12 max-w-4xl font-light text-muted-foreground text-xl leading-normal md:text-3xl">
-						<strong className="text-foreground">ULTIMATE AI & HPC PERFORMANCE.</strong>{' '}
+						<strong className="text-foreground">ULTIMATE AI & HPC PERFORMANCE.</strong>
 						<br />
 						Built on the cutting-edge 4th Gen AMD CDNA™ architecture to drive the next
 						era of innovation.
@@ -71,7 +71,7 @@ export default function MI355XContent() {
 							<p>
 								The global adoption of AI technology demands ever greater amounts of
 								processing capacity. The direct liquid cooling option enables AMD
-								Instinct MI355X GPUs to consume up to{' '}
+								<span> Instinct MI355X GPUs to consume up to </span>
 								<strong className="text-foreground">1400W</strong>.
 							</p>
 							<p>
@@ -172,20 +172,23 @@ export default function MI355XContent() {
 						<div className="space-y-5 text-lg text-muted-foreground leading-relaxed">
 							<p>
 								The MI355X uses the 4th Gen AMD CDNA™ multi-chip architecture based
-								on{' '}
+								<span> on </span>
 								<strong className="text-foreground">3nm process technology</strong>.
 							</p>
 							<h4 className="font-bold text-foreground">
 								Breakthrough AI Acceleration
 							</h4>
 							<p>
-								With new expanded{' '}
+								<span>With new expanded </span>
 								<strong className="text-foreground">
 									FP6 and FP4 datatype support
 								</strong>
-								, MI355X maximizes computational throughput and energy efficiency.
-								Enhanced FP16 and FP8 processing positions the MI350 Series to
-								deliver exceptional performance for advanced generative AI models.
+								<span>
+									, MI355X maximizes computational throughput and energy
+									efficiency. Enhanced FP16 and FP8 processing positions the MI350
+									Series to deliver exceptional performance for advanced
+									generative AI models.
+								</span>
 							</p>
 						</div>
 					</div>
@@ -231,10 +234,12 @@ export default function MI355XContent() {
 							</h2>
 						</div>
 						<p className="mb-10 text-neutral-300 text-xl leading-relaxed">
-							The foundation of AMD accelerated computing,{' '}
-							<strong>AMD ROCm™ software</strong> empowers AI developers to fully
-							leverage AMD Instinct GPUs. With Day-0 support for PyTorch, TensorFlow,
-							JAX, and ONNX Runtime.
+							<span>The foundation of AMD accelerated computing, </span>
+							<strong className="mr-1">AMD ROCm™ software</strong>
+							<span>
+								empowers AI developers to fully leverage AMD Instinct GPUs. With
+								Day-0 support for PyTorch, TensorFlow, JAX, and ONNX Runtime.
+							</span>
 						</p>
 						<div className="grid grid-cols-2 gap-6 font-bold text-sm opacity-80 md:grid-cols-4">
 							<div className="rounded-xl bg-white/5 p-4">OpenAI</div>
@@ -298,7 +303,7 @@ export default function MI355XContent() {
 
 				<div className="mt-10 border-border border-t pt-20 text-center">
 					<p className="text-muted-foreground text-sm">
-						Footnote explanations are available at:{' '}
+						Footnote explanations are available at:
 						<a
 							className="underline hover:text-foreground"
 							href="https://www.amd.com/en/legal/claims/instinct.html"

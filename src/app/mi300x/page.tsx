@@ -19,7 +19,7 @@ export default function MI300XPage() {
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-emerald-900 to-green-800 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
-				🔥 We are now accepting MI355x reservations!{' '}
+				🔥 We are now accepting MI355x reservations!
 				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
 				</AppLink>
@@ -40,9 +40,9 @@ export default function MI300XPage() {
 								MI300X
 							</h1>
 							<h2 className="mb-8 max-w-2xl font-light text-2xl text-muted-foreground leading-snug md:text-3xl">
-								Leading-Edge, industry-standard accelerator module for{' '}
-								<span className="font-medium text-foreground">generative AI</span>,
-								training, and high-performance computing.
+								<span>Leading-Edge, industry-standard accelerator module for </span>
+								<span className="font-medium text-foreground">generative AI</span>
+								<span>, training, and high-performance computing.</span>
 							</h2>
 
 							<div className="mb-10 grid max-w-lg grid-cols-2 gap-4">
@@ -126,9 +126,12 @@ export default function MI300XPage() {
 						<p>
 							It is designed with 304 high-throughput compute units, AI-specific
 							functions including new data-type support, photo and video decoding,
-							plus an unprecedented{' '}
-							<strong className="text-foreground">192 GB of HBM3 memory</strong> on a
-							GPU accelerator. Using state-of-the-art die stacking and chiplet
+							<span>plus an unprecedented </span>
+							<strong className="mr-1 text-foreground">192 GB of HBM3 memory</strong>
+							<span>
+								on a GPU accelerator. Using state-of-the-art die stacking and
+								chiplet
+							</span>
 							technology in a multi-chip package propels generative AI, machine
 							learning, and inferencing, while extending AMD leadership in HPC
 							acceleration.
@@ -140,16 +143,18 @@ export default function MI300XPage() {
 							</h4>
 							<p className="text-sm">
 								The MI300X offers outstanding performance to our prior generation,
-								offering{' '}
-								<span className="font-bold text-foreground">
+								<span> offering </span>
+								<span className="mr-1 font-bold text-foreground">
 									13.7x the peak AI/ML workload performance
-								</span>{' '}
-								using FP8 with sparsity compared to prior AMD MI250X accelerators
-								using FP16 and a{' '}
-								<span className="font-bold text-foreground">
+								</span>
+								<span>
+									using FP8 with sparsity compared to prior AMD MI250X
+									accelerators using FP16 and a
+								</span>
+								<span className="mx-1 font-bold text-foreground">
 									3.4x peak advantage
-								</span>{' '}
-								for HPC workloads on FP32 calculations.
+								</span>
+								<span>for HPC workloads on FP32 calculations.</span>
 							</p>
 						</div>
 					</div>

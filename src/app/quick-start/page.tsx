@@ -62,7 +62,7 @@ export default function QuickStartPage() {
 					</div>
 
 					<p className="mt-4 max-w-xl text-center text-muted-foreground text-sm">
-						If you need a terminal app, use{' '}
+						If you need a terminal app, use
 						<a
 							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://www.cmux.dev/"
@@ -70,8 +70,8 @@ export default function QuickStartPage() {
 							target="_blank"
 						>
 							cmux
-						</a>{' '}
-						on macOS,{' '}
+						</a>
+						on macOS,
 						<a
 							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://ghostty.org/"
@@ -79,10 +79,10 @@ export default function QuickStartPage() {
 							target="_blank"
 						>
 							Ghostty
-						</a>{' '}
+						</a>
 						on Linux,
 						<br />
-						and{' '}
+						and
 						<a
 							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://wezterm.org/"
@@ -90,7 +90,7 @@ export default function QuickStartPage() {
 							target="_blank"
 						>
 							WezTerm
-						</a>{' '}
+						</a>
 						on Windows.
 					</p>
 

@@ -18,7 +18,7 @@ export default function PricingPage() {
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-hot-orange to-red-600 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
-				🔥 We are now accepting MI355x reservations!{' '}
+				🔥 We are now accepting MI355x reservations!
 				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
 				</AppLink>
@@ -48,8 +48,8 @@ export default function PricingPage() {
 					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-hot-orange/50 hover:shadow-2xl">
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Small</h3>
-							<div className="mb-1 font-black text-4xl text-hot-orange">
-								1x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>1x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>
@@ -93,8 +93,8 @@ export default function PricingPage() {
 						</div>
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Medium</h3>
-							<div className="mb-1 font-black text-4xl text-hot-orange">
-								2-4x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>2-4x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>
@@ -135,8 +135,8 @@ export default function PricingPage() {
 					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-hot-orange/50 hover:shadow-2xl">
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Large</h3>
-							<div className="mb-1 font-black text-4xl text-hot-orange">
-								8x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>8x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>

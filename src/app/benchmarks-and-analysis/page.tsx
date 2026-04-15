@@ -150,9 +150,11 @@ export default function BenchmarksPage() {
 
 					<div className="prose prose-lg dark:prose-invert mx-auto max-w-3xl text-muted-foreground leading-relaxed">
 						<p className="mb-6">
-							Welcome to the{' '}
-							<strong className="text-foreground">Benchmarks & Analysis</strong>{' '}
-							section of Hot Aisle Inc.'s website. As a leader in deploying
+							<span>Welcome to the </span>
+							<strong className="mr-1 text-foreground">Benchmarks & Analysis</strong>
+							<span>
+								section of Hot Aisle Inc.'s website. As a leader in deploying
+							</span>
 							cutting-edge AMD hardware and other advanced technologies, we are
 							committed to providing transparent, reliable, and comprehensive
 							performance metrics. The links shared here are meticulously selected to

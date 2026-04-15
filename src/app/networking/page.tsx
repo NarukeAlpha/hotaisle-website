@@ -193,11 +193,11 @@ export default function NetworkingPage() {
 							<strong className="text-foreground">Note:</strong>
 							<span>
 								Public IPv4/v6 address is included on all baremetal and VM servers.
-								You may need to edit{' '}
+								<span> You may need to edit </span>
 								<code className="rounded bg-muted px-1 py-0.5 text-hot-orange">
 									ufw config
-								</code>{' '}
-								to open ports, which we can help with.
+								</code>
+								<span> to open ports, which we can help with.</span>
 							</span>
 						</span>
 					</div>
@@ -210,8 +210,12 @@ export default function NetworkingPage() {
 						<h3 className="font-bold text-2xl">Mission Critical Uptime</h3>
 					</div>
 					<p className="mb-6 text-muted-foreground">
-						Uptime is critical for you, and for us. All of our switches are backed by a{' '}
-						<strong>Dell ProSupport Next Business Day warranty</strong>.
+						<span>
+							Uptime is critical for you, and for us. All of our switches are backed
+							by a
+						</span>
+						<strong className="ml-1">Dell ProSupport Next Business Day warranty</strong>
+						.
 					</p>
 					<ul className="space-y-3">
 						<li className="flex items-center gap-3 rounded-xl border border-border bg-background p-3 text-foreground text-sm">
