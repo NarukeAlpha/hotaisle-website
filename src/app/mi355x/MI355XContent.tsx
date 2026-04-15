@@ -100,16 +100,16 @@ export default function MI355XContent() {
 								industry-standard universal baseboard (UBB 2.0).
 							</p>
 							<ul className="space-y-2 font-medium text-foreground">
-								<li>• 8 OAMs connected with AMD Infinity Fabric™ mesh</li>
-								<li>• 153.6 GB/s bidirectional links</li>
+								<li>8 OAMs connected with AMD Infinity Fabric™ mesh</li>
+								<li>153.6 GB/s bidirectional links</li>
 								<li>
-									• <strong>288 GB of HBM3E memory</strong> per accelerator
+									<strong>288 GB of HBM3E memory</strong> per accelerator
 								</li>
 								<li>
-									• <strong>8 TB/s</strong> of memory bandwidth
+									<strong>8 TB/s</strong> of memory bandwidth
 								</li>
 								<li>
-									• Massive <strong>2.3 TB of coherent, shared memory</strong> per
+									Massive <strong>2.3 TB of coherent, shared memory</strong> per
 									platform
 								</li>
 							</ul>
@@ -287,9 +287,6 @@ export default function MI355XContent() {
 							<div className="rounded-[20px] bg-background p-4 text-slate-900 md:p-8 dark:text-slate-100">
 								<iframe
 									className="min-h-screen w-full rounded-xl border border-border"
-									frameBorder={0}
-									marginHeight={0}
-									marginWidth={0}
 									src="https://tally.so/embed/wAZ1AB?alignLeft=1&hideTitle=1&transparentBackground=0&dynamicHeight=1"
 									title="Reserve your AMD MI355X Compute at Hot Aisle"
 								/>
