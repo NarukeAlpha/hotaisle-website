@@ -17,11 +17,11 @@ export default function MI355XContent() {
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* Hero Section */}
 			<div className="main-hero-section relative overflow-hidden border-border border-b bg-background px-6 pt-32 pb-20">
-				<div className="pointer-events-none absolute top-0 right-0 h-200 w-200 rounded-full bg-orange-600/10 opacity-40 blur-[100px]" />
+				<div className="pointer-events-none absolute top-0 right-0 h-200 w-200 rounded-full bg-hot-orange/10 opacity-40 blur-[100px]" />
 				<div className="pointer-events-none absolute bottom-0 left-0 h-150 w-150 rounded-full bg-red-600/10 opacity-30 blur-[100px]" />
 
 				<div className="container relative z-10 mx-auto max-w-6xl text-center">
-					<div className="mb-8 inline-flex animate-pulse items-center gap-2 rounded-full bg-orange-600 px-4 py-1.5 font-bold text-sm text-white uppercase tracking-widest shadow-lg shadow-orange-500/30">
+					<div className="mb-8 inline-flex animate-pulse items-center gap-2 rounded-full bg-hot-orange px-4 py-1.5 font-bold text-sm text-white uppercase tracking-widest shadow-hot-orange/30 shadow-lg">
 						<Zap className="fill-current" size={14} /> Coming Soon
 					</div>
 					<h1 className="mb-8 font-black text-6xl leading-tight tracking-tighter md:text-9xl">
@@ -40,7 +40,7 @@ export default function MI355XContent() {
 					>
 						Reserve Now <ArrowRight className="ml-2" size={20} />
 					</a>
-					<p className="mt-4 font-bold text-orange-700 text-xs uppercase tracking-widest">
+					<p className="mt-4 font-bold text-hot-orange text-xs uppercase tracking-widest">
 						🔥 Scroll to the bottom to reserve 🔥
 					</p>
 				</div>
@@ -62,7 +62,7 @@ export default function MI355XContent() {
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-hot-orange">
 								<Thermometer size={24} />
 							</div>
 							<h2 className="font-black text-4xl">DIRECT LIQUID COOLED DESIGN</h2>
@@ -89,7 +89,7 @@ export default function MI355XContent() {
 				<section className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
 					<div>
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-hot-orange">
 								<Server size={24} />
 							</div>
 							<h2 className="font-black text-4xl">INDUSTRY-STANDARD FORM FACTOR</h2>
@@ -162,7 +162,7 @@ export default function MI355XContent() {
 					</div>
 					<div className="order-1 lg:order-2">
 						<div className="mb-6 flex items-center gap-3">
-							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-orange-700">
+							<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-hot-orange">
 								<Layers size={24} />
 							</div>
 							<h2 className="font-black text-4xl leading-tight">
@@ -193,24 +193,24 @@ export default function MI355XContent() {
 
 				{/* Additional Features Grid */}
 				<section className="grid grid-cols-1 gap-8 md:grid-cols-3">
-					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<UploadIcon className="mb-6 h-12 w-12 text-orange-700" />
+					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-hot-orange/50">
+						<UploadIcon className="mb-6 h-12 w-12 text-hot-orange" />
 						<h3 className="mb-3 font-bold text-xl">K8s Integration</h3>
 						<p className="text-muted-foreground">
 							AMD GPU Operator simplifies deployment in Kubernetes. Day-0 support
 							enables optimized models upon release.
 						</p>
 					</div>
-					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<ShieldCheck className="mb-6 h-12 w-12 text-orange-700" />
+					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-hot-orange/50">
+						<ShieldCheck className="mb-6 h-12 w-12 text-hot-orange" />
 						<h3 className="mb-3 font-bold text-xl">Advanced Security</h3>
 						<p className="text-muted-foreground">
 							Verify hardware authenticity, secure multitenant GPU sharing, and
 							encrypted high-speed communication.
 						</p>
 					</div>
-					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-orange-500/50">
-						<Network className="mb-6 h-12 w-12 text-orange-700" />
+					<div className="rounded-3xl border border-border bg-card p-8 transition-colors hover:border-hot-orange/50">
+						<Network className="mb-6 h-12 w-12 text-hot-orange" />
 						<h3 className="mb-3 font-bold text-xl">Scalable Networking</h3>
 						<p className="text-muted-foreground">
 							Ethernet-based AI and HPC networking enables massive hyperclass
@@ -257,19 +257,19 @@ export default function MI355XContent() {
 							</p>
 							<div className="grid grid-cols-1 gap-4 text-left md:grid-cols-3">
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-hot-orange/10 text-hot-orange dark:bg-hot-orange/20">
 										<Lock size={20} />
 									</div>
 									<span className="font-medium">Priority Allocation</span>
 								</div>
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-hot-orange/10 text-hot-orange dark:bg-hot-orange/20">
 										<Zap size={20} />
 									</div>
 									<span className="font-medium">Exclusive Hardware Updates</span>
 								</div>
 								<div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-hot-orange/10 text-hot-orange dark:bg-hot-orange/20">
 										<CreditCard size={20} />
 									</div>
 									<span className="font-medium">$100 Deposit</span>
@@ -278,7 +278,7 @@ export default function MI355XContent() {
 						</div>
 
 						{/* Tally Form */}
-						<div className="relative overflow-hidden rounded-3xl border-2 border-orange-500/20 bg-card p-2 shadow-2xl">
+						<div className="relative overflow-hidden rounded-3xl border-2 border-hot-orange/20 bg-card p-2 shadow-2xl">
 							<div className="rounded-[20px] bg-background p-4 text-slate-900 md:p-8 dark:text-slate-100">
 								<iframe
 									className="min-h-screen w-full rounded-xl border border-border"

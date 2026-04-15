@@ -107,7 +107,7 @@ function DataColumns() {
 		<div className="absolute inset-0 overflow-hidden opacity-50">
 			{DATA_COLUMNS.map((position, index) => (
 				<div
-					className="ha-hero-column absolute bottom-0 w-px origin-bottom bg-linear-to-t from-orange-500/0 via-orange-400/60 to-orange-500/0"
+					className="ha-hero-column absolute bottom-0 w-px origin-bottom bg-linear-to-t from-hot-orange/0 via-hot-orange/60 to-hot-orange/0"
 					key={position}
 					style={{
 						animationDelay: `${index * 0.18}s`,
@@ -228,7 +228,7 @@ export default function HotAisleHero() {
 								color: 'var(--ha-hero-muted)',
 							}}
 						>
-							<Sparkles className="h-3.5 w-3.5 text-orange-400 dark:text-orange-300" />
+							<Sparkles className="h-3.5 w-3.5 text-hot-orange" />
 							AMD Exclusive AI Cloud
 						</div>
 
@@ -259,7 +259,7 @@ export default function HotAisleHero() {
 						{/* CTAs */}
 						<div className="animation-fade-in mt-10 flex flex-wrap items-center justify-center gap-4">
 							<AppLink
-								className="group inline-flex items-center gap-2 rounded-xl bg-orange-700 px-7 py-3.5 font-semibold text-base text-white shadow-lg shadow-orange-950/30 transition hover:-translate-y-0.5 hover:bg-orange-600"
+								className="group inline-flex items-center gap-2 rounded-xl bg-hot-orange px-7 py-3.5 font-semibold text-base text-white shadow-hot-orange/30 shadow-lg transition hover:-translate-y-0.5 hover:opacity-90"
 								href="/quick-start"
 							>
 								Start Now

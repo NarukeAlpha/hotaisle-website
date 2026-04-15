@@ -64,7 +64,7 @@ export default function QuickStartPage() {
 					<p className="mt-4 max-w-xl text-center text-muted-foreground text-sm">
 						If you need a terminal app, use{' '}
 						<a
-							className="mx-1 font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://www.cmux.dev/"
 							rel="noopener"
 							target="_blank"
@@ -73,7 +73,7 @@ export default function QuickStartPage() {
 						</a>{' '}
 						on macOS,{' '}
 						<a
-							className="mx-1 font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://ghostty.org/"
 							rel="noopener"
 							target="_blank"
@@ -84,7 +84,7 @@ export default function QuickStartPage() {
 						<br />
 						and{' '}
 						<a
-							className="mx-1 font-medium text-arctic-blue hover:underline"
+							className="mx-1 font-medium text-hot-orange hover:underline"
 							href="https://wezterm.org/"
 							rel="noopener"
 							target="_blank"
@@ -163,9 +163,9 @@ export default function QuickStartPage() {
 
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 						{/* AMD */}
-						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
+						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-hot-orange/50">
 							<div className="mb-4 flex items-center gap-3">
-								<Box className="h-5 w-5 shrink-0 text-arctic-blue" />
+								<Box className="h-5 w-5 shrink-0 text-hot-orange" />
 								<h3 className="font-bold text-lg">Quickstart with AMD</h3>
 							</div>
 							<p className="text-muted-foreground text-sm">
@@ -173,7 +173,7 @@ export default function QuickStartPage() {
 								sticks around after the container exits.
 							</p>
 							<a
-								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
+								className="mt-auto flex items-center pt-2 font-bold text-hot-orange text-sm hover:underline"
 								href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html"
 								rel="noopener"
 								target="_blank"
@@ -183,9 +183,9 @@ export default function QuickStartPage() {
 						</div>
 
 						{/* dstack */}
-						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
+						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-hot-orange/50">
 							<div className="mb-4 flex items-center gap-3">
-								<Server className="h-5 w-5 shrink-0 text-arctic-blue" />
+								<Server className="h-5 w-5 shrink-0 text-hot-orange" />
 								<h3 className="font-bold text-lg">Automate with dstack</h3>
 							</div>
 							<p className="text-muted-foreground text-sm">
@@ -193,7 +193,7 @@ export default function QuickStartPage() {
 								automating your deployment? Check out our tight API integration.
 							</p>
 							<a
-								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
+								className="mt-auto flex items-center pt-2 font-bold text-hot-orange text-sm hover:underline"
 								href="https://dstack.ai/blog/hotaisle/"
 								rel="noopener"
 								target="_blank"
@@ -203,9 +203,9 @@ export default function QuickStartPage() {
 						</div>
 
 						{/* PyTorch */}
-						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
+						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-hot-orange/50">
 							<div className="mb-4 flex items-center gap-3">
-								<Code className="h-5 w-5 shrink-0 text-arctic-blue" />
+								<Code className="h-5 w-5 shrink-0 text-hot-orange" />
 								<h3 className="font-bold text-lg">PyTorch Official Guide</h3>
 							</div>
 							<p className="text-muted-foreground text-sm">
@@ -213,7 +213,7 @@ export default function QuickStartPage() {
 								guide.
 							</p>
 							<a
-								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
+								className="mt-auto flex items-center pt-2 font-bold text-hot-orange text-sm hover:underline"
 								href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/3rd-party/pytorch-install.html"
 								rel="noopener"
 								target="_blank"
@@ -223,16 +223,16 @@ export default function QuickStartPage() {
 						</div>
 
 						{/* TinyGrad */}
-						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-arctic-blue/50">
+						<div className="group flex h-full flex-col rounded-xl border border-border bg-background p-6 transition-colors hover:border-hot-orange/50">
 							<div className="mb-4 flex items-center gap-3">
-								<Terminal className="h-5 w-5 shrink-0 text-arctic-blue" />
+								<Terminal className="h-5 w-5 shrink-0 text-hot-orange" />
 								<h3 className="font-bold text-lg">TinyGrad Setup</h3>
 							</div>
 							<p className="text-muted-foreground text-sm">
 								If you’re more into TinyGrad, follow their setup here.
 							</p>
 							<a
-								className="mt-auto flex items-center pt-2 font-bold text-arctic-blue text-sm hover:underline"
+								className="mt-auto flex items-center pt-2 font-bold text-hot-orange text-sm hover:underline"
 								href="https://github.com/tinygrad/tinygrad/#installation"
 								rel="noopener"
 								target="_blank"
@@ -245,7 +245,7 @@ export default function QuickStartPage() {
 					{/* Developer Tools */}
 					<div className="border-border border-t pt-12">
 						<h3 className="mb-6 flex items-center gap-2 font-bold text-xl">
-							<Terminal className="text-arctic-blue" /> Work Programmatically with Hot
+							<Terminal className="text-hot-orange" /> Work Programmatically with Hot
 							Aisle solutions
 						</h3>
 						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -289,10 +289,10 @@ export default function QuickStartPage() {
 					</div>
 
 					{/* Contact */}
-					<div className="rounded-xl border border-arctic-blue/10 bg-arctic-blue/5 p-8 text-center">
+					<div className="rounded-xl border border-hot-orange/10 bg-hot-orange/5 p-8 text-center">
 						<h3 className="mb-2 font-bold text-4xl">Questions?</h3>
 						<a
-							className="flex items-center justify-center gap-2 font-bold text-arctic-blue text-xl hover:underline"
+							className="flex items-center justify-center gap-2 font-bold text-hot-orange text-xl hover:underline"
 							href="mailto:hello@hotaisle.ai"
 						>
 							<Mail size={20} /> hello@hotaisle.ai

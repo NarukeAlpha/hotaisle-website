@@ -69,7 +69,7 @@ export default function DatacenterPage() {
 						</div>
 
 						<h1 className="font-black text-5xl text-foreground leading-tight tracking-tighter md:text-7xl">
-							Tier 5 <span className="text-arctic-blue">Platinum</span>
+							Tier 5 <span className="text-hot-orange">Platinum</span>
 							<br />
 							Infrastructure
 						</h1>
@@ -141,11 +141,11 @@ export default function DatacenterPage() {
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 					{advantages.map((item) => (
 						<div
-							className="group flex flex-col rounded-2xl border border-border bg-card p-8 transition-all hover:border-arctic-blue/50 hover:shadow-lg"
+							className="group flex flex-col rounded-2xl border border-border bg-card p-8 transition-all hover:border-hot-orange/50 hover:shadow-lg"
 							key={item.title}
 						>
-							<div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-arctic-blue/10">
-								<item.icon className="h-7 w-7 text-muted-foreground group-hover:text-arctic-blue" />
+							<div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-hot-orange/10">
+								<item.icon className="h-7 w-7 text-muted-foreground group-hover:text-hot-orange" />
 							</div>
 							<h3 className="mb-3 font-bold text-2xl text-foreground">
 								{item.title}
@@ -195,7 +195,7 @@ export default function DatacenterPage() {
 
 						<div className="rounded-xl border border-border bg-background p-6">
 							<h4 className="mb-2 flex items-center gap-2 font-bold text-foreground">
-								<ExternalLink className="text-arctic-blue" size={18} />
+								<ExternalLink className="text-hot-orange" size={18} />
 								switch.com
 							</h4>
 							<p className="mb-4 text-muted-foreground text-sm">
@@ -203,7 +203,7 @@ export default function DatacenterPage() {
 								the planet."
 							</p>
 							<a
-								className="font-medium text-arctic-blue underline underline-offset-4 transition-colors hover:text-foreground"
+								className="font-medium text-hot-orange underline underline-offset-4 transition-colors hover:text-foreground"
 								href="https://www.switch.com/grand-rapids/"
 								rel="noopener noreferrer"
 								target="_blank"

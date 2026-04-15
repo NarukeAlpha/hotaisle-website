@@ -145,7 +145,7 @@ export default function BenchmarksPage() {
 
 				<div className="container relative z-10 mx-auto max-w-4xl text-center">
 					<h1 className="mb-8 bg-linear-to-r from-foreground to-foreground bg-clip-text font-black text-5xl text-transparent tracking-tighter md:text-7xl">
-						Benchmarks & <span className="text-arctic-blue">Analysis</span>
+						Benchmarks & <span className="text-hot-orange">Analysis</span>
 					</h1>
 
 					<div className="prose prose-lg dark:prose-invert mx-auto max-w-3xl text-muted-foreground leading-relaxed">
@@ -176,23 +176,23 @@ export default function BenchmarksPage() {
 				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{benchmarks.map((b) => (
 						<a
-							className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-arctic-blue/50 hover:shadow-xl"
+							className="group flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-hot-orange/50 hover:shadow-xl"
 							href={b.url}
 							key={b.url}
 							rel="noopener noreferrer"
 							target="_blank"
 						>
 							<div className="mb-4 flex items-start justify-between">
-								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors duration-300 group-hover:bg-arctic-blue/10 group-hover:text-arctic-blue">
+								<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors duration-300 group-hover:bg-hot-orange/10 group-hover:text-hot-orange">
 									<b.icon size={24} />
 								</div>
 								<ExternalLink
-									className="text-muted-foreground transition-colors group-hover:text-arctic-blue"
+									className="text-muted-foreground transition-colors group-hover:text-hot-orange"
 									size={18}
 								/>
 							</div>
 
-							<h3 className="mb-3 font-bold text-foreground text-xl leading-tight transition-colors group-hover:text-arctic-blue">
+							<h3 className="mb-3 font-bold text-foreground text-xl leading-tight transition-colors group-hover:text-hot-orange">
 								{b.title}
 							</h3>
 
@@ -216,7 +216,7 @@ export default function BenchmarksPage() {
 						computing.
 					</p>
 					<AppLink
-						className="inline-flex rounded-full bg-arctic-blue px-8 py-3 font-bold text-white transition-all hover:scale-105 hover:bg-arctic-blue/90 dark:text-neutral-950"
+						className="inline-flex rounded-full bg-hot-orange px-8 py-3 font-bold text-white transition-all hover:scale-105 hover:opacity-90"
 						href="/quick-start"
 					>
 						Start Benchmarking Today

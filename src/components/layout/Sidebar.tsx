@@ -57,7 +57,7 @@ export function Sidebar() {
 					<div className="flex items-center gap-2">
 						<button
 							aria-label="Switch to dark mode"
-							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 							data-theme-toggle
 							title="Switch to dark mode"
 							type="button"
@@ -68,7 +68,7 @@ export function Sidebar() {
 							aria-controls="mobile-sidebar-nav"
 							aria-expanded="false"
 							aria-label="Toggle navigation menu"
-							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 							data-mobile-nav-toggle
 							type="button"
 						>
@@ -102,7 +102,7 @@ export function Sidebar() {
 						</div>
 						<button
 							aria-label="Close navigation menu"
-							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 							data-mobile-nav-close
 							type="button"
 						>
@@ -117,7 +117,7 @@ export function Sidebar() {
 								return (
 									<AppLink
 										className={cn(
-											'group relative flex items-center rounded-md px-3 py-2 font-medium text-base text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700'
+											'group relative flex items-center rounded-md px-3 py-2 font-medium text-base text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange'
 										)}
 										data-mobile-nav-close
 										href={item.href}
@@ -132,7 +132,7 @@ export function Sidebar() {
 					</nav>
 					<div className="flex items-center justify-between border-t p-4">
 						<AppLink
-							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+							className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 							data-mobile-nav-close
 							href="/contact"
 						>
@@ -170,7 +170,7 @@ export function Sidebar() {
 						return (
 							<AppLink
 								className={cn(
-									'group relative flex items-center rounded-md px-3 py-2 font-medium text-base text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700'
+									'group relative flex items-center rounded-md px-3 py-2 font-medium text-base text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange'
 								)}
 								href={item.href}
 								key={item.href}
@@ -185,14 +185,14 @@ export function Sidebar() {
 					<div className="flex items-center justify-between gap-3">
 						<div className="flex gap-2">
 							<AppLink
-								className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+								className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 								href="/contact"
 							>
 								<Mail size={20} />
 							</AppLink>
 							<button
 								aria-label="Switch to dark mode"
-								className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-orange-700"
+								className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-hot-orange/10 hover:text-hot-orange"
 								data-theme-toggle
 								title="Switch to dark mode"
 								type="button"

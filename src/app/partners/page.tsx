@@ -73,12 +73,12 @@ export default function PartnersPage() {
 			<div className="relative border-border border-b bg-muted/20">
 				<div className="container mx-auto max-w-5xl px-6 py-24">
 					<div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 font-bold text-foreground text-xs uppercase tracking-wider shadow-sm">
-						<Handshake className="text-arctic-blue" size={14} />
+						<Handshake className="text-hot-orange" size={14} />
 						Ecosystem
 					</div>
 
 					<h1 className="mb-8 text-center font-black text-5xl text-foreground tracking-tighter md:text-left md:text-7xl">
-						Our <span className="text-arctic-blue">Partners</span>
+						Our <span className="text-hot-orange">Partners</span>
 					</h1>
 
 					<div className="space-y-6 font-light text-lg text-muted-foreground leading-relaxed md:text-xl">
@@ -106,7 +106,7 @@ export default function PartnersPage() {
 							<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 								{section.list.map((p) => (
 									<a
-										className="group flex h-full flex-col justify-between rounded-xl border border-border bg-card p-6 transition-all hover:border-arctic-blue/50 hover:shadow-lg"
+										className="group flex h-full flex-col justify-between rounded-xl border border-border bg-card p-6 transition-all hover:border-hot-orange/50 hover:shadow-lg"
 										href={p.url}
 										key={p.url}
 										rel="noopener noreferrer"
@@ -114,11 +114,11 @@ export default function PartnersPage() {
 									>
 										<div>
 											<div className="mb-2 flex items-center justify-between">
-												<h3 className="font-bold text-foreground text-xl transition-colors group-hover:text-arctic-blue">
+												<h3 className="font-bold text-foreground text-xl transition-colors group-hover:text-hot-orange">
 													{p.name}
 												</h3>
 												<ExternalLink
-													className="text-muted-foreground opacity-0 transition-all group-hover:text-arctic-blue group-hover:opacity-100"
+													className="text-muted-foreground opacity-0 transition-all group-hover:text-hot-orange group-hover:opacity-100"
 													size={16}
 												/>
 											</div>
@@ -136,7 +136,7 @@ export default function PartnersPage() {
 				{/* Highlight Section */}
 				<div className="mt-32 text-center">
 					<div className="relative inline-flex max-w-full flex-col items-center overflow-hidden rounded-3xl border border-border bg-linear-to-br from-blue-900/10 to-indigo-900/10 p-10 shadow-2xl backdrop-blur-sm md:p-16">
-						<div className="pointer-events-none absolute top-0 right-0 h-64 w-64 rounded-full bg-arctic-blue/10 blur-[100px]" />
+						<div className="pointer-events-none absolute top-0 right-0 h-64 w-64 rounded-full bg-hot-orange/10 blur-[100px]" />
 
 						<div className="relative z-10 text-center">
 							<img
@@ -149,7 +149,7 @@ export default function PartnersPage() {
 							<div className="mb-4 font-serif text-2xl text-foreground italic md:text-3xl">
 								"Great partnership"
 							</div>
-							<div className="font-black text-arctic-blue uppercase tracking-wider">
+							<div className="font-black text-hot-orange uppercase tracking-wider">
 								— Michael Dell
 							</div>
 						</div>

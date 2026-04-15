@@ -95,7 +95,7 @@ export function Navbar() {
 						</button>
 
 						<AppLink
-							className="hidden rounded-lg bg-orange-700 px-4 py-2 font-medium text-sm text-white shadow-sm transition hover:bg-orange-600 lg:inline-flex"
+							className="hidden rounded-lg bg-hot-orange px-4 py-2 font-medium text-sm text-white shadow-sm transition hover:opacity-90 lg:inline-flex"
 							href="/quick-start"
 						>
 							Start Now
@@ -163,7 +163,7 @@ export function Navbar() {
 
 					<div className="border-t p-4">
 						<AppLink
-							className="flex w-full items-center justify-center rounded-lg bg-orange-700 px-4 py-3 font-semibold text-white transition hover:bg-orange-600"
+							className="flex w-full items-center justify-center rounded-lg bg-hot-orange px-4 py-3 font-semibold text-white transition hover:opacity-90"
 							data-mobile-nav-close
 							href="/quick-start"
 						>

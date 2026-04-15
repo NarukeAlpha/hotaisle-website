@@ -70,7 +70,7 @@ export default function ComputePage() {
 							OFFICIAL DELL TECHNOLOGIES PARTNER
 						</div>
 						<h1 className="mb-6 font-black text-5xl text-foreground leading-tight tracking-tighter md:text-7xl">
-							Dell PowerEdge <span className="text-arctic-blue">XE9680</span>
+							Dell PowerEdge <span className="text-hot-orange">XE9680</span>
 						</h1>
 						<p className="mb-8 max-w-2xl font-light text-muted-foreground text-xl leading-relaxed md:text-2xl">
 							<span>We offer remote access to the Dell PowerEdge XE9680 with </span>
@@ -120,7 +120,7 @@ export default function ComputePage() {
 							/>
 						</div>
 						<div className="absolute -right-6 -bottom-6 flex animate-bounce-slow items-center gap-3 rounded-xl border border-border bg-background p-4 shadow-xl">
-							<div className="rounded-lg bg-orange-100 p-2 text-orange-600">
+							<div className="rounded-lg bg-hot-orange/10 p-2 text-hot-orange">
 								<Server size={24} />
 							</div>
 							<div>
@@ -145,7 +145,7 @@ export default function ComputePage() {
 				<div className="grid grid-cols-1 gap-6">
 					{specs.map((spec) => (
 						<div
-							className="group rounded-2xl border border-border bg-card p-6 transition-colors hover:border-arctic-blue/50 md:p-8"
+							className="group rounded-2xl border border-border bg-card p-6 transition-colors hover:border-hot-orange/50 md:p-8"
 							key={spec.item}
 						>
 							<div className="grid grid-cols-1 items-start gap-6 md:grid-cols-12">
@@ -169,7 +169,7 @@ export default function ComputePage() {
 													className="flex items-start gap-2 text-muted-foreground"
 													key={line}
 												>
-													<span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-arctic-blue" />
+													<span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-hot-orange" />
 													{line}
 												</li>
 											))}
@@ -181,27 +181,27 @@ export default function ComputePage() {
 
 								{/* Highlight/Total */}
 								<div className="flex h-full items-center border-border md:col-span-4 md:justify-end md:border-l md:pl-6">
-									<div className="w-full rounded-xl bg-muted/30 px-4 py-3 text-center transition-colors group-hover:bg-arctic-blue/5 md:w-auto md:text-right">
+									<div className="w-full rounded-xl bg-muted/30 px-4 py-3 text-center transition-colors group-hover:bg-hot-orange/5 md:w-auto md:text-right">
 										<span className="mb-1 block font-bold text-muted-foreground text-sm uppercase tracking-wider">
 											Total Capacity
 										</span>
 										{spec.item === 'RAM' && (
-											<span className="font-black text-3xl text-arctic-blue">
+											<span className="font-black text-3xl text-hot-orange">
 												2,048 GB
 											</span>
 										)}
 										{spec.item === 'Disk' && (
-											<span className="font-black text-3xl text-arctic-blue">
+											<span className="font-black text-3xl text-hot-orange">
 												122.88 TB
 											</span>
 										)}
 										{spec.item === 'GPU' && (
-											<span className="font-black text-3xl text-orange-500">
+											<span className="font-black text-3xl text-hot-orange">
 												1.5 TB HBM3
 											</span>
 										)}
 										{spec.item === 'Network' && (
-											<span className="font-black text-3xl text-orange-500">
+											<span className="font-black text-3xl text-hot-orange">
 												3.2 Tbps
 											</span>
 										)}
@@ -250,7 +250,7 @@ export default function ComputePage() {
 									</div>
 								</li>
 								<li className="flex items-center gap-4 rounded-xl border border-border bg-background p-4 shadow-sm">
-									<Server className="h-8 w-8 text-orange-700" />
+									<Server className="h-8 w-8 text-hot-orange" />
 									<div>
 										<div className="font-bold text-foreground text-lg">
 											On-Site Parts Locker
