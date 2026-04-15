@@ -8,19 +8,24 @@ import { BLOG_POSTS } from '../src/generated/blog-data.ts';
 import { POLICIES } from '../src/generated/static-content-data.ts';
 import { createSitemapXml } from './generate_sitemap.ts';
 
+declare const Bun: typeof import('bun');
+
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const BLOG_ASSET_SOURCE_DIRECTORY = path.join(PROJECT_ROOT, 'content', 'blog', 'assets');
+const MERMAID_RENDER_ENTRY_PATH = path.join(PROJECT_ROOT, 'src', 'app', 'mermaid-render.ts');
 const PUBLIC_DIRECTORY = path.join(PROJECT_ROOT, 'public');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const STATIC_DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist-static');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
 const CLIENT_BLOG_ASSET_DIRECTORY = path.join(CLIENT_DIRECTORY, 'assets', 'blog');
+const CLIENT_VENDOR_DIRECTORY = path.join(CLIENT_DIRECTORY, 'assets', 'vendor');
 const SITEMAP_FILE_NAME = 'sitemap.xml';
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
 const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
+const MERMAID_RENDER_FILE_NAME = 'mermaid-render.js';
 const DS_STORE_FILE_NAME = '.DS_Store';
 const VITE_METADATA_DIRECTORY_NAME = '.vite';
 const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
@@ -59,6 +64,7 @@ if (exitCode !== 0) {
 
 await syncPublicAssetsToClientOutput();
 await syncBlogAssetsToClientOutput();
+await syncVendorAssetsToClientOutput();
 
 await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
 	filter: (sourcePath: string) => !shouldExcludeFromStaticExport(sourcePath),
@@ -172,6 +178,31 @@ async function syncBlogAssetsToClientOutput(): Promise<void> {
 	}
 
 	await copyBlogAssetsToOutput(BLOG_ASSET_SOURCE_DIRECTORY, CLIENT_BLOG_ASSET_DIRECTORY);
+}
+
+async function syncVendorAssetsToClientOutput(): Promise<void> {
+	await rm(CLIENT_VENDOR_DIRECTORY, { force: true, recursive: true });
+	await mkdir(CLIENT_VENDOR_DIRECTORY, { recursive: true });
+
+	const buildResult = await Bun.build({
+		entrypoints: [MERMAID_RENDER_ENTRY_PATH],
+		format: 'esm',
+		minify: true,
+		naming: MERMAID_RENDER_FILE_NAME,
+		outdir: CLIENT_VENDOR_DIRECTORY,
+		splitting: false,
+		target: 'browser',
+	});
+
+	if (buildResult.success) {
+		return;
+	}
+
+	for (const log of buildResult.logs) {
+		console.error(log);
+	}
+
+	throw new Error('Failed to bundle Mermaid render script.');
 }
 
 async function directoryExists(directoryPath: string): Promise<boolean> {
