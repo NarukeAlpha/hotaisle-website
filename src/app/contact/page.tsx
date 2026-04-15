@@ -31,9 +31,9 @@ export default function ContactPage() {
 				<div className="space-y-3">
 					<h1 className="font-black text-4xl tracking-tight">Contact Us</h1>
 					<p className="text-lg text-muted-foreground">
-						Email us at{' '}
+						Email us at
 						<a
-							className="pl-1 font-semibold text-orange-700 underline underline-offset-4"
+							className="pl-1 font-semibold text-hot-orange underline underline-offset-4"
 							href="mailto:hello@hotaisle.ai"
 						>
 							hello@hotaisle.ai

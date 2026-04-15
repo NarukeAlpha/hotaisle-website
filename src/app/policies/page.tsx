@@ -57,7 +57,7 @@ export default function PoliciesIndexPage() {
 		<div className="container mx-auto min-h-screen px-6 py-12">
 			<div className="mb-12">
 				<h1 className="mb-4 font-black text-4xl tracking-tighter md:text-5xl">
-					Legal & <span className="text-arctic-blue">Policies</span>
+					Legal & <span className="text-hot-orange">Policies</span>
 				</h1>
 				<p className="text-muted-foreground text-xl">
 					Governance constraints and operational standards.
@@ -67,13 +67,13 @@ export default function PoliciesIndexPage() {
 			<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{policies.map((p) => (
 					<AppLink
-						className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-arctic-blue/50 hover:shadow-lg"
+						className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-hot-orange/50 hover:shadow-lg"
 						href={`/policies/${p.slug}`}
 						key={p.slug}
 					>
-						<div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-arctic-blue/10">
+						<div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-muted transition-colors group-hover:bg-hot-orange/10">
 							<p.icon
-								className="text-foreground group-hover:text-arctic-blue"
+								className="text-foreground group-hover:text-hot-orange"
 								size={24}
 							/>
 						</div>

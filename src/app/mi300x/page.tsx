@@ -19,7 +19,7 @@ export default function MI300XPage() {
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* MI355x Announcement Banner */}
 			<div className="animate-pulse bg-linear-to-r from-emerald-900 to-green-800 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
-				🔥 We are now accepting MI355x reservations!{' '}
+				🔥 We are now accepting MI355x reservations!
 				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
 				</AppLink>
@@ -27,22 +27,22 @@ export default function MI300XPage() {
 
 			{/* Product Hero */}
 			<div className="relative overflow-hidden border-border border-b bg-background px-6 py-24">
-				<div className="absolute top-0 right-0 h-200 w-200 rounded-full bg-orange-500/10 opacity-30 blur-3xl" />
-				<div className="absolute bottom-0 left-0 h-150 w-150 rounded-full bg-arctic-blue/10 opacity-30 blur-3xl" />
+				<div className="absolute top-0 right-0 h-200 w-200 rounded-full bg-hot-orange/10 opacity-30 blur-3xl" />
+				<div className="absolute bottom-0 left-0 h-150 w-150 rounded-full bg-hot-orange/10 opacity-30 blur-3xl" />
 
 				<div className="container relative z-10 mx-auto max-w-7xl">
 					<div className="flex flex-col items-center gap-16 lg:flex-row">
 						<div className="flex-1">
-							<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 font-bold text-orange-700 text-xs uppercase tracking-widest dark:text-orange-400">
+							<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-hot-orange/20 bg-hot-orange/10 px-3 py-1 font-bold text-hot-orange text-xs uppercase tracking-widest dark:text-hot-orange">
 								<Zap className="fill-current" size={12} /> AMD Instinct™ Accelerator
 							</div>
 							<h1 className="mb-6 font-black text-5xl leading-tight tracking-tighter md:text-8xl">
 								MI300X
 							</h1>
 							<h2 className="mb-8 max-w-2xl font-light text-2xl text-muted-foreground leading-snug md:text-3xl">
-								Leading-Edge, industry-standard accelerator module for{' '}
-								<span className="font-medium text-foreground">generative AI</span>,
-								training, and high-performance computing.
+								<span>Leading-Edge, industry-standard accelerator module for </span>
+								<span className="font-medium text-foreground">generative AI</span>
+								<span>, training, and high-performance computing.</span>
 							</h2>
 
 							<div className="mb-10 grid max-w-lg grid-cols-2 gap-4">
@@ -76,7 +76,7 @@ export default function MI300XPage() {
 
 							<div className="flex flex-wrap gap-4">
 								<AppLink
-									className="rounded-full bg-orange-600 px-8 py-4 font-bold text-lg text-white shadow-lg shadow-orange-500/20 transition-all hover:scale-105 hover:bg-orange-700"
+									className="rounded-full bg-hot-orange px-8 py-4 font-bold text-lg text-white shadow-hot-orange/20 shadow-lg transition-all hover:scale-105 hover:opacity-90"
 									href="/quick-start"
 								>
 									Deploy MI300X
@@ -98,7 +98,7 @@ export default function MI300XPage() {
 									src="/assets/compute/gpu.png"
 									width={864}
 								/>
-								<div className="absolute inset-0 z-10 rounded-full bg-linear-to-tr from-orange-500/20 to-transparent blur-[100px]" />
+								<div className="absolute inset-0 z-10 rounded-full bg-linear-to-tr from-hot-orange/20 to-transparent blur-[100px]" />
 							</div>
 						</div>
 					</div>
@@ -110,7 +110,7 @@ export default function MI300XPage() {
 				{/* Leading-Edge Discrete GPU */}
 				<section className="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
 					<div className="md:col-span-4">
-						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-700">
+						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-hot-orange">
 							<Cpu size={32} />
 						</div>
 						<h3 className="mb-4 font-black text-3xl">
@@ -126,30 +126,35 @@ export default function MI300XPage() {
 						<p>
 							It is designed with 304 high-throughput compute units, AI-specific
 							functions including new data-type support, photo and video decoding,
-							plus an unprecedented{' '}
-							<strong className="text-foreground">192 GB of HBM3 memory</strong> on a
-							GPU accelerator. Using state-of-the-art die stacking and chiplet
+							<span>plus an unprecedented </span>
+							<strong className="mr-1 text-foreground">192 GB of HBM3 memory</strong>
+							<span>
+								on a GPU accelerator. Using state-of-the-art die stacking and
+								chiplet
+							</span>
 							technology in a multi-chip package propels generative AI, machine
 							learning, and inferencing, while extending AMD leadership in HPC
 							acceleration.
 						</p>
-						<div className="not-prose my-8 rounded-xl border-orange-500 border-l-4 bg-muted/30 p-6">
+						<div className="not-prose my-8 rounded-xl border-hot-orange border-l-4 bg-muted/30 p-6">
 							<h4 className="mb-2 flex items-center font-bold text-foreground">
-								<BarChart2 className="mr-2 text-orange-700" size={18} /> Performance
+								<BarChart2 className="mr-2 text-hot-orange" size={18} /> Performance
 								Leap
 							</h4>
 							<p className="text-sm">
 								The MI300X offers outstanding performance to our prior generation,
-								offering{' '}
-								<span className="font-bold text-foreground">
+								<span> offering </span>
+								<span className="mr-1 font-bold text-foreground">
 									13.7x the peak AI/ML workload performance
-								</span>{' '}
-								using FP8 with sparsity compared to prior AMD MI250X accelerators
-								using FP16 and a{' '}
-								<span className="font-bold text-foreground">
+								</span>
+								<span>
+									using FP8 with sparsity compared to prior AMD MI250X
+									accelerators using FP16 and a
+								</span>
+								<span className="mx-1 font-bold text-foreground">
 									3.4x peak advantage
-								</span>{' '}
-								for HPC workloads on FP32 calculations.
+								</span>
+								<span>for HPC workloads on FP32 calculations.</span>
 							</p>
 						</div>
 					</div>
@@ -158,7 +163,7 @@ export default function MI300XPage() {
 				{/* Designed to Accelerate */}
 				<section className="grid grid-cols-1 items-start gap-12 md:grid-cols-12">
 					<div className="md:col-span-4">
-						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-orange-700">
+						<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-hot-orange">
 							<Zap size={32} />
 						</div>
 						<h3 className="mb-4 font-black text-3xl">
@@ -187,11 +192,11 @@ export default function MI300XPage() {
 				{/* Architecture Specs */}
 				<section>
 					<div className="relative overflow-hidden rounded-3xl border border-border bg-card p-8 shadow-2xl md:p-12">
-						<div className="pointer-events-none absolute top-0 right-0 h-125 w-125 rounded-full bg-linear-to-b from-orange-500/10 to-transparent opacity-20 blur-3xl" />
+						<div className="pointer-events-none absolute top-0 right-0 h-125 w-125 rounded-full bg-linear-to-b from-hot-orange/10 to-transparent opacity-20 blur-3xl" />
 
 						<div className="relative z-10 mx-auto mb-16 max-w-3xl text-center">
 							<div className="mb-6 inline-block rounded-full bg-muted p-3">
-								<Layers className="text-orange-700" size={32} />
+								<Layers className="text-hot-orange" size={32} />
 							</div>
 							<h2 className="mb-6 font-black text-4xl">
 								Based on 4th Gen Infinity Architecture
@@ -206,7 +211,7 @@ export default function MI300XPage() {
 						<div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-2">
 							<div>
 								<h3 className="mb-4 flex items-center gap-2 font-bold text-xl">
-									<Share2 className="text-orange-700" size={24} /> Multi-Chip
+									<Share2 className="text-hot-orange" size={24} /> Multi-Chip
 									Architecture
 								</h3>
 								<p className="mb-6 text-muted-foreground">
@@ -249,7 +254,7 @@ export default function MI300XPage() {
 
 							<div>
 								<h3 className="mb-4 flex items-center gap-2 font-bold text-xl">
-									<Server className="text-orange-700" size={24} /> Coherent Shared
+									<Server className="text-hot-orange" size={24} /> Coherent Shared
 									Memory
 								</h3>
 								<p className="mb-6 text-muted-foreground">
@@ -298,7 +303,7 @@ export default function MI300XPage() {
 						Platform, and the AMD ROCm™ software platform, visit AMD.com/INSTINCT.
 					</p>
 					<AppLink
-						className="inline-flex items-center font-bold text-orange-700 hover:text-orange-800 hover:underline"
+						className="inline-flex items-center font-bold text-hot-orange hover:underline hover:opacity-80"
 						href="/quick-start"
 					>
 						Ready to deploy? Get started now <ArrowRight className="ml-2" size={16} />

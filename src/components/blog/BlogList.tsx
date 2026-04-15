@@ -20,7 +20,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 				return (
 					<AppLink
 						className={cn(
-							'group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg dark:hover:border-arctic-blue/50',
+							'group flex h-full flex-col overflow-hidden rounded-lg border bg-card transition-all hover:shadow-lg dark:hover:border-hot-orange/50',
 							isLatest &&
 								'border-hot-orange bg-hot-orange/5 shadow-hot-orange/10 shadow-lg hover:border-hot-orange/70'
 						)}
@@ -48,7 +48,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 						<div className="flex flex-1 flex-col p-6">
 							<div className="mb-3 flex items-center gap-2 text-muted-foreground text-xs">
 								{isLatest ? (
-									<span className="rounded-full bg-orange-700 px-2 py-1 font-semibold text-[10px] text-white uppercase tracking-[0.2em]">
+									<span className="rounded-full bg-hot-orange px-2 py-1 font-semibold text-[10px] text-white uppercase tracking-[0.2em]">
 										Latest
 									</span>
 								) : null}
@@ -58,7 +58,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
 								</time>
 							</div>
 
-							<h3 className="mb-2 line-clamp-2 font-bold text-xl transition-colors group-hover:text-arctic-blue">
+							<h3 className="mb-2 line-clamp-2 font-bold text-xl transition-colors group-hover:text-hot-orange">
 								{post.title}
 							</h3>
 

@@ -96,13 +96,13 @@ export default function ClusterPage() {
 			<div className="relative border-border border-b bg-muted/20">
 				<div className="container mx-auto max-w-6xl px-6 py-32 text-center">
 					<div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 font-bold text-foreground text-xs uppercase tracking-wider shadow-sm">
-						<Briefcase className="text-arctic-blue" size={14} />
+						<Briefcase className="text-hot-orange" size={14} />
 						Design & Deploy
 					</div>
 
 					<h1 className="mb-8 font-black text-5xl text-foreground leading-tight tracking-tighter md:text-7xl">
 						Unlock the Full Potential of <br className="hidden md:block" />
-						<span className="text-arctic-blue">AI & HPC</span>
+						<span className="text-hot-orange">AI & HPC</span>
 					</h1>
 
 					{/* Cluster Photo */}
@@ -148,12 +148,12 @@ export default function ClusterPage() {
 				<div className="grid grid-cols-1 gap-12 md:grid-cols-2">
 					{clusters.map((item) => (
 						<div
-							className="group rounded-3xl border border-border bg-card p-10 shadow-sm transition-all hover:border-arctic-blue/40"
+							className="group rounded-3xl border border-border bg-card p-10 shadow-sm transition-all hover:border-hot-orange/40"
 							key={item.title}
 						>
-							<div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted transition-colors group-hover:bg-arctic-blue/10">
+							<div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted transition-colors group-hover:bg-hot-orange/10">
 								<item.icon
-									className="text-muted-foreground group-hover:text-arctic-blue"
+									className="text-muted-foreground group-hover:text-hot-orange"
 									size={32}
 								/>
 							</div>
@@ -203,7 +203,7 @@ export default function ClusterPage() {
 					<div className="lg:w-1/3">
 						<h2 className="mb-6 font-black text-4xl text-foreground leading-tight">
 							Consulting & <br />
-							<span className="text-arctic-blue">Custom Deployments</span>
+							<span className="text-hot-orange">Custom Deployments</span>
 						</h2>
 						<p className="mb-8 text-muted-foreground text-xl">
 							Our consulting services go beyond simple deployment. With us, you get
@@ -218,7 +218,7 @@ export default function ClusterPage() {
 								deploy.
 							</p>
 							<AppLink
-								className="flex items-center gap-1 font-bold text-arctic-blue transition-colors hover:text-foreground"
+								className="flex items-center gap-1 font-bold text-hot-orange transition-colors hover:text-foreground"
 								href="/contact"
 							>
 								Talk to an Architect <ArrowRight size={16} />
@@ -252,7 +252,7 @@ export default function ClusterPage() {
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
 					{testimonials.map((t) => (
 						<div className="relative rounded-4xl bg-muted/50 p-8" key={t.text}>
-							<MessageSquare className="absolute top-8 right-8 h-12 w-12 text-arctic-blue/20" />
+							<MessageSquare className="absolute top-8 right-8 h-12 w-12 text-hot-orange/20" />
 							<p className="mb-6 font-medium text-foreground text-lg italic leading-relaxed">
 								"{t.text}"
 							</p>

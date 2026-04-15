@@ -128,7 +128,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 					<div className="mb-6 flex flex-wrap gap-2">
 						{post.tags?.map((tag: string) => (
 							<span
-								className="rounded-full border border-arctic-blue/20 bg-arctic-blue/10 px-3 py-1 font-bold text-arctic-blue text-xs uppercase tracking-wider backdrop-blur-sm"
+								className="rounded-full border border-hot-orange/20 bg-hot-orange/10 px-3 py-1 font-bold text-hot-orange text-xs uppercase tracking-wider backdrop-blur-sm"
 								key={tag}
 							>
 								{tag}
@@ -142,7 +142,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
 					<div className="flex flex-wrap items-center gap-6 font-medium text-muted-foreground">
 						<div className="flex items-center gap-2">
-							<Calendar className="text-arctic-blue" size={18} />
+							<Calendar className="text-hot-orange" size={18} />
 							<time dateTime={post.date}>{prettyDate}</time>
 						</div>
 						{post.author ? (
@@ -151,7 +151,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 									<span>By:</span>
 									{post.authorProfile ? (
 										<a
-											className="font-semibold text-foreground underline-offset-2 hover:text-arctic-blue hover:underline"
+											className="font-semibold text-foreground underline-offset-2 hover:text-hot-orange hover:underline"
 											href="#about-the-author"
 										>
 											{post.author}
@@ -170,7 +170,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
 			<article className="container relative z-20 mx-auto -mt-10 max-w-6xl px-6">
 				<div className="rounded-2xl border border-border bg-card p-8 shadow-xl md:p-12">
-					<div className="prose prose-lg max-w-none prose-img:rounded-lg prose-a:text-arctic-blue prose-blockquote:text-muted-foreground prose-code:text-arctic-blue prose-headings:text-foreground prose-strong:text-foreground text-foreground leading-relaxed prose-img:shadow-md">
+					<div className="prose prose-lg max-w-none prose-img:rounded-lg prose-a:text-hot-orange prose-blockquote:text-muted-foreground prose-code:text-hot-orange prose-headings:text-foreground prose-strong:text-foreground text-foreground leading-relaxed prose-img:shadow-md">
 						<BlogContent
 							authorProfile={post.authorProfile}
 							contentHtml={post.contentHtml}
@@ -182,7 +182,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 				<div className="mt-16 border-border border-t pt-16 text-center">
 					<h3 className="mb-6 font-bold text-2xl">More from Hot Aisle</h3>
 					<AppLink
-						className="inline-flex rounded-full border border-border bg-muted px-8 py-3 font-bold text-foreground transition-all hover:border-arctic-blue/30 hover:bg-muted/80"
+						className="inline-flex rounded-full border border-border bg-muted px-8 py-3 font-bold text-foreground transition-all hover:border-hot-orange/30 hover:bg-muted/80"
 						href="/blog"
 					>
 						Read More Articles

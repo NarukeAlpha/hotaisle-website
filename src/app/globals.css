@@ -89,7 +89,6 @@
 	--radius-lg: calc(var(--radius) + 2px);
 
 	--color-hot-orange: var(--hot-orange);
-	--color-arctic-blue: var(--hot-orange); /* Backward compatibility alias */
 }
 
 html {
@@ -151,9 +150,9 @@ body {
 
 .prose a {
 	font-weight: 500;
-	color: var(--arctic-blue);
+	color: var(--hot-orange);
 	text-decoration: underline;
-	text-decoration-color: var(--arctic-blue);
+	text-decoration-color: var(--hot-orange);
 	text-underline-offset: 2px;
 	transition: all 0.2s ease;
 }
@@ -179,7 +178,7 @@ body {
 	padding: 0.2rem 0.4rem;
 	font-size: 0.875em;
 	font-weight: 600;
-	color: var(--arctic-blue);
+	color: var(--hot-orange);
 	background-color: var(--secondary);
 	border-radius: 0.25rem;
 }
@@ -237,7 +236,7 @@ body {
 	padding-left: 1.5rem;
 	font-style: italic;
 	color: var(--muted-foreground);
-	border-left-color: var(--arctic-blue);
+	border-left-color: var(--hot-orange);
 }
 
 .prose ul > li::marker {

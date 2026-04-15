@@ -11,6 +11,7 @@ import { createSitemapXml } from './generate_sitemap.ts';
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
+const PUBLIC_DIRECTORY = path.join(PROJECT_ROOT, 'public');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const STATIC_DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist-static');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
@@ -50,6 +51,8 @@ const exitCode = await new Promise<number>((resolve, reject) => {
 if (exitCode !== 0) {
 	throw new Error(`vinext build failed with exit code ${exitCode}`);
 }
+
+await syncPublicAssetsToClientOutput();
 
 await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
 	filter: (sourcePath: string) => !shouldExcludeFromStaticExport(sourcePath),
@@ -143,6 +146,27 @@ async function writeSitemapFiles(): Promise<void> {
 	for (const outputPath of outputPaths) {
 		await mkdir(path.dirname(outputPath), { recursive: true });
 		await writeFile(outputPath, sitemapXml, 'utf8');
+	}
+}
+
+async function syncPublicAssetsToClientOutput(): Promise<void> {
+	if (!(await directoryExists(PUBLIC_DIRECTORY))) {
+		return;
+	}
+
+	await cp(PUBLIC_DIRECTORY, CLIENT_DIRECTORY, {
+		filter: (sourcePath: string) => !shouldExcludeFromStaticExport(sourcePath),
+		force: true,
+		recursive: true,
+	});
+}
+
+async function directoryExists(directoryPath: string): Promise<boolean> {
+	try {
+		const directoryStats = await readdir(directoryPath, { withFileTypes: true });
+		return Array.isArray(directoryStats);
+	} catch {
+		return false;
 	}
 }
 

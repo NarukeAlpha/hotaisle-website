@@ -17,8 +17,8 @@ export default function PricingPage() {
 	return (
 		<div className="animation-fade-in min-h-screen bg-background pb-20 text-foreground">
 			{/* MI355x Announcement Banner */}
-			<div className="animate-pulse bg-linear-to-r from-orange-500 to-red-600 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
-				🔥 We are now accepting MI355x reservations!{' '}
+			<div className="animate-pulse bg-linear-to-r from-hot-orange to-red-600 px-4 py-3 text-center font-bold text-sm text-white md:text-base">
+				🔥 We are now accepting MI355x reservations!
 				<AppLink className="ml-2 underline hover:text-white/90" href="/mi355x">
 					Reserve now
 				</AppLink>
@@ -27,11 +27,11 @@ export default function PricingPage() {
 			{/* Hero Header */}
 			<div className="relative overflow-hidden border-border border-b px-6 py-24 text-center">
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-neutral-200 via-background to-background opacity-80 dark:from-neutral-900 dark:via-neutral-950 dark:to-neutral-950" />
-				<div className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full bg-arctic-blue/10 blur-3xl" />
+				<div className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full bg-hot-orange/10 blur-3xl" />
 
 				<div className="relative z-10 mx-auto max-w-4xl">
 					<h1 className="mb-6 font-black text-5xl tracking-tighter md:text-7xl">
-						Transparent <span className="text-arctic-blue">Pricing</span>
+						Transparent <span className="text-hot-orange">Pricing</span>
 					</h1>
 					<p className="mx-auto max-w-2xl text-muted-foreground text-xl">
 						<span className="font-bold text-foreground">$1.99/GPU/hr</span>.
@@ -45,11 +45,11 @@ export default function PricingPage() {
 				{/* ... (Existing Pricing Grid) ... */}
 				<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
 					{/* Small Tier */}
-					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-arctic-blue/50 hover:shadow-2xl">
+					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-hot-orange/50 hover:shadow-2xl">
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Small</h3>
-							<div className="mb-1 font-black text-4xl text-arctic-blue">
-								1x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>1x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>
@@ -87,14 +87,14 @@ export default function PricingPage() {
 					</div>
 
 					{/* Medium Tier */}
-					<div className="relative flex flex-col rounded-2xl border-2 border-arctic-blue bg-card p-8 shadow-[0_0_40px_rgba(56,189,248,0.1)] backdrop-blur-md transition-all hover:-translate-y-2 hover:transform">
-						<div className="absolute top-0 right-0 rounded-tr-lg rounded-bl-lg bg-arctic-blue px-3 py-1 font-bold text-white text-xs dark:text-neutral-900">
+					<div className="relative flex flex-col rounded-2xl border-2 border-hot-orange bg-card p-8 shadow-[0_0_40px] shadow-hot-orange/10 backdrop-blur-md transition-all hover:-translate-y-2 hover:transform">
+						<div className="absolute top-0 right-0 rounded-tr-lg rounded-bl-lg bg-hot-orange px-3 py-1 font-bold text-white text-xs">
 							POPULAR
 						</div>
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Medium</h3>
-							<div className="mb-1 font-black text-4xl text-arctic-blue">
-								2-4x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>2-4x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>
@@ -105,26 +105,26 @@ export default function PricingPage() {
 						</div>
 						<ul className="mb-8 flex-1 space-y-4">
 							<li className="flex items-start text-muted-foreground">
-								<Check className="mr-3 h-5 w-5 shrink-0 text-arctic-blue" />
+								<Check className="mr-3 h-5 w-5 shrink-0 text-hot-orange" />
 								<span>
 									<strong className="text-foreground">384GB - 768GB</strong> HBM3
 								</span>
 							</li>
 							<li className="flex items-start text-muted-foreground">
-								<Check className="mr-3 h-5 w-5 shrink-0 text-arctic-blue" />
+								<Check className="mr-3 h-5 w-5 shrink-0 text-hot-orange" />
 								<span>26 - 52 CPU Cores</span>
 							</li>
 							<li className="flex items-start text-muted-foreground">
-								<Check className="mr-3 h-5 w-5 shrink-0 text-arctic-blue" />
+								<Check className="mr-3 h-5 w-5 shrink-0 text-hot-orange" />
 								<span>448GB - 896GB RAM</span>
 							</li>
 							<li className="flex items-start text-muted-foreground">
-								<Check className="mr-3 h-5 w-5 shrink-0 text-arctic-blue" />
+								<Check className="mr-3 h-5 w-5 shrink-0 text-hot-orange" />
 								<span>12TB NVMe Storage</span>
 							</li>
 						</ul>
 						<AppLink
-							className="w-full rounded-lg bg-arctic-blue py-3 text-center font-bold text-white shadow-arctic-blue/20 shadow-lg transition-colors hover:bg-arctic-blue/90 dark:text-neutral-900"
+							className="w-full rounded-lg bg-hot-orange py-3 text-center font-bold text-white shadow-hot-orange/20 shadow-lg transition-opacity hover:opacity-90"
 							href="/quick-start"
 						>
 							Deploy Medium
@@ -132,11 +132,11 @@ export default function PricingPage() {
 					</div>
 
 					{/* Large Tier */}
-					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-arctic-blue/50 hover:shadow-2xl">
+					<div className="flex flex-col rounded-2xl border border-border bg-card/90 p-8 backdrop-blur-sm transition-all hover:-translate-y-1 hover:transform hover:border-hot-orange/50 hover:shadow-2xl">
 						<div className="mb-6">
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Large</h3>
-							<div className="mb-1 font-black text-4xl text-arctic-blue">
-								8x{' '}
+							<div className="mb-1 inline-flex items-baseline gap-1 font-black text-4xl text-hot-orange">
+								<span>8x</span>
 								<span className="font-normal text-lg text-muted-foreground">
 									MI300x
 								</span>
@@ -178,7 +178,7 @@ export default function PricingPage() {
 			{/* Features List */}
 			<div className="container mx-auto mt-24 px-6">
 				<h2 className="mb-16 text-center font-black text-4xl tracking-tight md:text-5xl">
-					All Plans <span className="text-arctic-blue">Include</span>
+					All Plans <span className="text-hot-orange">Include</span>
 				</h2>
 				<div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{[
@@ -217,7 +217,7 @@ export default function PricingPage() {
 							className="flex items-start rounded-lg border border-transparent p-4 transition-colors hover:border-border hover:bg-muted/50"
 							key={feature.title}
 						>
-							<feature.icon className="mr-4 h-6 w-6 shrink-0 text-arctic-blue" />
+							<feature.icon className="mr-4 h-6 w-6 shrink-0 text-hot-orange" />
 							<div>
 								<h4 className="mb-1 font-bold text-foreground">{feature.title}</h4>
 								<p className="text-muted-foreground text-sm">{feature.desc}</p>

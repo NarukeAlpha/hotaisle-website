@@ -21,14 +21,14 @@ export default function AboutPage() {
 			<div className="relative border-border border-b bg-muted/20">
 				<div className="container mx-auto max-w-5xl px-6 py-20 text-center">
 					<div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 font-bold text-foreground text-xs uppercase tracking-wider shadow-sm">
-						<Users className="text-arctic-blue" size={14} />
+						<Users className="text-hot-orange" size={14} />
 						Our Story
 					</div>
 
 					<h1 className="mb-8 font-black text-4xl text-foreground tracking-tighter md:text-6xl">
 						Thanks for stopping by.
 					</h1>
-					<h1 className="text-3xl text-arctic-blue">Nice to meet you.</h1>
+					<h1 className="text-3xl text-hot-orange">Nice to meet you.</h1>
 				</div>
 			</div>
 
@@ -57,7 +57,7 @@ export default function AboutPage() {
 								/>
 							</div>
 							<h3 className="mb-2 font-bold text-2xl text-foreground">Jon Stevens</h3>
-							<div className="mb-6 font-bold text-arctic-blue text-sm uppercase tracking-wider">
+							<div className="mb-6 font-bold text-hot-orange text-sm uppercase tracking-wider">
 								Founder / CEO
 							</div>
 
@@ -86,7 +86,7 @@ export default function AboutPage() {
 							<h3 className="mb-2 font-bold text-2xl text-foreground">
 								Clint Armstrong
 							</h3>
-							<div className="mb-6 font-bold text-arctic-blue text-sm uppercase tracking-wider">
+							<div className="mb-6 font-bold text-hot-orange text-sm uppercase tracking-wider">
 								Founder / Head of Engineering
 							</div>
 
@@ -107,10 +107,10 @@ export default function AboutPage() {
 			{/* The Origin Story */}
 			<div className="container mx-auto max-w-5xl px-6 py-24">
 				<div className="relative overflow-hidden rounded-3xl border border-border bg-card p-10 shadow-lg md:p-16">
-					<div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-arctic-blue/5 blur-[100px]" />
+					<div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-hot-orange/5 blur-[100px]" />
 
 					<div className="relative z-10">
-						<div className="mb-6 flex items-center gap-3 text-arctic-blue">
+						<div className="mb-6 flex items-center gap-3 text-hot-orange">
 							<Lightbulb size={24} />
 							<h2 className="font-bold text-2xl uppercase tracking-widest">
 								The Origin
@@ -133,7 +133,7 @@ export default function AboutPage() {
 								common terms in a data center and "Hot Aisle" dawned on him as a
 								fantastic name.
 							</p>
-							<blockquote className="my-8 border-arctic-blue border-l-4 py-2 pl-6 font-medium text-foreground text-xl italic">
+							<blockquote className="my-8 border-hot-orange border-l-4 py-2 pl-6 font-medium text-foreground text-xl italic">
 								"While 'Cold Aisle' was another obvious choice, we felt that 'Hot
 								Aisle' better represents the high-performance, high-heat compute
 								services we offer."

@@ -39,7 +39,7 @@ const fabric = [
 		speed: '100 Gbps',
 		desc: 'Broadcom 57504 Quad Port 10/25GbE Adapters with Dell PowerSwitch Z9664F at 100G.',
 		icon: Activity,
-		color: 'text-orange-700',
+		color: 'text-hot-orange',
 		links: [
 			{ label: 'Broadcom 57504', url: 'https://docs.broadcom.com/doc/957504-N425G-DS' },
 			{
@@ -75,12 +75,12 @@ export default function NetworkingPage() {
 				<div className="pointer-events-none absolute top-0 right-0 h-200 w-200 rounded-full bg-hot-orange/5 blur-[120px]" />
 				<div className="container relative z-10 mx-auto max-w-6xl">
 					<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 font-bold text-foreground text-xs tracking-wider">
-						<Network className="text-arctic-blue" size={14} />
+						<Network className="text-hot-orange" size={14} />
 						HOT AISLE BGP AS: 21566
 					</div>
 
 					<h1 className="mb-8 font-black text-5xl text-foreground tracking-tighter md:text-7xl">
-						Custom <span className="text-arctic-blue">Networking Fabric</span>
+						Custom <span className="text-hot-orange">Networking Fabric</span>
 					</h1>
 
 					<p className="mb-6 max-w-4xl font-light text-muted-foreground text-xl leading-relaxed md:text-2xl">
@@ -94,7 +94,7 @@ export default function NetworkingPage() {
 							<CheckCircle /> IPv6 First
 						</span>
 						<a
-							className="flex items-center gap-2 underline decoration-dotted underline-offset-4 transition-colors hover:text-arctic-blue"
+							className="flex items-center gap-2 underline decoration-dotted underline-offset-4 transition-colors hover:text-hot-orange"
 							href="https://www.techtarget.com/searchnetworking/definition/virtual-routing-and-forwarding-VRF"
 							rel="noopener"
 							target="_blank"
@@ -102,7 +102,7 @@ export default function NetworkingPage() {
 							<CheckCircle /> VRF Networking
 						</a>
 						<a
-							className="flex items-center gap-2 underline decoration-dotted underline-offset-4 transition-colors hover:text-arctic-blue"
+							className="flex items-center gap-2 underline decoration-dotted underline-offset-4 transition-colors hover:text-hot-orange"
 							href="https://en.wikipedia.org/wiki/RDMA_over_Converged_Ethernet"
 							rel="noopener"
 							target="_blank"
@@ -118,12 +118,12 @@ export default function NetworkingPage() {
 				<div className="grid grid-cols-1 gap-8">
 					{fabric.map((item) => (
 						<div
-							className="group rounded-3xl border border-border bg-card p-8 shadow-sm transition-all hover:border-arctic-blue/40"
+							className="group rounded-3xl border border-border bg-card p-8 shadow-sm transition-all hover:border-hot-orange/40"
 							key={item.desc}
 						>
 							<div className="flex flex-col items-start gap-8 md:flex-row md:items-center">
 								<div
-									className={`rounded-2xl bg-muted p-4 transition-colors group-hover:bg-arctic-blue/10 ${item.color}`}
+									className={`rounded-2xl bg-muted p-4 transition-colors group-hover:bg-hot-orange/10 ${item.color}`}
 								>
 									<item.icon size={48} strokeWidth={1.5} />
 								</div>
@@ -146,7 +146,7 @@ export default function NetworkingPage() {
 									<div className="flex flex-wrap gap-4">
 										{item.links.map((link) => (
 											<a
-												className="flex items-center gap-1 font-bold text-arctic-blue text-sm transition-colors hover:text-foreground"
+												className="flex items-center gap-1 font-bold text-hot-orange text-sm transition-colors hover:text-foreground"
 												href={link.url}
 												key={link.url}
 												rel="noopener noreferrer"
@@ -193,11 +193,11 @@ export default function NetworkingPage() {
 							<strong className="text-foreground">Note:</strong>
 							<span>
 								Public IPv4/v6 address is included on all baremetal and VM servers.
-								You may need to edit{' '}
-								<code className="rounded bg-muted px-1 py-0.5 text-arctic-blue">
+								<span> You may need to edit </span>
+								<code className="rounded bg-muted px-1 py-0.5 text-hot-orange">
 									ufw config
-								</code>{' '}
-								to open ports, which we can help with.
+								</code>
+								<span> to open ports, which we can help with.</span>
 							</span>
 						</span>
 					</div>
@@ -210,8 +210,12 @@ export default function NetworkingPage() {
 						<h3 className="font-bold text-2xl">Mission Critical Uptime</h3>
 					</div>
 					<p className="mb-6 text-muted-foreground">
-						Uptime is critical for you, and for us. All of our switches are backed by a{' '}
-						<strong>Dell ProSupport Next Business Day warranty</strong>.
+						<span>
+							Uptime is critical for you, and for us. All of our switches are backed
+							by a
+						</span>
+						<strong className="ml-1">Dell ProSupport Next Business Day warranty</strong>
+						.
 					</p>
 					<ul className="space-y-3">
 						<li className="flex items-center gap-3 rounded-xl border border-border bg-background p-3 text-foreground text-sm">
