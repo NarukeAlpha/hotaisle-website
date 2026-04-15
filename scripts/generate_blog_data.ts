@@ -16,7 +16,6 @@ const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_CONTENT_DIR = path.join(CONTENT_DIR, 'blog');
 const BLOG_ASSET_SOURCE_DIR = path.join(BLOG_CONTENT_DIR, 'assets');
 const BLOG_AUTHORS_PATH = path.join(BLOG_CONTENT_DIR, '0-authors.json');
-const PUBLIC_BLOG_ASSETS_DIR = path.join(process.cwd(), 'public', 'assets', 'blog');
 const GENERATED_OUTPUT_PATH = path.join(process.cwd(), 'src', 'generated', 'blog-data.ts');
 const BLOG_ASSET_PREFIX = '/assets/blog/';
 const FILE_SUFFIX_REGEX = /\s[0-9a-f]{32}$/i;
@@ -577,13 +576,46 @@ async function renderMarkdown(markdown: string): Promise<string> {
 	return processedContent.toString();
 }
 
-function toPublicAssetPath(assetUrl: string): string | undefined {
+function toBlogAssetPath(assetUrl: string): string | undefined {
 	if (!assetUrl.startsWith(BLOG_ASSET_PREFIX)) {
 		return undefined;
 	}
 
 	const relativeAssetPath = assetUrl.slice(BLOG_ASSET_PREFIX.length);
-	return path.join(PUBLIC_BLOG_ASSETS_DIR, relativeAssetPath);
+	const directPath = path.join(BLOG_ASSET_SOURCE_DIR, relativeAssetPath);
+	if (fs.existsSync(directPath)) {
+		return directPath;
+	}
+
+	return resolveSluggedAssetPath(relativeAssetPath);
+}
+
+function resolveSluggedAssetPath(relativeAssetPath: string): string | undefined {
+	const pathSegments = relativeAssetPath
+		.split('/')
+		.map((segment) => segment.trim())
+		.filter(Boolean);
+	let currentDirectory = BLOG_ASSET_SOURCE_DIR;
+
+	for (const pathSegment of pathSegments) {
+		const candidatePath = path.join(currentDirectory, pathSegment);
+		if (fs.existsSync(candidatePath)) {
+			currentDirectory = candidatePath;
+			continue;
+		}
+
+		const directoryEntries = fs.readdirSync(currentDirectory, { withFileTypes: true });
+		const matchingEntry = directoryEntries.find(
+			(directoryEntry) => toSlugSegment(directoryEntry.name) === pathSegment
+		);
+		if (!matchingEntry) {
+			return undefined;
+		}
+
+		currentDirectory = path.join(currentDirectory, matchingEntry.name);
+	}
+
+	return currentDirectory;
 }
 
 async function getBlogImageMetadata(assetUrl: string): Promise<BlogImageMetadata | null> {
@@ -592,13 +624,13 @@ async function getBlogImageMetadata(assetUrl: string): Promise<BlogImageMetadata
 		return cachedMetadata;
 	}
 
-	const publicAssetPath = toPublicAssetPath(assetUrl);
-	if (!(publicAssetPath && fs.existsSync(publicAssetPath))) {
+	const blogAssetPath = toBlogAssetPath(assetUrl);
+	if (!(blogAssetPath && fs.existsSync(blogAssetPath))) {
 		blogImageMetadataByUrl.set(assetUrl, null);
 		return null;
 	}
 
-	const metadata = await sharp(publicAssetPath).metadata();
+	const metadata = await sharp(blogAssetPath).metadata();
 	const { width, height } = metadata;
 	if (!(width && height)) {
 		blogImageMetadataByUrl.set(assetUrl, null);
@@ -684,55 +716,6 @@ async function enhanceRenderedHtml(html: string): Promise<string> {
 	return enhancedHtml;
 }
 
-async function copyBlogAssets(
-	sourceDirectory: string,
-	destinationDirectory: string
-): Promise<void> {
-	if (!fs.existsSync(sourceDirectory)) {
-		return;
-	}
-
-	await fs.promises.mkdir(destinationDirectory, { recursive: true });
-	const entries = await fs.promises.readdir(sourceDirectory, { withFileTypes: true });
-
-	for (const entry of entries) {
-		const sourcePath = path.join(sourceDirectory, entry.name);
-		const encodedName = toSlugSegment(entry.name);
-		const destinationPath = path.join(destinationDirectory, encodedName);
-
-		if (entry.isDirectory()) {
-			await copyBlogAssets(sourcePath, destinationPath);
-			continue;
-		}
-
-		if (entry.name.endsWith('.md')) {
-			continue;
-		}
-
-		await fs.promises.mkdir(path.dirname(destinationPath), { recursive: true });
-
-		const [sourceStats, destinationStats] = await Promise.all([
-			fs.promises.stat(sourcePath),
-			fs.promises.stat(destinationPath).catch(() => null),
-		]);
-		const shouldSkipCopy =
-			destinationStats &&
-			destinationStats.size === sourceStats.size &&
-			destinationStats.mtimeMs >= sourceStats.mtimeMs;
-
-		if (shouldSkipCopy) {
-			continue;
-		}
-
-		await fs.promises.copyFile(sourcePath, destinationPath);
-		await fs.promises.utimes(destinationPath, sourceStats.atime, sourceStats.mtime);
-	}
-}
-
-async function resetBlogAssetOutputDirectory(): Promise<void> {
-	await fs.promises.mkdir(PUBLIC_BLOG_ASSETS_DIR, { recursive: true });
-}
-
 async function generateBlogData(): Promise<void> {
 	const posts: RawBlogPost[] = [];
 	const fileStemToSlug = new Map<string, string>();
@@ -753,9 +736,6 @@ async function generateBlogData(): Promise<void> {
 			fileStemToSlug.set(normalizeFileStem(fileName).toLowerCase(), parsed.slug);
 		}
 	}
-
-	await resetBlogAssetOutputDirectory();
-	await copyBlogAssets(BLOG_ASSET_SOURCE_DIR, PUBLIC_BLOG_ASSETS_DIR);
 
 	const renderedPosts: GeneratedBlogPost[] = [];
 	for (const post of posts) {
@@ -827,7 +807,7 @@ export const BLOG_POSTS: GeneratedBlogPost[] = ${JSON.stringify(renderedPosts, n
 
 try {
 	await generateBlogData();
-	console.log('Generated blog data and copied blog assets.');
+	console.log('Generated blog data.');
 } catch (error) {
 	console.error('Failed to generate blog data.');
 	throw error;

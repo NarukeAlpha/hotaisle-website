@@ -4,7 +4,10 @@ import { availableParallelism } from 'node:os';
 import path from 'node:path';
 import sharp from 'sharp';
 
+const PROJECT_ROOT = path.join(import.meta.dirname, '..');
+const BLOG_ASSET_SOURCE_DIRECTORY = path.join(PROJECT_ROOT, 'content', 'blog', 'assets');
 const PUBLIC_DIRECTORY = path.join(import.meta.dirname, '..', 'public');
+const IMAGE_SOURCE_DIRECTORIES = [BLOG_ASSET_SOURCE_DIRECTORY, PUBLIC_DIRECTORY] as const;
 const SOURCE_IMAGE_REGEX = /\.(png|jpe?g)$/i;
 const WEBP_EXTENSION_REGEX = /\.(png|jpe?g)$/i;
 const AVIF_EXTENSION_REGEX = /\.(jpe?g)$/i;
@@ -69,12 +72,22 @@ async function createAvifBuffer(sourcePath: string): Promise<Buffer<ArrayBufferL
 	return await sharp(sourcePath).avif({ effort: 8, quality: 55 }).toBuffer();
 }
 
-async function generateImageVariants(): Promise<void> {
-	if (!fs.existsSync(PUBLIC_DIRECTORY)) {
-		return;
+async function collectImageVariantTargets(): Promise<string[]> {
+	const rasterAssets: string[] = [];
+
+	for (const directory of IMAGE_SOURCE_DIRECTORIES) {
+		if (!fs.existsSync(directory)) {
+			continue;
+		}
+
+		rasterAssets.push(...(await collectRasterAssets(directory)));
 	}
 
-	const rasterAssets = await collectRasterAssets(PUBLIC_DIRECTORY);
+	return rasterAssets;
+}
+
+async function generateImageVariants(): Promise<void> {
+	const rasterAssets = await collectImageVariantTargets();
 	let nextAssetIndex = 0;
 
 	async function processNextAsset(): Promise<void> {

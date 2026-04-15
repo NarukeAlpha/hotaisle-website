@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process';
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readdir, readFile, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { minify as minifyWithRolldown } from 'rolldown/utils';
@@ -11,10 +11,12 @@ import { createSitemapXml } from './generate_sitemap.ts';
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
 const HTML_CLOSE_TAG = '</html>';
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
+const BLOG_ASSET_SOURCE_DIRECTORY = path.join(PROJECT_ROOT, 'content', 'blog', 'assets');
 const PUBLIC_DIRECTORY = path.join(PROJECT_ROOT, 'public');
 const DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist');
 const STATIC_DIST_DIRECTORY = path.join(PROJECT_ROOT, 'dist-static');
 const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
+const CLIENT_BLOG_ASSET_DIRECTORY = path.join(CLIENT_DIRECTORY, 'assets', 'blog');
 const SITEMAP_FILE_NAME = 'sitemap.xml';
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
 const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
@@ -29,6 +31,9 @@ const STYLESHEET_LINK_REGEX = /<link rel="stylesheet" href="([^"]+)"([^>]*)>/g;
 const STYLESHEET_PRELOAD_REGEX = /<link rel="preload" href="([^"]+\.css)" as="style"[^>]*\/?>/g;
 const INDEX_HTML_SUFFIX_REGEX = /\/index\.html$/;
 const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
+const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
+const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
+const EDGE_DASHES_REGEX = /^-+|-+$/g;
 interface CssSegment {
 	isString: boolean;
 	value: string;
@@ -53,6 +58,7 @@ if (exitCode !== 0) {
 }
 
 await syncPublicAssetsToClientOutput();
+await syncBlogAssetsToClientOutput();
 
 await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
 	filter: (sourcePath: string) => !shouldExcludeFromStaticExport(sourcePath),
@@ -138,7 +144,6 @@ async function normalizeExportedHtml(html: string, routePath: string): Promise<s
 async function writeSitemapFiles(): Promise<void> {
 	const sitemapXml = createSitemapXml();
 	const outputPaths = [
-		path.join(DIST_DIRECTORY, SITEMAP_FILE_NAME),
 		path.join(CLIENT_DIRECTORY, SITEMAP_FILE_NAME),
 		path.join(STATIC_DIST_DIRECTORY, SITEMAP_FILE_NAME),
 	];
@@ -161,12 +166,72 @@ async function syncPublicAssetsToClientOutput(): Promise<void> {
 	});
 }
 
+async function syncBlogAssetsToClientOutput(): Promise<void> {
+	if (!(await directoryExists(BLOG_ASSET_SOURCE_DIRECTORY))) {
+		return;
+	}
+
+	await copyBlogAssetsToOutput(BLOG_ASSET_SOURCE_DIRECTORY, CLIENT_BLOG_ASSET_DIRECTORY);
+}
+
 async function directoryExists(directoryPath: string): Promise<boolean> {
 	try {
 		const directoryStats = await readdir(directoryPath, { withFileTypes: true });
 		return Array.isArray(directoryStats);
 	} catch {
 		return false;
+	}
+}
+
+function toSlugSegment(segment: string): string {
+	const parsed = path.parse(segment);
+	const normalizedBaseName = (parsed.name || parsed.base)
+		.normalize('NFKD')
+		.replace(UNICODE_DIACRITICS_REGEX, '')
+		.toLowerCase()
+		.replace(NON_ALPHANUMERIC_REGEX, '-')
+		.replace(EDGE_DASHES_REGEX, '');
+	const safeBaseName = normalizedBaseName || 'file';
+	const normalizedExtension = parsed.ext.toLowerCase();
+
+	return normalizedExtension ? `${safeBaseName}${normalizedExtension}` : safeBaseName;
+}
+
+async function copyBlogAssetsToOutput(
+	sourceDirectory: string,
+	destinationDirectory: string
+): Promise<void> {
+	await mkdir(destinationDirectory, { recursive: true });
+	const directoryEntries = await readdir(sourceDirectory, { withFileTypes: true });
+
+	for (const directoryEntry of directoryEntries) {
+		const sourcePath = path.join(sourceDirectory, directoryEntry.name);
+		const destinationPath = path.join(destinationDirectory, toSlugSegment(directoryEntry.name));
+
+		if (directoryEntry.isDirectory()) {
+			await copyBlogAssetsToOutput(sourcePath, destinationPath);
+			continue;
+		}
+
+		if (!directoryEntry.isFile()) {
+			continue;
+		}
+
+		const [sourceStats, destinationStats] = await Promise.all([
+			stat(sourcePath),
+			stat(destinationPath).catch(() => null),
+		]);
+		const shouldSkipCopy =
+			destinationStats &&
+			destinationStats.size === sourceStats.size &&
+			destinationStats.mtimeMs >= sourceStats.mtimeMs;
+
+		if (shouldSkipCopy) {
+			continue;
+		}
+
+		await cp(sourcePath, destinationPath, { force: true });
+		await utimes(destinationPath, sourceStats.atime, sourceStats.mtime);
 	}
 }
 
