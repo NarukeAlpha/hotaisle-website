@@ -16,6 +16,10 @@ import {
 } from 'lucide-react';
 import { AppLink } from '@/components/AppLink.tsx';
 
+const LOGO_ALT = 'Hot Aisle';
+const LOGO_HEIGHT = 32;
+const LOGO_SRC = '/hotaisle-logo.svg';
+const LOGO_WIDTH = 104;
 const PRIMARY_NAV = [
 	{ href: '/quick-start', label: 'Quick Start' },
 	{ href: '/pricing', label: 'Pricing' },
@@ -51,11 +55,12 @@ export function Navbar() {
 					<div className="flex items-center gap-8">
 						<AppLink aria-label="Home" href="/">
 							<img
-								alt="Hot Aisle"
+								alt={LOGO_ALT}
 								className="h-8 w-auto object-contain"
-								height={32}
-								src="/hotaisle-logo.svg"
-								width={104}
+								fetchPriority="high"
+								height={LOGO_HEIGHT}
+								src={LOGO_SRC}
+								width={LOGO_WIDTH}
 							/>
 						</AppLink>
 
@@ -126,11 +131,11 @@ export function Navbar() {
 				<div className="flex h-full w-full flex-col bg-card">
 					<div className="flex h-16 items-center justify-between border-b px-4">
 						<img
-							alt="Hot Aisle"
+							alt={LOGO_ALT}
 							className="h-8 w-auto object-contain"
-							height={32}
-							src="/hotaisle-logo.svg"
-							width={104}
+							height={LOGO_HEIGHT}
+							src={LOGO_SRC}
+							width={LOGO_WIDTH}
 						/>
 						<button
 							aria-label="Close navigation menu"
