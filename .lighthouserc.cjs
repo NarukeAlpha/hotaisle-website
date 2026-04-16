@@ -2,7 +2,7 @@ const LIGHTHOUSE_MODE = process.env.LIGHTHOUSE_MODE ?? 'pr';
 const LOCAL_BASE_URL = 'http://localhost';
 const PRODUCTION_BASE_URL = 'https://hotaisle.xyz';
 const NUMBER_OF_RUNS = 3;
-const PAGE_PATHS = ['/', '/quick-start/', '/mi300x/'];
+const PAGE_PATHS = ['/', '/compute/', '/pricing/', '/quick-start/', '/mi300x/'];
 
 if (!['pr', 'prod'].includes(LIGHTHOUSE_MODE)) {
 	throw new Error(`Unsupported LIGHTHOUSE_MODE: ${LIGHTHOUSE_MODE}`);
