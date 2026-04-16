@@ -4,10 +4,17 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   check:
@@ -32,8 +39,9 @@ jobs:
       - name: Run checks
         run: bun run check
 
-  lighthouse:
-    name: lighthouse
+  lighthouse-pr:
+    name: lighthouse pr
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     env:
       LIGHTHOUSE_MODE: pr
@@ -74,3 +82,70 @@ jobs:
           path: .lighthouseci/pr
           if-no-files-found: ignore
           include-hidden-files: true
+
+  lighthouse-prod-pages:
+    name: lighthouse prod pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    env:
+      LIGHTHOUSE_MODE: prod
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Collect Lighthouse runs
+        run: bun run lighthouse:collect
+
+      - name: Assert Lighthouse thresholds
+        run: bun run lighthouse:assert
+
+      - name: Write Lighthouse reports
+        if: always()
+        run: bun run lighthouse:upload
+
+      - name: Build Lighthouse Pages index
+        if: always()
+        run: bun run lighthouse:pages
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-reports-prod
+          path: .lighthouseci/prod
+          if-no-files-found: ignore
+          include-hidden-files: true
+
+      - name: Configure GitHub Pages
+        if: always()
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .lighthouseci/prod
+
+      - name: Deploy GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v4

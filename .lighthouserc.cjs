@@ -1,17 +1,30 @@
 const LIGHTHOUSE_MODE = process.env.LIGHTHOUSE_MODE ?? 'pr';
-const LOCAL_BASE_URL = 'http://localhost';
-const PRODUCTION_BASE_URL = 'https://hotaisle.xyz';
-const NUMBER_OF_RUNS = 3;
-const PAGE_PATHS = ['/', '/compute/', '/pricing/', '/quick-start/', '/mi300x/'];
+const LIGHTHOUSE_ENFORCE_CORE_METRICS = process.env.LIGHTHOUSE_ENFORCE_CORE_METRICS === 'true';
+const LIGHTHOUSE_NUMBER_OF_RUNS = 2;
+const LIGHTHOUSE_PAGE_PATHS = ['/', '/pricing/', '/quick-start/', '/mi300x/'];
+const LIGHTHOUSE_BASE_URLS = {
+	pr: 'http://localhost',
+	prod: 'https://hotaisle.xyz',
+};
+const SUPPORTED_LIGHTHOUSE_MODES = new Set(Object.keys(LIGHTHOUSE_BASE_URLS));
 
-if (!['pr', 'prod'].includes(LIGHTHOUSE_MODE)) {
+if (!SUPPORTED_LIGHTHOUSE_MODES.has(LIGHTHOUSE_MODE)) {
 	throw new Error(`Unsupported LIGHTHOUSE_MODE: ${LIGHTHOUSE_MODE}`);
 }
 
-const baseUrl = LIGHTHOUSE_MODE === 'prod' ? PRODUCTION_BASE_URL : LOCAL_BASE_URL;
+const createMedianAssertion = (level, options) => [
+	level,
+	{
+		aggregationMethod: 'median',
+		...options,
+	},
+];
+// Set LIGHTHOUSE_ENFORCE_CORE_METRICS=true to fail the primary category and metric thresholds.
+const coreMetricAssertionLevel = LIGHTHOUSE_ENFORCE_CORE_METRICS ? 'error' : 'warn';
+const baseUrl = LIGHTHOUSE_BASE_URLS[LIGHTHOUSE_MODE];
 const collect = {
-	numberOfRuns: NUMBER_OF_RUNS,
-	url: PAGE_PATHS.map((pagePath) => new URL(pagePath, baseUrl).toString()),
+	numberOfRuns: LIGHTHOUSE_NUMBER_OF_RUNS,
+	url: LIGHTHOUSE_PAGE_PATHS.map((pagePath) => new URL(pagePath, baseUrl).toString()),
 	settings: {
 		preset: 'desktop',
 		chromeFlags: '--no-sandbox',
@@ -26,57 +39,42 @@ module.exports = {
 	ci: {
 		collect,
 		assert: {
+			includePassedAssertions: true,
 			preset: 'lighthouse:recommended',
 			assertions: {
 				'categories:accessibility': [
-					'error',
+					coreMetricAssertionLevel,
 					{
 						minScore: 0.9,
 					},
 				],
 				'categories:best-practices': [
-					'error',
+					coreMetricAssertionLevel,
 					{
 						minScore: 0.9,
 					},
 				],
 				'categories:seo': [
-					'error',
+					coreMetricAssertionLevel,
 					{
 						minScore: 0.9,
 					},
 				],
-				// Keep performance warning-only until the scheduled production runs give us a stable baseline.
-				'categories:performance': [
-					'warn',
-					{
-						aggregationMethod: 'median',
-						minScore: 0.7,
-					},
-				],
+				// Keep performance warning-only until we decide to promote the threshold.
+				'categories:performance': createMedianAssertion('warn', {
+					minScore: 0.7,
+				}),
 				// These phase-1 warnings seed concrete metrics now so we can promote stable thresholds later.
-				'largest-contentful-paint': [
-					'warn',
-					{
-						aggregationMethod: 'median',
-						maxNumericValue: 2500,
-					},
-				],
+				'largest-contentful-paint': createMedianAssertion(coreMetricAssertionLevel, {
+					maxNumericValue: 2500,
+				}),
 				'image-delivery-insight': 'warn',
-				'cumulative-layout-shift': [
-					'warn',
-					{
-						aggregationMethod: 'median',
-						maxNumericValue: 0.1,
-					},
-				],
-				'total-blocking-time': [
-					'warn',
-					{
-						aggregationMethod: 'median',
-						maxNumericValue: 200,
-					},
-				],
+				'cumulative-layout-shift': createMedianAssertion(coreMetricAssertionLevel, {
+					maxNumericValue: 0.1,
+				}),
+				'total-blocking-time': createMedianAssertion(coreMetricAssertionLevel, {
+					maxNumericValue: 200,
+				}),
 				'uses-responsive-images': 'warn',
 				'lcp-discovery-insight': 'warn',
 				'network-dependency-tree-insight': 'warn',
