@@ -21,7 +21,10 @@
 		"tailwind:lint": "bun run scripts/fix_tailwind_lint.ts",
 		"tailwind:lint:dry": "bun run scripts/fix_tailwind_lint.ts --dry-run",
 		"check:imports": "bun run scripts/check_import_paths.ts",
-		"lighthouse": "bun run build && bunx @lhci/cli@0.15.1 autorun",
+		"lighthouse": "bun run build && bun run lighthouse:collect && bun run lighthouse:assert && bun run lighthouse:upload",
+		"lighthouse:collect": "bunx @lhci/cli@0.15.1 collect --config=.lighthouserc.cjs",
+		"lighthouse:assert": "bunx @lhci/cli@0.15.1 assert --config=.lighthouserc.cjs",
+		"lighthouse:upload": "bunx @lhci/cli@0.15.1 upload --config=.lighthouserc.cjs",
 		"typecheck": "bun run tsc -b",
 		"check": "bun ./node_modules/ultracite/dist/index.js check && bun run check:imports && bun run typecheck && bun run tailwind:lint:dry",
 		"fix": "bun ./node_modules/ultracite/dist/index.js fix && bun run tailwind:lint"

@@ -1,0 +1,74 @@
+name: Lighthouse Prod
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * 1'
+
+concurrency:
+  group: lighthouse-prod-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  schedule-gate:
+    name: schedule gate
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.evaluate.outputs.should_run }}
+
+    steps:
+      - name: Evaluate biweekly schedule
+        id: evaluate
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          week_number="$(date -u +%V)"
+
+          if [ $((10#$week_number % 2)) -eq 0 ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "should_run=false" >> "$GITHUB_OUTPUT"
+
+  lighthouse:
+    name: lighthouse prod
+    runs-on: ubuntu-latest
+    needs: schedule-gate
+    if: needs.schedule-gate.outputs.should_run == 'true'
+    env:
+      LIGHTHOUSE_MODE: prod
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Collect Lighthouse runs
+        run: bun run lighthouse:collect
+
+      - name: Assert Lighthouse thresholds
+        run: bun run lighthouse:assert
+
+      - name: Write Lighthouse reports
+        if: always()
+        run: bun run lighthouse:upload
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-reports-prod
+          path: .lighthouseci/prod
+          if-no-files-found: ignore
+          include-hidden-files: true
