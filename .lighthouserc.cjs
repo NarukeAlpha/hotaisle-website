@@ -1,16 +1,8 @@
-const LIGHTHOUSE_MODE = process.env.LIGHTHOUSE_MODE ?? 'pr';
-const LIGHTHOUSE_ENFORCE_CORE_METRICS = process.env.LIGHTHOUSE_ENFORCE_CORE_METRICS === 'true';
+const LIGHTHOUSE_ENFORCE_CORE_METRICS = process.env.LIGHTHOUSE_ENFORCE_CORE_METRICS === 'false';
 const LIGHTHOUSE_NUMBER_OF_RUNS = 2;
 const LIGHTHOUSE_PAGE_PATHS = ['/', '/pricing/', '/quick-start/', '/mi300x/'];
-const LIGHTHOUSE_BASE_URLS = {
-	pr: 'http://localhost',
-	prod: 'https://hotaisle.xyz',
-};
-const SUPPORTED_LIGHTHOUSE_MODES = new Set(Object.keys(LIGHTHOUSE_BASE_URLS));
-
-if (!SUPPORTED_LIGHTHOUSE_MODES.has(LIGHTHOUSE_MODE)) {
-	throw new Error(`Unsupported LIGHTHOUSE_MODE: ${LIGHTHOUSE_MODE}`);
-}
+const LIGHTHOUSE_BASE_URL = 'http://localhost';
+const LIGHTHOUSE_OUTPUT_DIRECTORY = '.lighthouseci/reports';
 
 const createMedianAssertion = (level, options) => [
 	level,
@@ -21,19 +13,15 @@ const createMedianAssertion = (level, options) => [
 ];
 // Set LIGHTHOUSE_ENFORCE_CORE_METRICS=true to fail the primary category and metric thresholds.
 const coreMetricAssertionLevel = LIGHTHOUSE_ENFORCE_CORE_METRICS ? 'error' : 'warn';
-const baseUrl = LIGHTHOUSE_BASE_URLS[LIGHTHOUSE_MODE];
 const collect = {
 	numberOfRuns: LIGHTHOUSE_NUMBER_OF_RUNS,
-	url: LIGHTHOUSE_PAGE_PATHS.map((pagePath) => new URL(pagePath, baseUrl).toString()),
+	url: LIGHTHOUSE_PAGE_PATHS.map((pagePath) => new URL(pagePath, LIGHTHOUSE_BASE_URL).toString()),
+	staticDistDir: './dist-static',
 	settings: {
 		preset: 'desktop',
 		chromeFlags: '--no-sandbox',
 	},
 };
-
-if (LIGHTHOUSE_MODE === 'pr') {
-	collect.staticDistDir = './dist-static';
-}
 
 module.exports = {
 	ci: {
@@ -85,7 +73,7 @@ module.exports = {
 		},
 		upload: {
 			target: 'filesystem',
-			outputDir: `.lighthouseci/${LIGHTHOUSE_MODE}`,
+			outputDir: LIGHTHOUSE_OUTPUT_DIRECTORY,
 		},
 	},
 };

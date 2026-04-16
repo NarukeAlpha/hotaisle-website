@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
-const DEFAULT_REPORT_DIRECTORY = path.join(PROJECT_ROOT, '.lighthouseci', 'prod');
+const DEFAULT_REPORT_DIRECTORY = path.join(PROJECT_ROOT, '.lighthouseci', 'reports');
 const MANIFEST_FILE_NAME = 'manifest.json';
 const INDEX_FILE_NAME = 'index.html';
 const NO_JEKYLL_FILE_NAME = '.nojekyll';
@@ -301,10 +301,10 @@ function renderAllReportsTable(
 
 const STYLES = `
 	:root {
-		color-scheme: light;
+		color-scheme: dark;
 		font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-		background: #f3f6fb;
-		color: #0f172a;
+		background: #08111f;
+		color: #e2e8f0;
 	}
 
 	* {
@@ -314,12 +314,13 @@ const STYLES = `
 	body {
 		margin: 0;
 		background:
-			radial-gradient(circle at top, rgba(37, 99, 235, 0.18), transparent 32%),
-			linear-gradient(180deg, #f8fbff 0%, #eef3fb 100%);
+			radial-gradient(circle at top, rgba(56, 189, 248, 0.18), transparent 28%),
+			radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.16), transparent 24%),
+			linear-gradient(180deg, #0a1120 0%, #020617 100%);
 	}
 
 	a {
-		color: #2563eb;
+		color: #7dd3fc;
 		text-decoration: none;
 	}
 
@@ -344,11 +345,11 @@ const STYLES = `
 	.hero,
 	.panel,
 	.page-card {
-		background: rgba(255, 255, 255, 0.92);
+		background: rgba(9, 15, 28, 0.84);
 		backdrop-filter: blur(10px);
-		border: 1px solid rgba(148, 163, 184, 0.2);
+		border: 1px solid rgba(71, 85, 105, 0.5);
 		border-radius: 1.5rem;
-		box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+		box-shadow: 0 20px 45px rgba(2, 6, 23, 0.5);
 	}
 
 	.hero {
@@ -364,7 +365,7 @@ const STYLES = `
 	.hero p,
 	.page-url,
 	.section-header p {
-		color: #475569;
+		color: #94a3b8;
 		line-height: 1.6;
 	}
 
@@ -378,7 +379,9 @@ const STYLES = `
 	.hero-meta span {
 		padding: 0.5rem 0.75rem;
 		border-radius: 999px;
-		background: #e2e8f0;
+		background: rgba(30, 41, 59, 0.92);
+		border: 1px solid rgba(71, 85, 105, 0.65);
+		color: #cbd5e1;
 		font-size: 0.95rem;
 	}
 
@@ -403,14 +406,14 @@ const STYLES = `
 		gap: 0.75rem;
 		padding: 1rem;
 		border-radius: 1.25rem;
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
+		background: rgba(15, 23, 42, 0.94);
+		border: 1px solid rgba(71, 85, 105, 0.65);
 		color: inherit;
 	}
 
 	.score-card:hover {
 		transform: translateY(-1px);
-		box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+		box-shadow: 0 10px 24px rgba(2, 6, 23, 0.45);
 		text-decoration: none;
 	}
 
@@ -426,7 +429,7 @@ const STYLES = `
 		width: 5.75rem;
 		height: 5.75rem;
 		border-radius: 999px;
-		background: conic-gradient(var(--ring-color) calc(var(--score) * 1%), #dbe3ef 0);
+		background: conic-gradient(var(--ring-color) calc(var(--score) * 1%), #334155 0);
 	}
 
 	.score-ring::before {
@@ -434,7 +437,7 @@ const STYLES = `
 		position: absolute;
 		inset: 0.55rem;
 		border-radius: inherit;
-		background: #ffffff;
+		background: #020817;
 	}
 
 	.score-value {
@@ -466,7 +469,7 @@ const STYLES = `
 
 	.score-muted {
 		--ring-color: #94a3b8;
-		--score-text: #475569;
+		--score-text: #cbd5e1;
 	}
 
 	.page-list {
@@ -492,7 +495,7 @@ const STYLES = `
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: #2563eb;
+		color: #38bdf8;
 	}
 
 	.page-links {
@@ -504,8 +507,8 @@ const STYLES = `
 	.page-links a {
 		padding: 0.55rem 0.85rem;
 		border-radius: 999px;
-		background: #eff6ff;
-		border: 1px solid #bfdbfe;
+		background: rgba(15, 23, 42, 0.96);
+		border: 1px solid rgba(96, 165, 250, 0.35);
 	}
 
 	table {
@@ -516,7 +519,7 @@ const STYLES = `
 	th,
 	td {
 		padding: 0.85rem 0.75rem;
-		border-bottom: 1px solid #e2e8f0;
+		border-bottom: 1px solid rgba(51, 65, 85, 0.9);
 		text-align: left;
 	}
 
@@ -524,7 +527,7 @@ const STYLES = `
 		font-size: 0.85rem;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #64748b;
+		color: #94a3b8;
 	}
 
 	.score-cell {
@@ -572,7 +575,7 @@ function renderPage(reportDirectory: string, manifestEntries: LighthouseManifest
 		<main>
 			<section class="hero">
 				<h1>Hot Aisle Lighthouse Reports</h1>
-				<p>Latest production Lighthouse run published from <code>ci.yml</code>. The top summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
+				<p>Latest localhost-based Lighthouse run published from <code>ci.yml</code>. The top summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
 				<div class="hero-meta">
 					<span>${representativeEntries.length} representative pages</span>
 					<span>${manifestEntries.length} total reports</span>
@@ -583,7 +586,7 @@ function renderPage(reportDirectory: string, manifestEntries: LighthouseManifest
 			<section class="panel">
 				<div class="section-header">
 					<h2>Top Scores</h2>
-					<p>These are the average category scores across the representative production runs. The GitHub Actions assertion log includes passed checks too, so the run prints the full assertion set instead of only warnings.</p>
+					<p>These are the average category scores across the representative localhost runs. The GitHub Actions assertion log includes passed checks too, so the run prints the full assertion set instead of only warnings.</p>
 				</div>
 				<div class="score-grid">${renderOverviewCards(averageSummary, overviewReportHref)}</div>
 			</section>
