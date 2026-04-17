@@ -3,6 +3,7 @@ import { initializeCopyCommandScript } from '@/app/copy-command-script.ts';
 import { initializeHeroStarsScript } from '@/app/hero-stars-script.ts';
 import { initializeMobileNavScript } from '@/app/mobile-nav-script.ts';
 import { initializeThemeScript } from '@/app/theme-script.ts';
+import { initializeWebMcpScript } from '@/app/webmcp-script.ts';
 import { Footer } from '@/components/layout/Footer.tsx';
 import { Navbar } from '@/components/layout/Navbar.tsx';
 import JsonLd from '@/components/seo/JsonLd.tsx';
@@ -23,6 +24,7 @@ const COPY_COMMAND_SCRIPT = `(${initializeCopyCommandScript.toString()})();`;
 const HERO_STARS_SCRIPT = `(${initializeHeroStarsScript.toString()})();`;
 const MOBILE_NAV_SCRIPT = `(${initializeMobileNavScript.toString()})();`;
 const THEME_SCRIPT = `(${initializeThemeScript.toString()})();`;
+const WEB_MCP_SCRIPT = `(${initializeWebMcpScript.toString()})();`;
 
 export const metadata = {
 	title: 'Hot Aisle - AMD Exclusive AI Cloud',
@@ -84,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<script>{HERO_STARS_SCRIPT}</script>
 				<script>{MOBILE_NAV_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
+				<script>{WEB_MCP_SCRIPT}</script>
 				{ENABLE_GTM && <script>{GTM_SCRIPT}</script>}
 			</head>
 			<body>
