@@ -1,0 +1,12 @@
+{
+	"$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+	"skills": [
+		{
+			"name": "hotaisle-api",
+			"type": "skill-md",
+			"description": "Use this skill when interacting with the Hot Aisle API, authenticating requests, or locating the OpenAPI spec and human-readable API documentation.",
+			"url": "/.well-known/agent-skills/hotaisle-api/SKILL.md",
+			"digest": "sha256:b908fa199e9f285752639fb6eacd848fb41ac8a4a311238c2e2d9f8fdf06d42d"
+		}
+	]
+}
