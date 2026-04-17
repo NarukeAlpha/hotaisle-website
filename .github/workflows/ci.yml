@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -68,11 +67,11 @@ jobs:
         run: bun run lighthouse:assert
 
       - name: Write Lighthouse reports
-        if: always()
+        if: ${{ !cancelled() }}
         run: bun run lighthouse:upload
 
       - name: Upload Lighthouse reports
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v6
         with:
           name: lighthouse-reports
