@@ -5,6 +5,7 @@ const FOOTER_COLUMNS = [
 		heading: 'Get Started',
 		links: [
 			{ href: '/quick-start', label: 'Quick Start' },
+			{ href: '/docs/api', label: 'API Docs' },
 			{ href: '/pricing', label: 'Pricing' },
 			{ href: '/contact', label: 'Contact Sales' },
 		],
