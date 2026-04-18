@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://admin.hotaisle.app/api/",
+      "service-desc": [
+        {
+          "href": "https://admin.hotaisle.app/api/docs/swagger.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://admin.hotaisle.app/api/docs/",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

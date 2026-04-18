@@ -4,17 +4,19 @@
  * Uses @tailwindcss/language-server (via LSP protocol) to find and auto-fix
  * Tailwind CSS linting warnings in .tsx files.
  *
- * Usage: bun run scripts/fix_tailwind_lint.ts [--dry-run]
+ * Usage: bun run scripts/fix_tailwind_lint.ts [--dry-run] [file ...]
  */
 
 import { spawn } from 'node:child_process';
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 const PROJECT_ROOT = process.cwd();
 const SERVER_BIN = path.join(PROJECT_ROOT, 'node_modules', '.bin', 'tailwindcss-language-server');
-const DRY_RUN = process.argv.includes('--dry-run');
+const args = process.argv.slice(2);
+const DRY_RUN = args.includes('--dry-run');
+const requestedPaths = args.filter((arg) => arg !== '--dry-run');
 
 const contentLengthRegex = /Content-Length:\s*(\d+)/;
 const sevMap: Record<number, string> = { 1: 'error', 2: 'warn', 3: 'info', 4: 'hint' };
@@ -269,6 +271,38 @@ async function findTsxFiles(root: string): Promise<string[]> {
 	return result;
 }
 
+async function resolveTargetFiles(pathsToScan: readonly string[]): Promise<string[]> {
+	if (pathsToScan.length === 0) {
+		return findTsxFiles(path.join(PROJECT_ROOT, 'src'));
+	}
+
+	const resolvedFiles = new Set<string>();
+
+	for (const targetPath of pathsToScan) {
+		const absolutePath = path.resolve(PROJECT_ROOT, targetPath);
+		const stats = await stat(absolutePath).catch(() => null);
+		if (!stats) {
+			throw new Error(`Path does not exist: ${targetPath}`);
+		}
+
+		if (stats.isDirectory()) {
+			const nestedFiles = await findTsxFiles(absolutePath);
+			for (const nestedFile of nestedFiles) {
+				resolvedFiles.add(nestedFile);
+			}
+			continue;
+		}
+
+		if (!absolutePath.endsWith('.tsx')) {
+			continue;
+		}
+
+		resolvedFiles.add(absolutePath);
+	}
+
+	return [...resolvedFiles].sort((left, right) => left.localeCompare(right));
+}
+
 /**
  * Apply LSP TextEdits to a string buffer, returning the modified content.
  * Edits must not overlap. We apply them in reverse document order.
@@ -388,7 +422,7 @@ async function processFile(
 async function main() {
 	const client = new LspClient();
 
-	const tsxFiles = await findTsxFiles(path.join(PROJECT_ROOT, 'src'));
+	const tsxFiles = await resolveTargetFiles(requestedPaths);
 	console.log(`Scanning ${tsxFiles.length} .tsx files${DRY_RUN ? ' (dry run)' : ''}…\n`);
 
 	await client.request('initialize', {
