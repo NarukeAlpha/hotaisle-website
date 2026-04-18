@@ -23,7 +23,8 @@
 		"check:imports": "bun run scripts/check_import_paths.ts",
 		"lighthouse": "bun run build && bunx @lhci/cli@0.15.1 autorun",
 		"typecheck": "bun run tsc -b",
-		"check": "bun ./node_modules/ultracite/dist/index.js check && bun run check:imports && bun run typecheck && bun run tailwind:lint:dry",
+		"check": "bun ./node_modules/ultracite/dist/index.js check && bun run check:imports && bun run typecheck",
+		"check:finalize": "bun run check && bun run tailwind:lint:dry",
 		"fix": "bun ./node_modules/ultracite/dist/index.js fix && bun run tailwind:lint"
 	},
 	"dependencies": {
