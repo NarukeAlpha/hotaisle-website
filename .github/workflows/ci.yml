@@ -71,6 +71,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: bun run lighthouse:upload
 
+      - name: Build Lighthouse report index
+        if: ${{ !cancelled() }}
+        run: bun run lighthouse:pages
+
       - name: Upload Lighthouse reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v6
