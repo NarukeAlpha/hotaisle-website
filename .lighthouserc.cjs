@@ -1,4 +1,3 @@
-const LIGHTHOUSE_ENFORCE_CORE_METRICS = process.env.LIGHTHOUSE_ENFORCE_CORE_METRICS === 'false';
 const LIGHTHOUSE_NUMBER_OF_RUNS = 2;
 const LIGHTHOUSE_PAGE_PATHS = ['/', '/pricing/', '/quick-start/', '/mi300x/'];
 const LIGHTHOUSE_BASE_URL = 'http://localhost';
@@ -11,8 +10,8 @@ const createMedianAssertion = (level, options) => [
 		...options,
 	},
 ];
-// Set LIGHTHOUSE_ENFORCE_CORE_METRICS=true to fail the primary category and metric thresholds.
-const coreMetricAssertionLevel = LIGHTHOUSE_ENFORCE_CORE_METRICS ? 'error' : 'warn';
+// CI decides whether Lighthouse assertion failures are blocking.
+const coreMetricAssertionLevel = 'error';
 const collect = {
 	numberOfRuns: LIGHTHOUSE_NUMBER_OF_RUNS,
 	url: LIGHTHOUSE_PAGE_PATHS.map((pagePath) => new URL(pagePath, LIGHTHOUSE_BASE_URL).toString()),
