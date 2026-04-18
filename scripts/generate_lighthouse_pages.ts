@@ -575,7 +575,7 @@ function renderPage(reportDirectory: string, manifestEntries: LighthouseManifest
 		<main>
 			<section class="hero">
 				<h1>Hot Aisle Lighthouse Reports</h1>
-				<p>Latest localhost-based Lighthouse run published from <code>ci.yml</code>. The top summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
+				<p>Latest localhost-based Lighthouse run published from <a href="https://github.com/hotaisle/hotaisle-website/blob/main/.github/workflows/ci.yml" rel="noopener" target="_blank"><code>ci.yml</code></a>. The top summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
 				<div class="hero-meta">
 					<span>${representativeEntries.length} representative pages</span>
 					<span>${manifestEntries.length} total reports</span>
