@@ -4,10 +4,16 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   check:
@@ -19,9 +25,9 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: latest
+          node-version: 24
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -32,14 +38,77 @@ jobs:
       - name: Run checks
         run: bun run check
 
-      - name: Run Lighthouse
-        run: bun run lighthouse
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build static site
+        run: bun run build
+
+      - name: Collect Lighthouse runs
+        run: bun run lighthouse:collect
+
+      - name: Assert Lighthouse thresholds
         continue-on-error: true
+        run: bun run lighthouse:assert
+
+      - name: Write Lighthouse reports
+        run: bun run lighthouse:upload
+
+      - name: Build Lighthouse report index
+        run: bun run lighthouse:pages
 
       - name: Upload Lighthouse reports
         uses: actions/upload-artifact@v6
         with:
           name: lighthouse-reports
-          path: .lighthouseci
+          path: .lighthouseci/reports
           if-no-files-found: ignore
           include-hidden-files: true
+
+  lighthouse-pages:
+    name: lighthouse pages
+    if: ${{  !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    needs: lighthouse
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download Lighthouse reports
+        uses: actions/download-artifact@v5
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/reports
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .lighthouseci/reports
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
