@@ -103,6 +103,14 @@ export function Footer() {
 						</AppLink>
 						<AppLink
 							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+							href="https://hotaisle.github.io/hotaisle-website/"
+							rel="noopener"
+							target="_blank"
+						>
+							Lighthouse
+						</AppLink>
+						<AppLink
+							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
 							href="/contact"
 						>
 							Contact
