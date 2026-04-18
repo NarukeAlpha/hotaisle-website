@@ -105,10 +105,6 @@
 	--color-hot-orange-contrast: var(--hot-orange-contrast);
 }
 
-html {
-	scrollbar-gutter: stable;
-}
-
 body {
 	font-family:
 		-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
