@@ -19,11 +19,15 @@ const CLIENT_DIRECTORY = path.join(DIST_DIRECTORY, 'client');
 const CLIENT_BLOG_ASSET_DIRECTORY = path.join(CLIENT_DIRECTORY, 'assets', 'blog');
 const SITEMAP_FILE_NAME = 'sitemap.xml';
 const APP_DIRECTORY = path.join(PROJECT_ROOT, 'src', 'app');
-const SERVER_ENTRY_PATH = path.join(DIST_DIRECTORY, 'server', 'index.js');
+const SERVER_ENTRY_CANDIDATES = [
+	path.join(DIST_DIRECTORY, 'server', 'index.js'),
+	path.join(DIST_DIRECTORY, 'server', 'ssr', 'index.js'),
+] as const;
 const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
 const DS_STORE_FILE_NAME = '.DS_Store';
 const VITE_METADATA_DIRECTORY_NAME = '.vite';
 const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
+const DEV_FILE_PREFIX = '.dev';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
@@ -87,12 +91,7 @@ for (const policy of POLICIES) {
 	exportedPaths.add(`/policies/${policy.slug}`);
 }
 
-const serverModule = await import(pathToFileURL(SERVER_ENTRY_PATH).href);
-const renderRoute = serverModule.default as (request: Request) => Promise<Response>;
-
-if (typeof renderRoute !== 'function') {
-	throw new Error('vinext build did not produce a callable server handler');
-}
+const renderRoute = await resolveRenderRoute();
 
 for (const routePath of exportedPaths) {
 	const requestPath = toRequestPath(routePath);
@@ -181,6 +180,32 @@ async function directoryExists(directoryPath: string): Promise<boolean> {
 	} catch {
 		return false;
 	}
+}
+
+async function resolveRenderRoute(): Promise<(request: Request) => Promise<Response>> {
+	for (const serverEntryPath of SERVER_ENTRY_CANDIDATES) {
+		try {
+			await stat(serverEntryPath);
+		} catch {
+			continue;
+		}
+
+		const serverModule = await import(pathToFileURL(serverEntryPath).href);
+		const defaultExport = serverModule.default as
+			| { fetch?: (request: Request) => Promise<Response> }
+			| ((request: Request) => Promise<Response>)
+			| undefined;
+
+		if (typeof defaultExport === 'function') {
+			return defaultExport;
+		}
+
+		if (typeof defaultExport?.fetch === 'function') {
+			return defaultExport.fetch.bind(defaultExport);
+		}
+	}
+
+	throw new Error('vinext build did not produce a callable server handler');
 }
 
 function toSlugSegment(segment: string): string {
@@ -567,15 +592,19 @@ function findCssStringEnd(content: string, index: number, delimiter: '"' | "'"):
 }
 
 function minifyCssSegment(segment: string): string {
-	return segment
-		.replace(/\s+/g, ' ')
-		.replace(/\s*([{}:;,>+~()])\s*/g, '$1')
-		.replace(/;}/g, '}');
+	return (
+		segment
+			.replace(/\s+/g, ' ')
+			// Preserve spacing around parentheses so CSS math like `calc()` stays valid.
+			.replace(/\s*([{}:;,>~])\s*/g, '$1')
+			.replace(/;}/g, '}')
+	);
 }
 
 function shouldExcludeFromStaticExport(sourcePath: string): boolean {
 	const entryName = path.basename(sourcePath);
 	return (
+		entryName.startsWith(DEV_FILE_PREFIX) ||
 		entryName === DS_STORE_FILE_NAME ||
 		entryName === VITE_METADATA_DIRECTORY_NAME ||
 		entryName === WRANGLER_CONFIG_FILE_NAME

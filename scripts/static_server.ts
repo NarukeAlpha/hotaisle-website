@@ -6,12 +6,15 @@ const INDEX_FILE_NAME = 'index.html';
 const HTML_EXTENSION = '.html';
 const HTML_CONTENT_TYPE = 'text/html; charset=utf-8';
 
+export type StaticServerTlsOptions = Bun.TLSOptions;
+
 export interface StartStaticServerOptions {
 	development: boolean;
 	directory: string;
 	handleRequest?: (request: Request) => Promise<Response | null> | Response | null;
 	hostname: string;
 	port: number;
+	tls?: StaticServerTlsOptions;
 	transformHtml?: (html: string, request: Request) => Promise<string> | string;
 }
 
@@ -20,6 +23,7 @@ export async function startStaticServer({
 	directory,
 	hostname,
 	port,
+	tls,
 	transformHtml,
 	handleRequest,
 }: StartStaticServerOptions): Promise<Bun.Server<unknown>> {
@@ -29,6 +33,7 @@ export async function startStaticServer({
 		development,
 		hostname,
 		port: resolvedPort,
+		tls,
 		fetch: async (request: Request): Promise<Response> => {
 			const handledResponse = await handleRequest?.(request);
 			if (handledResponse) {
