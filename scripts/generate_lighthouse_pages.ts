@@ -15,6 +15,7 @@ const INDEX_FILE_NAME = 'index.html';
 const NO_JEKYLL_FILE_NAME = '.nojekyll';
 const LOGO_FILE_PATH = path.join(PROJECT_ROOT, 'public', 'hotaisle-logo.svg');
 const PATH_SEPARATOR_REGEX = /\\/g;
+const REPORTS_SITE_PATH_PREFIX = '/hotaisle-website';
 const CATEGORY_IDS = ['performance', 'accessibility', 'best-practices', 'seo'] as const;
 const CATEGORY_LABELS = {
 	performance: 'Performance',
@@ -120,7 +121,24 @@ function escapeHtml(value: string): string {
 
 function getPathLabel(urlString: string): string {
 	const { pathname } = new URL(urlString);
-	return pathname || '/';
+	if (!pathname) {
+		return '/';
+	}
+
+	if (!pathname.startsWith(REPORTS_SITE_PATH_PREFIX)) {
+		return pathname;
+	}
+
+	return pathname.slice(REPORTS_SITE_PATH_PREFIX.length) || '/';
+}
+
+function getSiteHref(urlString: string): string {
+	const { hash, pathname, search } = new URL(urlString);
+	const normalizedPathname = pathname.startsWith(REPORTS_SITE_PATH_PREFIX)
+		? pathname.slice(REPORTS_SITE_PATH_PREFIX.length) || '/'
+		: pathname;
+
+	return resolveFooterHref(`${normalizedPathname}${search}${hash}`);
 }
 
 function toRelativePath(reportDirectory: string, filePath: string): string {
@@ -254,6 +272,7 @@ function renderRepresentativeSections(
 			const htmlHref = toRelativePath(reportDirectory, entry.htmlPath);
 			const jsonHref = toRelativePath(reportDirectory, entry.jsonPath);
 			const pathLabel = getPathLabel(entry.url);
+			const siteHref = getSiteHref(entry.url);
 			const scoreCards = CATEGORY_IDS.map((categoryId) =>
 				renderScoreCard(
 					CATEGORY_LABELS[categoryId],
@@ -266,10 +285,10 @@ function renderRepresentativeSections(
 			return `
 				<article class="page-card">
 					<header class="page-card-header">
-						<div>
+						<div class="page-summary">
 							<p class="page-eyebrow">Representative run</p>
 							<h2>${escapeHtml(pathLabel)}</h2>
-							<p class="page-url">${escapeHtml(entry.url)}</p>
+							<p class="page-url">${escapeHtml(siteHref)}</p>
 						</div>
 						<nav class="page-links" aria-label="Report links for ${escapeHtml(pathLabel)}">
 							<a href="${escapeHtml(htmlHref)}">HTML report</a>
@@ -541,6 +560,11 @@ const STYLES = `
 		gap: 1rem;
 		align-items: flex-start;
 		margin-bottom: 1rem;
+	}
+
+	.page-summary {
+		color: inherit;
+		display: block;
 	}
 
 	.page-eyebrow {
