@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -20,9 +21,15 @@ const PATH_SEPARATOR_REGEX = /\\/g;
 const LEADING_SLASHES_REGEX = /^\/+/;
 const SCORE_CATEGORY_IDS = ['performance', 'accessibility', 'best-practices', 'seo'] as const;
 const CHROME_FLAG_TOKEN_REGEX = /"[^"]*"|'[^']*'|[^\s]+/g;
-const HEADLESS_CHROME_FLAGS = ['--headless=new', '--no-first-run'] as const;
+const HEADLESS_CHROME_FLAGS = [
+	'--headless=new',
+	'--no-first-run',
+	'--allow-insecure-localhost',
+] as const;
 const DUPLICATE_SLASHES_REGEX = /\/{2,}/g;
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
+const LOCAL_TLS_CERT_PATH = path.join(PROJECT_ROOT, '.dev-localhost-cert.pem');
+const LOCAL_TLS_KEY_PATH = path.join(PROJECT_ROOT, '.dev-localhost-key.pem');
 
 interface LighthouseSummary {
 	accessibility?: number;
@@ -241,7 +248,7 @@ function rewriteReportUrls(
 }
 
 async function runBuild(): Promise<void> {
-	const buildProcess = spawn('bun', ['run', 'build'], {
+	const buildProcess = spawn('bun', ['run', 'build:internal'], {
 		cwd: PROJECT_ROOT,
 		stdio: 'inherit',
 	});
@@ -250,12 +257,12 @@ async function runBuild(): Promise<void> {
 		buildProcess.once('error', reject);
 		buildProcess.once('exit', (exitCode, signal) => {
 			if (signal) {
-				reject(new Error(`bun run build exited from signal ${signal}`));
+				reject(new Error(`bun run build:internal exited from signal ${signal}`));
 				return;
 			}
 
 			if (exitCode !== 0) {
-				reject(new Error(`bun run build exited with code ${exitCode ?? 'unknown'}`));
+				reject(new Error(`bun run build:internal exited with code ${exitCode ?? 'unknown'}`));
 				return;
 			}
 
@@ -431,9 +438,13 @@ async function main(): Promise<void> {
 		directory: staticDirectory,
 		hostname: host,
 		port,
+		tls: {
+			cert: fs.readFileSync(LOCAL_TLS_CERT_PATH),
+			key: fs.readFileSync(LOCAL_TLS_KEY_PATH),
+		},
 	});
 
-	const baseUrl = `http://${server.hostname}:${server.port}`;
+	const baseUrl = `https://${server.hostname}:${server.port}`;
 	const urls = resolveRequestedUrls(lighthouseConfig, baseUrl);
 
 	console.log(`Serving Lighthouse target at ${baseUrl}`);

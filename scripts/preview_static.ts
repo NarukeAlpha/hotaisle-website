@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import './ensure_dev_tls.ts';
 import { startStaticServer } from './static_server.ts';
 
 const DEFAULT_HOST = 'localhost';

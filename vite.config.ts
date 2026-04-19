@@ -4,13 +4,10 @@ import { cloudflare } from '@cloudflare/vite-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import vinext from 'vinext';
 import { defineConfig } from 'vite';
-import { ensureLocalTlsCertificateExists } from './scripts/ensure_dev_tls.ts';
 
 const LOCAL_TLS_CERT_PATH = path.resolve(import.meta.dirname, './.dev-localhost-cert.pem');
 const LOCAL_TLS_KEY_PATH = path.resolve(import.meta.dirname, './.dev-localhost-key.pem');
 const DEV_SERVER_PORT = 4174;
-
-ensureLocalTlsCertificateExists();
 
 export default defineConfig({
 	optimizeDeps: {
