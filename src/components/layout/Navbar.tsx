@@ -15,19 +15,12 @@ import {
 	Zap,
 } from 'lucide-react';
 import { AppLink } from '@/components/AppLink.tsx';
+import { HEADER_CONTACT_LINK, HEADER_CTA_LINK, PRIMARY_NAV_LINKS } from '@/lib/navigation.ts';
 
 const LOGO_ALT = 'Hot Aisle';
 const LOGO_HEIGHT = 32;
 const LOGO_SRC = '/hotaisle-logo.svg';
 const LOGO_WIDTH = 104;
-const PRIMARY_NAV = [
-	{ href: '/quick-start', label: 'Quick Start' },
-	{ href: '/pricing', label: 'Pricing' },
-	{ href: '/compute', label: 'Compute' },
-	{ href: '/mi300x', label: 'MI300X' },
-	{ href: '/mi355x', label: 'MI355X' },
-	{ href: '/blog', label: 'Blog' },
-];
 
 const ALL_NAV_ITEMS = [
 	{ href: '/quick-start', label: 'Quick Start', icon: Zap },
@@ -65,7 +58,7 @@ export function Navbar() {
 						</AppLink>
 
 						<nav className="hidden items-center gap-1 lg:flex">
-							{PRIMARY_NAV.map((item) => (
+							{PRIMARY_NAV_LINKS.map((item) => (
 								<AppLink
 									className="rounded-md px-3 py-2 font-medium text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
 									href={item.href}
@@ -81,7 +74,7 @@ export function Navbar() {
 					<div className="flex items-center gap-2">
 						<AppLink
 							className="hidden rounded-md p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:flex"
-							href="/contact"
+							href={HEADER_CONTACT_LINK.href}
 							title="Contact"
 						>
 							<Mail className="h-4 w-4" />
@@ -101,9 +94,9 @@ export function Navbar() {
 
 						<AppLink
 							className="hidden rounded-lg bg-hot-orange px-4 py-2 font-medium text-sm text-white shadow-sm transition hover:opacity-90 lg:inline-flex"
-							href="/quick-start"
+							href={HEADER_CTA_LINK.href}
 						>
-							Start Now
+							{HEADER_CTA_LINK.label}
 						</AppLink>
 
 						{/* Mobile hamburger */}

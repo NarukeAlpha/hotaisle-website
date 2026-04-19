@@ -7,6 +7,7 @@ import {
 	resolveFooterHref,
 	SITE_BASE_URL,
 } from '@/lib/footer.ts';
+import { HEADER_CONTACT_LINK, HEADER_CTA_LINK, PRIMARY_NAV_LINKS } from '@/lib/navigation.ts';
 
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const DEFAULT_REPORT_DIRECTORY = path.join(PROJECT_ROOT, '.lighthouseci', 'reports');
@@ -373,6 +374,65 @@ function renderFooter(logoSvg: string): string {
 	`;
 }
 
+function renderHero(
+	logoSvg: string,
+	representativeEntryCount: number,
+	reportCount: number,
+	generatedAt: string
+): string {
+	return `
+		<section class="hero">
+			<div class="hero-copy">
+				<p class="hero-eyebrow">Performance Reports</p>
+				<h1>Hot Aisle Lighthouse Reports</h1>
+				<p>Latest Lighthouse run published from <a href="https://github.com/hotaisle/hotaisle-website/blob/main/.github/workflows/ci.yml" rel="noopener" target="_blank"><code>ci.yml</code></a>. This summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
+				<div class="hero-meta">
+					<span>${representativeEntryCount} representative pages</span>
+					<span>${reportCount} total reports</span>
+					<span>Generated ${escapeHtml(generatedAt)}</span>
+				</div>
+			</div>
+			<div aria-hidden="true" class="hero-brand">
+				<div class="hero-brand-mark">${logoSvg}</div>
+				<p class="hero-brand-caption">Benchmarked against a production build.</p>
+			</div>
+		</section>
+	`;
+}
+
+function renderHeader(logoSvg: string): string {
+	const primaryNav = PRIMARY_NAV_LINKS.map(
+		(link) => `
+			<a class="site-header-nav-link" href="${escapeHtml(resolveFooterHref(link.href))}" rel="noopener" target="_blank">
+				${escapeHtml(link.label)}
+			</a>
+		`
+	).join('');
+
+	return `
+		<header class="site-header">
+			<div class="site-header-inner">
+				<div class="site-header-left">
+					<a aria-label="Hot Aisle home" class="site-header-logo" href="${SITE_BASE_URL}" rel="noopener" target="_blank">
+						<span aria-hidden="true" class="site-header-logo-mark">${logoSvg}</span>
+					</a>
+					<nav aria-label="Primary" class="site-header-nav">
+						${primaryNav}
+					</nav>
+				</div>
+				<div class="site-header-actions">
+					<a class="site-header-contact" href="${escapeHtml(resolveFooterHref(HEADER_CONTACT_LINK.href))}" rel="noopener" target="_blank">
+						${escapeHtml(HEADER_CONTACT_LINK.label)}
+					</a>
+					<a class="site-header-cta" href="${escapeHtml(resolveFooterHref(HEADER_CTA_LINK.href))}" rel="noopener" target="_blank">
+						${escapeHtml(HEADER_CTA_LINK.label)}
+					</a>
+				</div>
+			</div>
+		</header>
+	`;
+}
+
 const STYLES = `
 	:root {
 		color-scheme: dark;
@@ -409,11 +469,112 @@ const STYLES = `
 	main {
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 3rem 1.5rem 2rem;
+		padding: 1.5rem 1.5rem 2rem;
 	}
 
 	section {
 		margin-top: 2rem;
+	}
+
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 30;
+		border-bottom: 1px solid rgba(71, 85, 105, 0.35);
+		background: rgba(2, 6, 23, 0.82);
+		backdrop-filter: blur(14px);
+	}
+
+	.site-header-inner {
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+		min-height: 4.25rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.site-header-left,
+	.site-header-actions,
+	.site-header-nav {
+		display: flex;
+		align-items: center;
+	}
+
+	.site-header-left {
+		gap: 2rem;
+		min-width: 0;
+	}
+
+	.site-header-logo {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	.site-header-logo:hover {
+		text-decoration: none;
+	}
+
+	.site-header-logo-mark {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.site-header-logo-mark svg {
+		display: block;
+		width: 104px;
+		height: 32px;
+	}
+
+	.site-header-nav {
+		gap: 0.25rem;
+		flex-wrap: wrap;
+	}
+
+	.site-header-nav-link,
+	.site-header-contact {
+		border-radius: 0.5rem;
+		padding: 0.55rem 0.8rem;
+		font-size: 0.92rem;
+		font-weight: 500;
+		color: #94a3b8;
+		transition:
+			background 120ms ease,
+			color 120ms ease;
+	}
+
+	.site-header-nav-link:hover,
+	.site-header-contact:hover {
+		background: rgba(30, 41, 59, 0.9);
+		color: #e2e8f0;
+		text-decoration: none;
+	}
+
+	.site-header-actions {
+		gap: 0.5rem;
+		flex-shrink: 0;
+	}
+
+	.site-header-cta {
+		border-radius: 0.7rem;
+		background: linear-gradient(135deg, #f97316, #ea580c);
+		padding: 0.7rem 1rem;
+		font-size: 0.92rem;
+		font-weight: 600;
+		color: #fff;
+		box-shadow: 0 10px 24px rgba(234, 88, 12, 0.24);
+		transition:
+			transform 120ms ease,
+			opacity 120ms ease;
+	}
+
+	.site-header-cta:hover {
+		opacity: 0.95;
+		text-decoration: none;
+		transform: translateY(-1px);
 	}
 
 	.hero,
@@ -427,7 +588,15 @@ const STYLES = `
 	}
 
 	.hero {
-		padding: 2rem;
+		display: grid;
+		grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr);
+		gap: 2rem;
+		padding: 2.25rem;
+		position: relative;
+		overflow: hidden;
+		background:
+			radial-gradient(circle at top right, rgba(249, 115, 22, 0.2), transparent 35%),
+			linear-gradient(145deg, rgba(9, 15, 28, 0.92), rgba(15, 23, 42, 0.88));
 	}
 
 	.hero h1,
@@ -436,11 +605,75 @@ const STYLES = `
 		margin: 0;
 	}
 
+	.hero-copy {
+		position: relative;
+		z-index: 1;
+	}
+
+	.hero-eyebrow {
+		margin: 0 0 0.75rem;
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: #38bdf8;
+	}
+
+	.hero h1 {
+		font-size: clamp(2rem, 4vw, 3.4rem);
+		line-height: 0.95;
+		letter-spacing: -0.04em;
+		max-width: 10ch;
+	}
+
 	.hero p,
 	.page-url,
 	.section-header p {
 		color: #94a3b8;
 		line-height: 1.6;
+	}
+
+	.hero-brand {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.5rem;
+		border-radius: 1.35rem;
+		background: rgba(15, 23, 42, 0.82);
+		border: 1px solid rgba(71, 85, 105, 0.4);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+	}
+
+	.hero-brand::before {
+		content: '';
+		position: absolute;
+		inset: auto -3rem -3rem auto;
+		width: 10rem;
+		height: 10rem;
+		border-radius: 999px;
+		background: radial-gradient(circle, rgba(14, 165, 233, 0.18), transparent 70%);
+	}
+
+	.hero-brand-mark {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.hero-brand-mark svg {
+		display: block;
+		width: min(100%, 250px);
+		height: auto;
+	}
+
+	.hero-brand-caption {
+		position: relative;
+		margin: 0;
+		font-size: 0.95rem;
+		color: #cbd5e1;
+		max-width: 28ch;
 	}
 
 	.hero-meta {
@@ -732,6 +965,14 @@ const STYLES = `
 	}
 
 	@media (max-width: 720px) {
+		.site-header-inner {
+			padding: 0 1rem;
+		}
+
+		.site-header-nav {
+			display: none;
+		}
+
 		main {
 			padding: 2rem 1rem 3rem;
 		}
@@ -740,6 +981,15 @@ const STYLES = `
 		.panel,
 		.page-card {
 			border-radius: 1.25rem;
+		}
+
+		.hero {
+			grid-template-columns: 1fr;
+			padding: 1.5rem;
+		}
+
+		.hero h1 {
+			max-width: none;
 		}
 
 		.page-card-header {
@@ -784,16 +1034,9 @@ function renderPage(
 		<style>${STYLES}</style>
 	</head>
 	<body>
+		${renderHeader(logoSvg)}
 		<main>
-			<section class="hero">
-				<h1>Hot Aisle Lighthouse Reports</h1>
-				<p>Latest localhost-based Lighthouse run published from <a href="https://github.com/hotaisle/hotaisle-website/blob/main/.github/workflows/ci.yml" rel="noopener" target="_blank"><code>ci.yml</code></a>. The top summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
-				<div class="hero-meta">
-					<span>${representativeEntries.length} representative pages</span>
-					<span>${manifestEntries.length} total reports</span>
-					<span>Generated ${escapeHtml(generatedAt)}</span>
-				</div>
-			</section>
+			${renderHero(logoSvg, representativeEntries.length, manifestEntries.length, generatedAt)}
 
 			<section class="panel">
 				<div class="section-header">
