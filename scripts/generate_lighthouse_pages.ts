@@ -1,11 +1,19 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import {
+	FOOTER_COLUMNS,
+	FOOTER_COPYRIGHT,
+	FOOTER_META_LINKS,
+	resolveFooterHref,
+	SITE_BASE_URL,
+} from '@/lib/footer.ts';
 
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const DEFAULT_REPORT_DIRECTORY = path.join(PROJECT_ROOT, '.lighthouseci', 'reports');
 const MANIFEST_FILE_NAME = 'manifest.json';
 const INDEX_FILE_NAME = 'index.html';
 const NO_JEKYLL_FILE_NAME = '.nojekyll';
+const LOGO_FILE_PATH = path.join(PROJECT_ROOT, 'public', 'hotaisle-logo.svg');
 const PATH_SEPARATOR_REGEX = /\\/g;
 const CATEGORY_IDS = ['performance', 'accessibility', 'best-practices', 'seo'] as const;
 const CATEGORY_LABELS = {
@@ -14,7 +22,6 @@ const CATEGORY_LABELS = {
 	'best-practices': 'Best Practices',
 	seo: 'SEO',
 } as const;
-
 type CategoryId = (typeof CATEGORY_IDS)[number];
 
 interface LighthouseSummary {
@@ -96,6 +103,10 @@ async function loadManifest(reportDirectory: string): Promise<LighthouseManifest
 	}
 
 	return parsedManifest;
+}
+
+async function loadFooterLogoSvg(): Promise<string> {
+	return await readFile(LOGO_FILE_PATH, 'utf8');
 }
 
 function escapeHtml(value: string): string {
@@ -299,6 +310,49 @@ function renderAllReportsTable(
 		.join('');
 }
 
+function renderFooter(logoSvg: string): string {
+	const footerColumns = FOOTER_COLUMNS.map((column) => {
+		const links = column.links
+			.map(
+				(link) => `
+					<li>
+						<a href="${escapeHtml(resolveFooterHref(link.href))}" rel="noopener" target="_blank">${escapeHtml(link.label)}</a>
+					</li>
+				`
+			)
+			.join('');
+
+		return `
+			<div class="footer-column">
+				<h3>${escapeHtml(column.heading)}</h3>
+				<ul>${links}</ul>
+			</div>
+		`;
+	}).join('');
+
+	return `
+		<footer class="site-footer">
+			<div class="footer-accent"></div>
+			<div class="footer-inner">
+				<div class="footer-grid">${footerColumns}</div>
+				<div class="footer-divider"></div>
+				<div class="footer-bottom">
+					<a aria-label="Hot Aisle home" class="footer-logo" href="${SITE_BASE_URL}" rel="noopener" target="_blank">
+						<span aria-hidden="true" class="footer-logo-mark">${logoSvg}</span>
+					</a>
+					<p>${escapeHtml(FOOTER_COPYRIGHT)}</p>
+					<nav aria-label="Footer links" class="footer-meta-links">
+						${FOOTER_META_LINKS.map(
+							(link) =>
+								`<a href="${escapeHtml(resolveFooterHref(link.href))}" rel="noopener" target="_blank">${escapeHtml(link.label)}</a>`
+						).join('')}
+					</nav>
+				</div>
+			</div>
+		</footer>
+	`;
+}
+
 const STYLES = `
 	:root {
 		color-scheme: dark;
@@ -335,7 +389,7 @@ const STYLES = `
 	main {
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 3rem 1.5rem 4rem;
+		padding: 3rem 1.5rem 2rem;
 	}
 
 	section {
@@ -538,6 +592,120 @@ const STYLES = `
 		overflow-x: auto;
 	}
 
+	.site-footer {
+		margin-top: 2rem;
+		border-top: 1px solid rgba(71, 85, 105, 0.3);
+		background: rgba(9, 15, 28, 0.88);
+	}
+
+	.footer-accent {
+		height: 1px;
+		width: 100%;
+		background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.4), transparent);
+	}
+
+	.footer-inner {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+	}
+
+	.footer-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 2rem;
+		padding: 3rem 0;
+	}
+
+	.footer-column h3 {
+		margin: 0 0 1rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #f8fafc;
+	}
+
+	.footer-column ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.footer-column li + li {
+		margin-top: 0.75rem;
+	}
+
+	.footer-column a {
+		color: #94a3b8;
+		font-size: 0.95rem;
+		transition: color 120ms ease;
+	}
+
+	.footer-column a:hover {
+		color: #e2e8f0;
+		text-decoration: none;
+	}
+
+	.footer-divider {
+		border-top: 1px solid rgba(71, 85, 105, 0.3);
+	}
+
+	.footer-bottom {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.75rem 0 2rem;
+	}
+
+	.footer-logo {
+		display: inline-flex;
+		align-items: center;
+		opacity: 0.8;
+		transition: opacity 120ms ease;
+	}
+
+	.footer-logo-mark {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.footer-logo-mark svg {
+		display: block;
+		width: 110px;
+		height: 28px;
+	}
+
+	.footer-logo:hover {
+		opacity: 1;
+		text-decoration: none;
+	}
+
+	.footer-bottom p {
+		margin: 0;
+		color: #94a3b8;
+		font-size: 0.8rem;
+		text-align: center;
+	}
+
+	.footer-meta-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	.footer-meta-links a {
+		color: #94a3b8;
+		font-size: 0.8rem;
+		transition: color 120ms ease;
+	}
+
+	.footer-meta-links a:hover {
+		color: #e2e8f0;
+		text-decoration: none;
+	}
+
 	@media (max-width: 720px) {
 		main {
 			padding: 2rem 1rem 3rem;
@@ -552,10 +720,29 @@ const STYLES = `
 		.page-card-header {
 			flex-direction: column;
 		}
+
+		.footer-inner {
+			padding: 0 1rem;
+		}
+
+		.footer-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1.5rem;
+			padding: 2.5rem 0;
+		}
+
+		.footer-bottom {
+			flex-direction: column;
+			padding-top: 1.5rem;
+		}
 	}
 `;
 
-function renderPage(reportDirectory: string, manifestEntries: LighthouseManifestEntry[]): string {
+function renderPage(
+	reportDirectory: string,
+	manifestEntries: LighthouseManifestEntry[],
+	logoSvg: string
+): string {
 	const representativeEntries = getRepresentativeEntries(manifestEntries);
 	const averageSummary = getAverageSummary(representativeEntries);
 	const overviewReportHref = representativeEntries[0]
@@ -625,6 +812,7 @@ function renderPage(reportDirectory: string, manifestEntries: LighthouseManifest
 				</div>
 			</section>
 		</main>
+		${renderFooter(logoSvg)}
 	</body>
 </html>
 `;
@@ -633,10 +821,11 @@ function renderPage(reportDirectory: string, manifestEntries: LighthouseManifest
 async function main(): Promise<void> {
 	const reportDirectory = resolveReportDirectory();
 	const manifestEntries = await loadManifest(reportDirectory);
+	const logoSvg = await loadFooterLogoSvg();
 	const indexPath = path.join(reportDirectory, INDEX_FILE_NAME);
 	const noJekyllPath = path.join(reportDirectory, NO_JEKYLL_FILE_NAME);
 
-	await writeFile(indexPath, renderPage(reportDirectory, manifestEntries), 'utf8');
+	await writeFile(indexPath, renderPage(reportDirectory, manifestEntries, logoSvg), 'utf8');
 	await writeFile(noJekyllPath, '', 'utf8');
 
 	console.log(

@@ -1,42 +1,5 @@
 import { AppLink } from '@/components/AppLink.tsx';
-
-const FOOTER_COLUMNS = [
-	{
-		heading: 'Get Started',
-		links: [
-			{ href: '/quick-start', label: 'Quick Start' },
-			{ href: '/docs/api', label: 'API Docs' },
-			{ href: '/pricing', label: 'Pricing' },
-			{ href: '/contact', label: 'Contact Sales' },
-		],
-	},
-	{
-		heading: 'Infrastructure',
-		links: [
-			{ href: '/compute', label: 'Supercomputer' },
-			{ href: '/datacenter', label: 'Datacenter' },
-			{ href: '/networking', label: 'Networking' },
-			{ href: '/cluster', label: 'Cluster Design' },
-		],
-	},
-	{
-		heading: 'GPUs',
-		links: [
-			{ href: '/mi300x', label: 'MI300X' },
-			{ href: '/mi355x', label: 'MI355X' },
-			{ href: '/benchmarks-and-analysis', label: 'Benchmarks' },
-		],
-	},
-	{
-		heading: 'Company',
-		links: [
-			{ href: '/about', label: 'About Us' },
-			{ href: '/partners', label: 'Partners' },
-			{ href: '/blog', label: 'Blog' },
-			{ href: '/policies', label: 'Policies' },
-		],
-	},
-];
+import { FOOTER_COLUMNS, FOOTER_COPYRIGHT, FOOTER_META_LINKS } from '@/lib/footer.ts';
 
 export function Footer() {
 	return (
@@ -84,37 +47,20 @@ export function Footer() {
 						/>
 					</AppLink>
 
-					<p className="text-center text-muted-foreground text-xs">
-						© 2026 Hot Aisle, Inc. AMD Exclusive AI Cloud.
-					</p>
+					<p className="text-center text-muted-foreground text-xs">{FOOTER_COPYRIGHT}</p>
 
 					<div className="flex items-center gap-4">
-						<AppLink
-							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-							href="/policies/privacy-policy"
-						>
-							Privacy
-						</AppLink>
-						<AppLink
-							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-							href="/policies/terms-of-service"
-						>
-							Terms
-						</AppLink>
-						<AppLink
-							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-							href="https://hotaisle.github.io/hotaisle-website/"
-							rel="noopener"
-							target="_blank"
-						>
-							Lighthouse
-						</AppLink>
-						<AppLink
-							className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-							href="/contact"
-						>
-							Contact
-						</AppLink>
+						{FOOTER_META_LINKS.map((link) => (
+							<AppLink
+								className="text-muted-foreground text-xs transition-colors hover:text-foreground"
+								href={link.href}
+								key={link.href}
+								rel={link.href.startsWith('http') ? 'noopener' : undefined}
+								target={link.href.startsWith('http') ? '_blank' : undefined}
+							>
+								{link.label}
+							</AppLink>
+						))}
 					</div>
 				</div>
 			</div>
