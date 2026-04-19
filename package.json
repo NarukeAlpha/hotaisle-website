@@ -19,7 +19,7 @@
 		"preview": "bun run preflight && bun run build:internal && bun run scripts/preview_static.ts",
 		"preview:vinext": "bun run preflight && vinext start",
 		"preview:static": "bun run preview",
-		"deploy": "bun run build && bun run wrangler deploy --config wrangler.jsonc",
+		"deploy": "bun run build && bun run wrangler deploy --config dist/server/wrangler.static.json",
 		"test": "bun test",
 		"tailwind:lint": "bun run scripts/fix_tailwind_lint.ts",
 		"tailwind:lint:dry": "bun run scripts/fix_tailwind_lint.ts --dry-run",
