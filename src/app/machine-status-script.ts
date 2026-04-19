@@ -1,4 +1,5 @@
 export function initializeMachineStatusScript(): void {
+	const ENABLE_MACHINE_STATUS_SOCKET = false;
 	const EVENT_TYPES = new Set(['vm', 'bm']);
 	const EVENT_STATUSES = new Set(['reserved', 'deleted']);
 	const HOME_SIGNAL_ID = 'ha-machine-status-signal';
@@ -20,6 +21,10 @@ export function initializeMachineStatusScript(): void {
 	let reconnectAttempts = 0;
 	let activeSocket: WebSocket | null = null;
 	let homeSignalResetTimeoutId = 0;
+
+	if (!ENABLE_MACHINE_STATUS_SOCKET) {
+		return;
+	}
 
 	const setup = () => {
 		const documentRoot = document;
