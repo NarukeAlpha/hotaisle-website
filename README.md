@@ -57,7 +57,22 @@ The site is deployed on Cloudflare Workers. Most routes are statically generated
 - `bun run check` runs formatting, import checks, and TypeScript.
 - `bun run test` runs the test suite.
 - `bun run build` generates the static output used for deploys.
+- `bun run preview` builds the static output and serves it locally over HTTPS at `https://localhost:4174`. This is a static-only server — the Worker is not running, so `/ws` and `/machine-status` are unavailable.
 - `bun run test:toast` posts a sample machine-status event to the local Worker.
+
+### Previewing with the Worker (WSS / machine-status)
+
+`bun run preview` does not start the Cloudflare Worker, so the WebSocket endpoint (`/ws`) and machine-status push (`/machine-status`) will not work. To test the full stack locally, build first then start Wrangler dev in a second terminal:
+
+```bash
+# Terminal 1
+bun run build
+
+# Terminal 2 — serves static assets + Worker at https://localhost:4174
+bun run wrangler dev --config wrangler.jsonc
+```
+
+Wrangler dev handles both static asset serving and the Worker, so `bun run preview` and `wrangler dev` should not run at the same time (they both bind port 4174).
 
 ### Realtime machine-status events
 
