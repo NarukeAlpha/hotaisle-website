@@ -385,7 +385,7 @@ function renderHero(
 			<div class="hero-copy">
 				<p class="hero-eyebrow">Performance Reports</p>
 				<h1>Hot Aisle Lighthouse Reports</h1>
-				<p>Latest Lighthouse run published from <a href="https://github.com/hotaisle/hotaisle-website/blob/main/.github/workflows/ci.yml" rel="noopener" target="_blank"><code>ci.yml</code></a>. This summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
+				<p>Latest <a href="https://developer.chrome.com/docs/lighthouse" rel="noopener" target="_blank">Lighthouse</a> run published from <a href="https://github.com/hotaisle/hotaisle-website/blob/main/.github/workflows/ci.yml" rel="noopener" target="_blank"><code>ci.yml</code></a>. This summary mirrors Lighthouse's score-first layout, then each audited page links to its full interactive HTML report.</p>
 				<div class="hero-meta">
 					<span>${representativeEntryCount} representative pages</span>
 					<span>${reportCount} total reports</span>
