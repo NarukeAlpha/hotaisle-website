@@ -8,7 +8,7 @@ const LOCAL_TLS_KEY_PATH = path.join(PROJECT_ROOT, '.dev-localhost-key.pem');
 const OPENSSL_SUBJECT = '/CN=localhost';
 const OPENSSL_SUBJECT_ALT_NAME = 'subjectAltName=DNS:localhost,IP:127.0.0.1,IP:::1';
 
-const ensureCertificateExists = (): void => {
+export const ensureLocalTlsCertificateExists = (): void => {
 	const hasCertificate = existsSync(LOCAL_TLS_CERT_PATH);
 	const hasKey = existsSync(LOCAL_TLS_KEY_PATH);
 
@@ -47,4 +47,6 @@ const ensureCertificateExists = (): void => {
 	}
 };
 
-ensureCertificateExists();
+if (import.meta.main) {
+	ensureLocalTlsCertificateExists();
+}
