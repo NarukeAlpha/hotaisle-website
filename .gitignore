@@ -17,6 +17,7 @@
 .open-next/*
 /dist
 /dist-static
+/public/assets/blog
 
 # misc
 
@@ -37,6 +38,7 @@ logs
 
 # env files (can opt-in for committing if needed)
 .env*
+.dev*
 
 # cf
 .wrangler/*
