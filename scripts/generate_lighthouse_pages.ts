@@ -2,8 +2,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
 	FOOTER_COLUMNS,
-	FOOTER_COPYRIGHT,
 	FOOTER_META_LINKS,
+	getFooterCopyright,
 	resolveFooterHref,
 	SITE_BASE_URL,
 } from '@/lib/footer.ts';
@@ -330,6 +330,7 @@ function renderAllReportsTable(
 }
 
 function renderFooter(logoSvg: string): string {
+	const footerCopyright = getFooterCopyright();
 	const footerColumns = FOOTER_COLUMNS.map((column) => {
 		const links = column.links
 			.map(
@@ -359,7 +360,7 @@ function renderFooter(logoSvg: string): string {
 					<a aria-label="Hot Aisle home" class="footer-logo" href="${SITE_BASE_URL}" rel="noopener" target="_blank">
 						<span aria-hidden="true" class="footer-logo-mark">${logoSvg}</span>
 					</a>
-					<p>${escapeHtml(FOOTER_COPYRIGHT)}</p>
+					<p>${escapeHtml(footerCopyright)}</p>
 					<nav aria-label="Footer links" class="footer-meta-links">
 						${FOOTER_META_LINKS.map(
 							(link) =>

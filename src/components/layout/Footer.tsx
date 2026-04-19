@@ -1,7 +1,9 @@
 import { AppLink } from '@/components/AppLink.tsx';
-import { FOOTER_COLUMNS, FOOTER_COPYRIGHT, FOOTER_META_LINKS } from '@/lib/footer.ts';
+import { FOOTER_COLUMNS, FOOTER_META_LINKS, getFooterCopyright } from '@/lib/footer.ts';
 
 export function Footer() {
+	const footerCopyright = getFooterCopyright();
+
 	return (
 		<footer className="border-border/60 border-t bg-card">
 			{/* Top accent line */}
@@ -47,7 +49,7 @@ export function Footer() {
 						/>
 					</AppLink>
 
-					<p className="text-center text-muted-foreground text-xs">{FOOTER_COPYRIGHT}</p>
+					<p className="text-center text-muted-foreground text-xs">{footerCopyright}</p>
 
 					<div className="flex items-center gap-4">
 						{FOOTER_META_LINKS.map((link) => (

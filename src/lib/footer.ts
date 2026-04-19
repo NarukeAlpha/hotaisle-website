@@ -1,6 +1,5 @@
 export const SITE_BASE_URL = 'https://hotaisle.xyz' as const;
 export const LIGHTHOUSE_INDEX_URL = 'https://hotaisle.github.io/hotaisle-website/' as const;
-export const FOOTER_COPYRIGHT = '© 2026 Hot Aisle, Inc. AMD Exclusive AI Cloud.' as const;
 const ABSOLUTE_URL_REGEX = /^https?:\/\//;
 
 export interface FooterLink {
@@ -57,6 +56,10 @@ export const FOOTER_META_LINKS: FooterLink[] = [
 	{ href: LIGHTHOUSE_INDEX_URL, label: 'Lighthouse' },
 	{ href: '/contact', label: 'Contact' },
 ];
+
+export function getFooterCopyright(): string {
+	return `© ${new Date().getFullYear()} Hot Aisle, Inc. AMD Exclusive AI Cloud.`;
+}
 
 export function resolveFooterHref(href: string, baseUrl: string = SITE_BASE_URL): string {
 	if (ABSOLUTE_URL_REGEX.test(href)) {
