@@ -3,7 +3,7 @@ import path from 'node:path';
 import './ensure_dev_tls.ts';
 import { startStaticServer } from './static_server.ts';
 
-const DEFAULT_HOST = '127.0.0.1';
+const DEFAULT_HOST = 'localhost';
 const DEFAULT_PORT = 4174;
 const DIST_STATIC_DIRECTORY = path.join(import.meta.dirname, '..', 'dist-static');
 const LOCAL_TLS_CERT_PATH = path.join(import.meta.dirname, '..', '.dev-localhost-cert.pem');
