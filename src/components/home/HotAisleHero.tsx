@@ -287,7 +287,6 @@ export default function HotAisleHero() {
 						</p>
 					</div>
 				</div>
-
 				{/* Bottom fade */}
 				<div
 					className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t to-transparent"

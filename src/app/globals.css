@@ -114,6 +114,140 @@ body {
 	background-color: var(--background);
 }
 
+.ha-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	white-space: nowrap;
+	border: 0;
+	clip: rect(0, 0, 0, 0);
+}
+
+.ha-machine-home-signal {
+	position: fixed;
+	top: 5.5rem;
+	right: 1rem;
+	z-index: 80;
+	width: min(22rem, calc(100vw - 1.5rem));
+	min-height: 10.5rem;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(18px) scale(0.96);
+}
+
+.ha-machine-home-signal.is-active {
+	animation: ha-machine-home-signal-enter 420ms
+		cubic-bezier(0.18, 0.89, 0.32, 1.18) forwards;
+}
+
+.ha-machine-home-signal__glow {
+	position: absolute;
+	inset: 1rem;
+	background: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--hot-orange) 32%, transparent),
+		transparent 72%
+	);
+	border-radius: 999px;
+	opacity: 0.9;
+	filter: blur(28px);
+}
+
+.ha-machine-home-signal[data-status="deleted"] .ha-machine-home-signal__glow {
+	background: radial-gradient(
+		circle,
+		color-mix(in srgb, var(--destructive) 22%, transparent),
+		transparent 72%
+	);
+}
+
+.ha-machine-home-signal__frame {
+	position: relative;
+	display: grid;
+	gap: 0.7rem;
+	padding: 1.2rem 1.2rem 1.35rem;
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--background) 54%, transparent),
+		color-mix(in srgb, var(--card) 88%, transparent)
+	);
+	border: 1px solid color-mix(in srgb, var(--hot-orange) 28%, var(--border));
+	border-radius: 1.4rem;
+	box-shadow:
+		0 24px 60px rgb(0 0 0 / 0.24),
+		0 0 0 1px color-mix(in srgb, var(--hot-orange) 14%, transparent) inset;
+	backdrop-filter: blur(20px);
+}
+
+.ha-machine-home-signal[data-status="deleted"] .ha-machine-home-signal__frame {
+	border-color: color-mix(in srgb, var(--destructive) 18%, var(--border));
+	box-shadow:
+		0 24px 60px rgb(0 0 0 / 0.24),
+		0 0 0 1px color-mix(in srgb, var(--destructive) 14%, transparent) inset;
+}
+
+.ha-machine-home-signal__eyebrow {
+	font-size: 0.72rem;
+	font-weight: 700;
+	color: color-mix(in srgb, var(--muted-foreground) 82%, var(--hot-orange));
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+}
+
+.ha-machine-home-signal__title {
+	font-size: clamp(1.6rem, 2vw, 2rem);
+	font-weight: 800;
+	line-height: 1;
+	color: var(--foreground);
+	text-transform: uppercase;
+	letter-spacing: -0.04em;
+}
+
+.ha-machine-home-signal__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.65rem;
+	font-size: 0.82rem;
+	font-weight: 600;
+	color: var(--muted-foreground);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.ha-header-cta {
+	border-radius: calc(var(--radius) + 2px);
+}
+
+@keyframes ha-machine-home-signal-enter {
+	0% {
+		opacity: 0;
+		transform: translateY(18px) scale(0.96);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@media (max-width: 640px) {
+	.ha-machine-home-signal {
+		top: 5rem;
+		right: 0.75rem;
+		left: 0.75rem;
+		width: auto;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ha-machine-home-signal.is-active {
+		animation-duration: 1ms !important;
+	}
+}
+
 .inline-label-group {
 	display: inline;
 }

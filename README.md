@@ -17,7 +17,7 @@ This repository contains the frontend application that powers **[hotaisle.xyz](h
 
 ## Hosting
 
-The site is hosted on CloudFlare workers and is just static generated without any connections to anything. We could have some dynamic aspects some day. Have fun hackers.
+The site is deployed on Cloudflare Workers. Most routes are statically generated, but local and production runtime also include a small Worker surface for realtime machine-status events and websocket fanout.
 
 ## ✨ Key Features
 
@@ -42,22 +42,85 @@ The site is hosted on CloudFlare workers and is just static generated without an
     bun run dev
     ```
 
-    Open [http://127.0.0.1:4174](http://127.0.0.1:4174) to view the application.
+    Open [https://localhost:4174](https://localhost:4174) to view the application.
+
+### Local development notes
+
+- `bun run dev` starts Vinext on HTTPS at `https://localhost:4174`.
+- Local TLS certs are generated automatically if `.dev-localhost-cert.pem` or `.dev-localhost-key.pem` are missing.
+- Local-only `.dev*` files are ignored by git and excluded from the static export.
+- Blog images under `content/blog/assets` are mirrored into generated `public/assets/blog` during content generation so Vite dev can serve `/assets/blog/...` correctly.
+- The content watcher regenerates on blog markdown, policy markdown, and blog asset changes.
+
+### Useful scripts
+
+- `bun run check` runs formatting, import checks, and TypeScript.
+- `bun run test` runs the test suite.
+- `bun run build` generates the static output used for deploys.
+- `bun run test:toast` posts a sample machine-status event to the local Worker.
+
+### Realtime machine-status events
+
+The local Worker exposes:
+
+- `POST /machine-status`
+- `GET /ws`
+
+`POST /machine-status` expects the shared secret header:
+
+```text
+x-hotaisle-machine-status-secret: <secret>
+```
+
+Local dev defaults:
+
+- URL: `https://localhost:4174/machine-status`
+- Secret: `dev-secret`
+
+Payloads:
+
+```json
+{ "type": "bm", "status": "deleted" }
+```
+
+```json
+{ "type": "vm", "gpuCount": 4, "status": "reserved" }
+```
+
+Test from the repo with:
+
+```bash
+bun run test:toast
+bun run test:toast bm reserved
+bun run test:toast vm reserved 4
+```
+
+Optional overrides:
+
+```bash
+HOTAISLE_MACHINE_STATUS_SECRET=your-secret \
+HOTAISLE_MACHINE_STATUS_URL=https://localhost:4174/machine-status \
+bun run test:toast vm deleted 8
+```
 
 
 ## 📂 Project Structure
 
 ```
 hotaisle-next/
-├── public/              # Static assets (images, logos, icons)
-│   └── assets/          # Blog and content images
-├── scripts/             # Maintenance scripts (date fixers, tag generators)
+├── content/             # Markdown content and source blog assets
+├── public/              # Static assets served directly by Vite/Worker
+│   └── assets/blog/     # Generated mirror of content/blog/assets for local dev
+├── scripts/             # Build, content, and maintenance scripts
 ├── src/
 │   ├── app/             # App Router pages
 │   ├── components/      # Reusable UI components
 │   │   ├── home/        # Homepage specific (PyramidHero, SecuritySection)
 │   │   └── layout/      # Sidebar, Header, Footer
-│   └── lib/             # Utility functions
+│   ├── lib/             # Utility functions
+│   └── worker/          # Cloudflare Worker entrypoint and Durable Objects
+├── wrangler.jsonc       # Cloudflare Worker config
+└── dist-static/         # Generated deploy output
 ```
 
 ## 🎨 Branding

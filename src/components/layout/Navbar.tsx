@@ -93,7 +93,7 @@ export function Navbar() {
 						</button>
 
 						<AppLink
-							className="hidden rounded-lg bg-hot-orange px-4 py-2 font-medium text-sm text-white shadow-sm transition hover:opacity-90 lg:inline-flex"
+							className="ha-header-cta hidden bg-hot-orange px-4 py-2 font-medium text-sm text-white shadow-sm transition hover:opacity-90 lg:inline-flex"
 							href={HEADER_CTA_LINK.href}
 						>
 							{HEADER_CTA_LINK.label}
