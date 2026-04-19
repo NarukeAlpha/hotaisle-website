@@ -87,6 +87,7 @@ function ParticleField() {
 					className="ha-hero-particle absolute rounded-full"
 					data-hero-star
 					key={particle.id}
+					suppressHydrationWarning
 					style={{
 						animationDelay: `${particle.delay}s`,
 						animationDuration: `${particle.duration}s`,
@@ -287,7 +288,6 @@ export default function HotAisleHero() {
 						</p>
 					</div>
 				</div>
-
 				{/* Bottom fade */}
 				<div
 					className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t to-transparent"

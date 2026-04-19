@@ -1,6 +1,7 @@
 import { initializeBlogImageModalScript } from '@/app/blog-image-modal-script.ts';
 import { initializeCopyCommandScript } from '@/app/copy-command-script.ts';
 import { initializeHeroStarsScript } from '@/app/hero-stars-script.ts';
+import { initializeMachineStatusScript } from '@/app/machine-status-script.ts';
 import { initializeMobileNavScript } from '@/app/mobile-nav-script.ts';
 import { initializeThemeScript } from '@/app/theme-script.ts';
 import { initializeWebMcpScript } from '@/app/webmcp-script.ts';
@@ -22,6 +23,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 const BLOG_IMAGE_MODAL_SCRIPT = `(${initializeBlogImageModalScript.toString()})();`;
 const COPY_COMMAND_SCRIPT = `(${initializeCopyCommandScript.toString()})();`;
 const HERO_STARS_SCRIPT = `(${initializeHeroStarsScript.toString()})();`;
+const MACHINE_STATUS_SCRIPT = `(${initializeMachineStatusScript.toString()})();`;
 const MOBILE_NAV_SCRIPT = `(${initializeMobileNavScript.toString()})();`;
 const THEME_SCRIPT = `(${initializeThemeScript.toString()})();`;
 const WEB_MCP_SCRIPT = `(${initializeWebMcpScript.toString()})();`;
@@ -84,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<script>{BLOG_IMAGE_MODAL_SCRIPT}</script>
 				<script>{COPY_COMMAND_SCRIPT}</script>
 				<script>{HERO_STARS_SCRIPT}</script>
+				<script>{MACHINE_STATUS_SCRIPT}</script>
 				<script>{MOBILE_NAV_SCRIPT}</script>
 				<script>{THEME_SCRIPT}</script>
 				<script>{WEB_MCP_SCRIPT}</script>

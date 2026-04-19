@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"tsBuildInfoFile": ".tsbuild/tsconfig.tsbuildinfo",
 		"target": "ESNext",
 		"useDefineForClassFields": true,
 		"lib": ["ESNext", "DOM", "DOM.Iterable"],

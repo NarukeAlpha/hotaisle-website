@@ -8,6 +8,7 @@ const execAsync = promisify(exec);
 const CONTENT_DIR = path.join(process.cwd(), 'content');
 const BLOG_DIR = path.join(CONTENT_DIR, 'blog');
 const POLICIES_DIR = path.join(CONTENT_DIR, 'policies');
+const CONTENT_REBUILD_TRIGGER_REGEX = /\.(avif|gif|jpe?g|json|md|png|svg|webp)$/i;
 
 let isGenerating = false;
 
@@ -35,7 +36,7 @@ function watchDirectory(dir: string) {
 	}
 
 	fs.watch(dir, { recursive: true }, (_eventType, filename) => {
-		if (filename?.endsWith('.md')) {
+		if (filename && CONTENT_REBUILD_TRIGGER_REGEX.test(filename)) {
 			regenerateContent();
 		}
 	});
