@@ -24,6 +24,12 @@ const SERVER_ENTRY_CANDIDATES = [
 	path.join(DIST_DIRECTORY, 'server', 'index.js'),
 	path.join(DIST_DIRECTORY, 'server', 'ssr', 'index.js'),
 ] as const;
+const GENERATED_DEPLOY_WRANGLER_CONFIG_PATH = path.join(DIST_DIRECTORY, 'server', 'wrangler.json');
+const STATIC_DEPLOY_WRANGLER_CONFIG_PATH = path.join(
+	DIST_DIRECTORY,
+	'server',
+	'wrangler.static.json'
+);
 const VITE_METADATA_DIRECTORY_NAME = '.vite';
 const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const DEV_FILE_PREFIX = '.dev';
@@ -71,6 +77,7 @@ await cp(CLIENT_DIRECTORY, STATIC_DIST_DIRECTORY, {
 	recursive: true,
 });
 
+await writeStaticDeployWranglerConfig();
 await writeSitemapFiles();
 
 const routes = await appRouter(APP_DIRECTORY);
@@ -148,6 +155,25 @@ async function writeSitemapFiles(): Promise<void> {
 		await mkdir(path.dirname(outputPath), { recursive: true });
 		await writeFile(outputPath, sitemapXml, 'utf8');
 	}
+}
+
+async function writeStaticDeployWranglerConfig(): Promise<void> {
+	const generatedWranglerConfig = JSON.parse(
+		await readFile(GENERATED_DEPLOY_WRANGLER_CONFIG_PATH, 'utf8')
+	) as {
+		assets?: { directory?: string };
+	};
+
+	generatedWranglerConfig.assets = {
+		...generatedWranglerConfig.assets,
+		directory: '../../dist-static',
+	};
+
+	await writeFile(
+		STATIC_DEPLOY_WRANGLER_CONFIG_PATH,
+		`${JSON.stringify(generatedWranglerConfig, null, 2)}\n`,
+		'utf8'
+	);
 }
 
 async function syncPublicAssetsToClientOutput(): Promise<void> {
