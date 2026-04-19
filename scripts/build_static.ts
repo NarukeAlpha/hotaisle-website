@@ -3,6 +3,7 @@ import { cp, mkdir, readdir, readFile, rm, stat, utimes, writeFile } from 'node:
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { minify as minifyHtml } from '@minify-html/node';
+import { transform as transformCss } from 'lightningcss';
 import { minifySync } from 'oxc-minify';
 import { BLOG_POSTS } from '@/generated/blog-data.ts';
 import { POLICIES } from '@/generated/static-content-data.ts';
@@ -29,8 +30,16 @@ const DEV_FILE_PREFIX = '.dev';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
 const INLINE_SCRIPT_REGEX = /<script([^>]*)>([\s\S]*?)<\/script>/g;
-const STYLESHEET_LINK_REGEX = /<link rel="stylesheet" href="([^"]+)"([^>]*)>/g;
-const STYLESHEET_PRELOAD_REGEX = /<link rel="preload" href="([^"]+\.css)" as="style"[^>]*\/?>/g;
+const INLINE_STYLE_REGEX = /<style([^>]*)>([\s\S]*?)<\/style>/g;
+const LINK_TAG_REGEX = /<link\b[^>]*>/g;
+const STYLESHEET_PRELOAD_REGEX =
+	/<link\b[^>]*\brel=(?:"preload"|'preload'|preload)\b[^>]*\bas=(?:"style"|'style'|style)\b[^>]*\/?>/g;
+const MODULE_PRELOAD_REGEX =
+	/<link\b[^>]*\brel=(?:"modulepreload"|'modulepreload'|modulepreload)\b[^>]*\/?>/g;
+const TRAILING_RSC_SCRIPTS_REGEX =
+	/(<\/html>)(?:<script\b[^>]*>self\.__VINEXT_RSC_[\s\S]*?<\/script>)+\s*$/g;
+const ATTRIBUTE_VALUE_REGEX = /([^\s=]+)=(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g;
+const CSS_COMMENT_REGEX = /\/\*[\s\S]*?\*\//g;
 const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
 const EDGE_DASHES_REGEX = /^-+|-+$/g;
@@ -93,7 +102,7 @@ for (const routePath of exportedPaths) {
 		throw new Error(`Failed to export ${routePath}: ${htmlResponse.status}`);
 	}
 	const rawHtml = await htmlResponse.text();
-	const html = await normalizeExportedHtml(rawHtml, routePath);
+	const html = await normalizeExportedHtml(rawHtml);
 	const outputPath = toOutputPath(routePath);
 	const fullPath = path.join(STATIC_DIST_DIRECTORY, outputPath);
 
@@ -120,11 +129,12 @@ function toRequestPath(routePath: string): string {
 	return routePath.endsWith('/') ? routePath : `${routePath}/`;
 }
 
-async function normalizeExportedHtml(html: string, routePath: string): Promise<string> {
+async function normalizeExportedHtml(html: string): Promise<string> {
 	const stripped = stripClientBootstrap(html);
-	const withStyles = routePath === '/' ? await inlineStylesheetLinks(stripped) : stripped;
+	const withStyles = await inlineStylesheetLinks(stripped);
 	const withMinifiedJs = minifyInlineScripts(withStyles);
-	return minifyHtml(Buffer.from(withMinifiedJs), { minify_js: false, minify_css: true }).toString('utf8');
+	const withMinifiedCss = minifyInlineStyles(withMinifiedJs);
+	return minifyHtml(Buffer.from(withMinifiedCss), { minify_js: false, minify_css: false }).toString('utf8');
 }
 
 async function writeSitemapFiles(): Promise<void> {
@@ -311,29 +321,67 @@ function minifyInlineScripts(html: string): string {
 	return result + html.slice(lastIndex);
 }
 
+function minifyInlineStyles(html: string): string {
+	const matches = [...html.matchAll(INLINE_STYLE_REGEX)];
+	if (matches.length === 0) {
+		return html;
+	}
+
+	let result = '';
+	let lastIndex = 0;
+
+	for (const match of matches) {
+		const [fullMatch, attributes, content] = match;
+		const matchIndex = match.index ?? 0;
+		result += html.slice(lastIndex, matchIndex);
+
+		if (content.trim().length > 0) {
+			const { code } = transformCss({
+				code: Buffer.from(content),
+				filename: 'style.css',
+				minify: true,
+			});
+			const minifiedCss = Buffer.from(code).toString('utf8').replace(CSS_COMMENT_REGEX, '');
+			result += `<style${attributes}>${minifiedCss}</style>`;
+		} else {
+			result += fullMatch;
+		}
+
+		lastIndex = matchIndex + fullMatch.length;
+	}
+
+	return result + html.slice(lastIndex);
+}
+
 function stripClientBootstrap(html: string): string {
 	return html
 		.replace(STYLESHEET_PRELOAD_REGEX, '')
-		.replace(
-			/<link rel="modulepreload" href="\/assets\/[^"]+\.js"(?: crossorigin="")?\s*\/>/g,
-			''
-		)
+		.replace(MODULE_PRELOAD_REGEX, '')
+		.replace(TRAILING_RSC_SCRIPTS_REGEX, '$1')
 		.replace(/<script>self\.__VINEXT_RSC_PARAMS__=.*?<\/script>/g, '')
 		.replace(/<script>self\.__VINEXT_RSC_NAV__=.*?<\/script>/g, '')
 		.replace(/<script id="_R_">[\s\S]*?<\/script>/g, '');
 }
 
 async function inlineStylesheetLinks(html: string): Promise<string> {
-	const stylesheetMatches = [...html.matchAll(STYLESHEET_LINK_REGEX)];
+	const linkMatches = [...html.matchAll(LINK_TAG_REGEX)];
 
-	if (stylesheetMatches.length === 0) {
+	if (linkMatches.length === 0) {
 		return html;
 	}
 
 	let transformedHtml = html;
 
-	for (const stylesheetMatch of stylesheetMatches) {
-		const [fullMatch, href] = stylesheetMatch;
+	for (const linkMatch of linkMatches) {
+		const [fullMatch] = linkMatch;
+		const attributes = getTagAttributes(fullMatch);
+		const href = attributes.href;
+		const rel = attributes.rel?.toLowerCase();
+
+		if (rel !== 'stylesheet' || !href) {
+			continue;
+		}
+
 		const stylesheetPath = toLocalAssetPath(href);
 
 		if (!stylesheetPath) {
@@ -346,6 +394,19 @@ async function inlineStylesheetLinks(html: string): Promise<string> {
 	}
 
 	return transformedHtml;
+}
+
+function getTagAttributes(tag: string): Record<string, string> {
+	const attributes: Record<string, string> = {};
+
+	for (const match of tag.matchAll(ATTRIBUTE_VALUE_REGEX)) {
+		const [, rawName, doubleQuotedValue, singleQuotedValue, unquotedValue] = match;
+		const normalizedName = rawName.toLowerCase();
+		const value = doubleQuotedValue ?? singleQuotedValue ?? unquotedValue ?? '';
+		attributes[normalizedName] = value;
+	}
+
+	return attributes;
 }
 
 function toLocalAssetPath(href: string): string | null {
