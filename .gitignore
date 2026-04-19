@@ -43,6 +43,8 @@ logs
 # cf
 .wrangler/*
 worker
+!src/worker/
+!src/worker/**
 
 # typescript
 *.tsbuildinfo
