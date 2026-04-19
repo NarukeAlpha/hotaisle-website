@@ -2,14 +2,14 @@ import { spawn } from 'node:child_process';
 import { cp, mkdir, readdir, readFile, rm, stat, utimes, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { minify as minifyWithRolldown } from 'rolldown/utils';
+import { minify as minifyHtml } from '@minify-html/node';
+import { minifySync } from 'oxc-minify';
 import { BLOG_POSTS } from '@/generated/blog-data.ts';
 import { POLICIES } from '@/generated/static-content-data.ts';
 import { appRouter } from '../node_modules/vinext/dist/routing/app-router.js';
 import { createSitemapXml } from './generate_sitemap.ts';
 
 const EXPORT_ORIGIN = 'https://static.hotaisle.local';
-const HTML_CLOSE_TAG = '</html>';
 const PROJECT_ROOT = path.join(import.meta.dirname, '..');
 const BLOG_ASSET_SOURCE_DIRECTORY = path.join(PROJECT_ROOT, 'content', 'blog', 'assets');
 const PUBLIC_DIRECTORY = path.join(PROJECT_ROOT, 'public');
@@ -23,25 +23,17 @@ const SERVER_ENTRY_CANDIDATES = [
 	path.join(DIST_DIRECTORY, 'server', 'index.js'),
 	path.join(DIST_DIRECTORY, 'server', 'ssr', 'index.js'),
 ] as const;
-const INLINE_SCRIPT_FILE_NAME = 'inline-script.js';
-const DS_STORE_FILE_NAME = '.DS_Store';
 const VITE_METADATA_DIRECTORY_NAME = '.vite';
 const WRANGLER_CONFIG_FILE_NAME = 'wrangler.json';
 const DEV_FILE_PREFIX = '.dev';
 const REDIRECT_STATUS_CODES = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECT_HOPS = 10;
-const PRE_BLOCK_REGEX = /<pre\b[^>]*>[\s\S]*?<\/pre>/gi;
+const INLINE_SCRIPT_REGEX = /<script([^>]*)>([\s\S]*?)<\/script>/g;
 const STYLESHEET_LINK_REGEX = /<link rel="stylesheet" href="([^"]+)"([^>]*)>/g;
 const STYLESHEET_PRELOAD_REGEX = /<link rel="preload" href="([^"]+\.css)" as="style"[^>]*\/?>/g;
-const INDEX_HTML_SUFFIX_REGEX = /\/index\.html$/;
-const WINDOWS_PATH_SEPARATOR_REGEX = /\\/g;
 const UNICODE_DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const NON_ALPHANUMERIC_REGEX = /[^a-z0-9]+/g;
 const EDGE_DASHES_REGEX = /^-+|-+$/g;
-interface CssSegment {
-	isString: boolean;
-	value: string;
-}
 
 process.env.NODE_ENV = 'production';
 
@@ -129,15 +121,10 @@ function toRequestPath(routePath: string): string {
 }
 
 async function normalizeExportedHtml(html: string, routePath: string): Promise<string> {
-	const htmlDocument = stripTrailingContentAfterHtml(html);
-	const htmlWithoutClientBootstrap = shouldStripClientBootstrap(routePath)
-		? stripClientBootstrap(htmlDocument)
-		: htmlDocument;
-	const htmlWithOptimizedStyles = shouldInlineStyles(routePath)
-		? await inlineStylesheetLinks(htmlWithoutClientBootstrap)
-		: htmlWithoutClientBootstrap;
-
-	return await minifyExportedHtml(htmlWithOptimizedStyles);
+	const stripped = stripClientBootstrap(html);
+	const withStyles = routePath === '/' ? await inlineStylesheetLinks(stripped) : stripped;
+	const withMinifiedJs = minifyInlineScripts(withStyles);
+	return minifyHtml(Buffer.from(withMinifiedJs), { minify_js: false, minify_css: true }).toString('utf8');
 }
 
 async function writeSitemapFiles(): Promise<void> {
@@ -226,55 +213,30 @@ async function copyBlogAssetsToOutput(
 	sourceDirectory: string,
 	destinationDirectory: string
 ): Promise<void> {
-	await mkdir(destinationDirectory, { recursive: true });
-	const directoryEntries = await readdir(sourceDirectory, { withFileTypes: true });
+	const allEntries = await readdir(sourceDirectory, { recursive: true });
 
-	for (const directoryEntry of directoryEntries) {
-		const sourcePath = path.join(sourceDirectory, directoryEntry.name);
-		const destinationPath = path.join(destinationDirectory, toSlugSegment(directoryEntry.name));
+	await Promise.all(
+		allEntries.map(async (relativePath) => {
+			const sourcePath = path.join(sourceDirectory, relativePath);
+			const sourceStats = await stat(sourcePath).catch(() => null);
+			if (!sourceStats?.isFile()) return;
 
-		if (directoryEntry.isDirectory()) {
-			await copyBlogAssetsToOutput(sourcePath, destinationPath);
-			continue;
-		}
+			const sluggedRelativePath = relativePath
+				.split(path.sep)
+				.map(toSlugSegment)
+				.join(path.sep);
+			const destPath = path.join(destinationDirectory, sluggedRelativePath);
 
-		if (!directoryEntry.isFile()) {
-			continue;
-		}
+			const destStats = await stat(destPath).catch(() => null);
+			if (destStats && destStats.size === sourceStats.size && destStats.mtimeMs >= sourceStats.mtimeMs) {
+				return;
+			}
 
-		const [sourceStats, destinationStats] = await Promise.all([
-			stat(sourcePath),
-			stat(destinationPath).catch(() => null),
-		]);
-		const shouldSkipCopy =
-			destinationStats &&
-			destinationStats.size === sourceStats.size &&
-			destinationStats.mtimeMs >= sourceStats.mtimeMs;
-
-		if (shouldSkipCopy) {
-			continue;
-		}
-
-		await cp(sourcePath, destinationPath, { force: true });
-		await utimes(destinationPath, sourceStats.atime, sourceStats.mtime);
-	}
-}
-
-function shouldStripClientBootstrap(_routePath: string): boolean {
-	return true;
-}
-
-function shouldInlineStyles(routePath: string): boolean {
-	return routePath === '/';
-}
-
-function stripTrailingContentAfterHtml(html: string): string {
-	const htmlCloseIndex = html.lastIndexOf(HTML_CLOSE_TAG);
-	if (htmlCloseIndex === -1) {
-		return html;
-	}
-
-	return html.slice(0, htmlCloseIndex + HTML_CLOSE_TAG.length);
+			await mkdir(path.dirname(destPath), { recursive: true });
+			await cp(sourcePath, destPath, { force: true });
+			await utimes(destPath, sourceStats.atime, sourceStats.mtime);
+		})
+	);
 }
 
 async function renderStaticRoute(
@@ -313,31 +275,40 @@ async function renderStaticRoute(
 	throw new Error(`Too many redirects while exporting ${requestPath}`);
 }
 
-async function minifyExportedHtml(html: string): Promise<string> {
-	const htmlWithMinifiedScripts = await minifyInlineBlocks(html, 'script');
-	const htmlWithMinifiedStyles = await minifyInlineBlocks(htmlWithMinifiedScripts, 'style');
-
-	return collapseInterTagWhitespaceOutsidePre(htmlWithMinifiedStyles).trim();
-}
-
-function collapseInterTagWhitespaceOutsidePre(html: string): string {
-	const preservedPreBlocks: string[] = [];
-	let protectedHtml = html;
-
-	protectedHtml = protectedHtml.replace(PRE_BLOCK_REGEX, (preBlock: string) => {
-		const placeholder = `__HOTAISLE_PRE_BLOCK_${preservedPreBlocks.length}__`;
-		preservedPreBlocks.push(preBlock);
-		return placeholder;
-	});
-
-	let restoredHtml = protectedHtml.replace(/>\s+</g, '><');
-
-	for (const [index, preBlock] of preservedPreBlocks.entries()) {
-		const placeholder = `__HOTAISLE_PRE_BLOCK_${index}__`;
-		restoredHtml = restoredHtml.replace(placeholder, preBlock);
+function minifyInlineScripts(html: string): string {
+	const matches = [...html.matchAll(INLINE_SCRIPT_REGEX)];
+	if (matches.length === 0) {
+		return html;
 	}
 
-	return restoredHtml;
+	let result = '';
+	let lastIndex = 0;
+
+	for (const match of matches) {
+		const [fullMatch, attributes, content] = match;
+		const matchIndex = match.index ?? 0;
+		result += html.slice(lastIndex, matchIndex);
+
+		const normalizedAttributes = attributes.toLowerCase();
+		const shouldMinify =
+			content.trim().length > 0 &&
+			!normalizedAttributes.includes(' src=') &&
+			!normalizedAttributes.includes('application/ld+json');
+
+		if (shouldMinify) {
+			const { code, errors } = minifySync('script.js', content, { module: false });
+			if (errors.length > 0) {
+				throw new Error(errors[0]?.message ?? 'oxc-minify failed on inline script');
+			}
+			result += `<script${attributes}>${code.trim()}</script>`;
+		} else {
+			result += fullMatch;
+		}
+
+		lastIndex = matchIndex + fullMatch.length;
+	}
+
+	return result + html.slice(lastIndex);
 }
 
 function stripClientBootstrap(html: string): string {
@@ -386,218 +357,19 @@ function toLocalAssetPath(href: string): string | null {
 }
 
 async function scrubExportedHtmlFiles(directory: string): Promise<void> {
-	const directoryEntries = await readdir(directory, { withFileTypes: true });
+	const allEntries = await readdir(directory, { recursive: true });
 
-	for (const directoryEntry of directoryEntries) {
-		const entryPath = path.join(directory, directoryEntry.name);
-
-		if (directoryEntry.isDirectory()) {
-			await scrubExportedHtmlFiles(entryPath);
-			continue;
-		}
-
-		if (!(directoryEntry.isFile() && entryPath.endsWith('.html'))) {
-			continue;
-		}
-
-		const routePath = toRoutePathFromHtmlFile(entryPath);
-		if (!shouldStripClientBootstrap(routePath)) {
-			continue;
-		}
-
-		const html = await readFile(entryPath, 'utf8');
-		const strippedHtml = stripClientBootstrap(html);
-
-		if (strippedHtml !== html) {
-			await writeFile(entryPath, strippedHtml, 'utf8');
-		}
-	}
-}
-
-function toRoutePathFromHtmlFile(entryPath: string): string {
-	const relativePath = path.relative(STATIC_DIST_DIRECTORY, entryPath);
-	if (relativePath === 'index.html') {
-		return '/';
-	}
-
-	const normalizedPath = relativePath
-		.replace(INDEX_HTML_SUFFIX_REGEX, '')
-		.replace(WINDOWS_PATH_SEPARATOR_REGEX, '/');
-	return `/${normalizedPath}`;
-}
-
-async function minifyInlineBlocks(html: string, tagName: 'script' | 'style'): Promise<string> {
-	const tagPattern =
-		tagName === 'script'
-			? /<script([^>]*)>([\s\S]*?)<\/script>/g
-			: /<style([^>]*)>([\s\S]*?)<\/style>/g;
-
-	const matches = Array.from(html.matchAll(tagPattern));
-	if (matches.length === 0) {
-		return html;
-	}
-
-	let minifiedHtml = '';
-	let lastIndex = 0;
-
-	for (const match of matches) {
-		const [fullMatch, attributes, content] = match;
-		const matchIndex = match.index ?? 0;
-
-		minifiedHtml += html.slice(lastIndex, matchIndex);
-
-		const nextContent = await minifyInlineBlockContent(tagName, attributes, content);
-		minifiedHtml += `<${tagName}${attributes}>${nextContent}</${tagName}>`;
-
-		lastIndex = matchIndex + fullMatch.length;
-	}
-
-	minifiedHtml += html.slice(lastIndex);
-	return minifiedHtml;
-}
-
-async function minifyInlineBlockContent(
-	tagName: 'script' | 'style',
-	attributes: string,
-	content: string
-): Promise<string> {
-	if (content.trim().length === 0) {
-		return '';
-	}
-
-	if (tagName === 'script') {
-		const normalizedAttributes = attributes.toLowerCase();
-		if (
-			normalizedAttributes.includes(' src=') ||
-			normalizedAttributes.includes('type="application/ld+json"') ||
-			normalizedAttributes.includes("type='application/ld+json'")
-		) {
-			return content.trim();
-		}
-
-		return await minifyInlineScript(content);
-	}
-
-	return minifyInlineCss(content);
-}
-
-async function minifyInlineScript(content: string): Promise<string> {
-	const result = await minifyWithRolldown(INLINE_SCRIPT_FILE_NAME, content, {
-		module: false,
-	});
-
-	if (result.errors.length > 0) {
-		const [firstError] = result.errors;
-		throw new Error(firstError?.message ?? 'Rolldown failed to minify inline script');
-	}
-
-	return result.code.trim();
-}
-
-function minifyInlineCss(content: string): string {
-	const cssSegments = splitCssSegments(content);
-	let minifiedCss = '';
-
-	for (const cssSegment of cssSegments) {
-		minifiedCss += cssSegment.isString ? cssSegment.value : minifyCssSegment(cssSegment.value);
-	}
-
-	return minifiedCss.trim();
-}
-
-function splitCssSegments(content: string): CssSegment[] {
-	const segments: CssSegment[] = [];
-	let index = 0;
-	let segmentStart = 0;
-
-	while (index < content.length) {
-		const character = content[index] ?? '';
-		const nextCharacter = content[index + 1] ?? '';
-
-		if (isCssCommentStart(character, nextCharacter)) {
-			pushCssSegment(segments, false, content.slice(segmentStart, index));
-			index = skipCssComment(content, index + 2);
-			segmentStart = index;
-			continue;
-		}
-
-		if (isCssStringDelimiter(character)) {
-			pushCssSegment(segments, false, content.slice(segmentStart, index));
-			const stringEnd = findCssStringEnd(content, index + 1, character);
-			pushCssSegment(segments, true, content.slice(index, stringEnd));
-			index = stringEnd;
-			segmentStart = index;
-			continue;
-		}
-
-		index += 1;
-	}
-
-	pushCssSegment(segments, false, content.slice(segmentStart));
-
-	return segments;
-}
-
-function pushCssSegment(segments: CssSegment[], isString: boolean, value: string): void {
-	if (value.length === 0) {
-		return;
-	}
-
-	segments.push({ isString, value });
-}
-
-function isCssCommentStart(character: string, nextCharacter: string): boolean {
-	return character === '/' && nextCharacter === '*';
-}
-
-function isCssStringDelimiter(character: string): character is '"' | "'" {
-	return character === '"' || character === "'";
-}
-
-function skipCssComment(content: string, index: number): number {
-	let nextIndex = index;
-
-	while (nextIndex < content.length) {
-		const character = content[nextIndex] ?? '';
-		const nextCharacter = content[nextIndex + 1] ?? '';
-
-		if (character === '*' && nextCharacter === '/') {
-			return nextIndex + 2;
-		}
-
-		nextIndex += 1;
-	}
-
-	return nextIndex;
-}
-
-function findCssStringEnd(content: string, index: number, delimiter: '"' | "'"): number {
-	let nextIndex = index;
-
-	while (nextIndex < content.length) {
-		const character = content[nextIndex] ?? '';
-		if (character === '\\') {
-			nextIndex += 2;
-			continue;
-		}
-
-		if (character === delimiter) {
-			return nextIndex + 1;
-		}
-
-		nextIndex += 1;
-	}
-
-	return nextIndex;
-}
-
-function minifyCssSegment(segment: string): string {
-	return (
-		segment
-			.replace(/\s+/g, ' ')
-			// Preserve spacing around parentheses so CSS math like `calc()` stays valid.
-			.replace(/\s*([{}:;,>~])\s*/g, '$1')
-			.replace(/;}/g, '}')
+	await Promise.all(
+		allEntries
+			.filter((entry) => entry.endsWith('.html'))
+			.map(async (relativePath) => {
+				const fullPath = path.join(directory, relativePath);
+				const html = await readFile(fullPath, 'utf8');
+				const strippedHtml = stripClientBootstrap(html);
+				if (strippedHtml !== html) {
+					await writeFile(fullPath, strippedHtml, 'utf8');
+				}
+			})
 	);
 }
 
@@ -605,7 +377,7 @@ function shouldExcludeFromStaticExport(sourcePath: string): boolean {
 	const entryName = path.basename(sourcePath);
 	return (
 		entryName.startsWith(DEV_FILE_PREFIX) ||
-		entryName === DS_STORE_FILE_NAME ||
+		entryName === '.DS_Store' ||
 		entryName === VITE_METADATA_DIRECTORY_NAME ||
 		entryName === WRANGLER_CONFIG_FILE_NAME
 	);
