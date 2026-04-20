@@ -16,8 +16,6 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Design and deploy AMD GPU clusters with Hot Aisle, from compact builds to large multi-node AI and HPC environments.',
-		image: '/assets/cluster/cluster-powered-by-amd.webp',
-		imageAlt: 'Hot Aisle cluster powered by AMD',
 		path: '/cluster',
 		title: 'Cluster Design',
 	});

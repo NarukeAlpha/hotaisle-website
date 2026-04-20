@@ -23,8 +23,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 	return createPageMetadata({
 		description,
-		image: '/assets/home/so2andhipaa.png',
-		imageAlt: 'Hot Aisle security and compliance',
 		path: `/policies/${page.slug}`,
 		title,
 		type: 'article',

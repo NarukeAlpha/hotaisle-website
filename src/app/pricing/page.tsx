@@ -6,8 +6,6 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Transparent AMD GPU pricing from Hot Aisle with self-service hourly billing and no long-term contracts.',
-		image: '/assets/compute/hero.png',
-		imageAlt: 'Hot Aisle compute infrastructure',
 		path: '/pricing',
 		title: 'Pricing',
 	});

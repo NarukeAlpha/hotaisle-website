@@ -5,6 +5,7 @@ const DEFAULT_IMAGE = '/assets/og/hot-aisle-share.png';
 const DEFAULT_IMAGE_ALT = 'Hot Aisle branded share image';
 const DEFAULT_IMAGE_WIDTH = 1200;
 const DEFAULT_IMAGE_HEIGHT = 630;
+const SITE_METADATA_BASE = new URL(SITE_URL);
 
 interface PageMetadataOptions {
 	description: string;
@@ -24,8 +25,16 @@ export function createPageMetadata({
 	type = 'website',
 }: PageMetadataOptions) {
 	const url = new URL(path, SITE_URL).toString();
+	const imageUrl = new URL(image, SITE_URL).toString();
+	const imageMetadata = {
+		alt: imageAlt,
+		height: DEFAULT_IMAGE_HEIGHT,
+		url: imageUrl,
+		width: DEFAULT_IMAGE_WIDTH,
+	};
 
 	return {
+		metadataBase: SITE_METADATA_BASE,
 		title,
 		description,
 		alternates: {
@@ -42,27 +51,13 @@ export function createPageMetadata({
 			type,
 			url,
 			siteName: SITE_NAME,
-			images: [
-				{
-					alt: imageAlt,
-					height: DEFAULT_IMAGE_HEIGHT,
-					url: image,
-					width: DEFAULT_IMAGE_WIDTH,
-				},
-			],
+			images: [imageMetadata],
 		},
 		twitter: {
 			card: 'summary_large_image',
 			title,
 			description,
-			images: [
-				{
-					alt: imageAlt,
-					height: DEFAULT_IMAGE_HEIGHT,
-					url: image,
-					width: DEFAULT_IMAGE_WIDTH,
-				},
-			],
+			images: [imageMetadata],
 		},
 	};
 }

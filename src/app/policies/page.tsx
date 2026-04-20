@@ -6,8 +6,6 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Legal documents, compliance information, and operational policies for Hot Aisle services.',
-		image: '/assets/home/so2andhipaa.png',
-		imageAlt: 'Hot Aisle security and compliance',
 		path: '/policies',
 		title: 'Legal and Policies',
 	});
