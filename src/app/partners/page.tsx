@@ -5,8 +5,6 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'The Hot Aisle ecosystem across hardware, orchestration, networking, and performance engineering partners.',
-		image: '/assets/home/AMDpartner.png',
-		imageAlt: 'Hot Aisle partner ecosystem',
 		path: '/partners',
 		title: 'Partners',
 	});

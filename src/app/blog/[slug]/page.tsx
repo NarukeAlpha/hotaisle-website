@@ -4,7 +4,11 @@ import { AppLink } from '@/components/AppLink.tsx';
 import { BlogContent } from '@/components/blog/BlogContent.tsx';
 import { OptimizedImage } from '@/components/OptimizedImage.tsx';
 import { getAllSlugs, getPageContent } from '@/lib/content.ts';
+import { createPageMetadata } from '@/lib/metadata.ts';
 import './syntax-highlighting.css';
+
+const DEFAULT_BLOG_IMAGE_ALT_SUFFIX = 'blog post cover image';
+
 const PUBLISH_DATE_FORMATTER = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',
 	month: 'long',
@@ -28,52 +32,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 	const title = post.metaTitle ?? post.title;
 	const description = post.metaDescription ?? post.description ?? '';
-	const url = `https://hotaisle.xyz/blog/${post.slug}`;
 	const image = post.coverImage ?? '/assets/og/hot-aisle-share.png';
+	const imageAlt = `${post.title} ${DEFAULT_BLOG_IMAGE_ALT_SUFFIX}`;
 	const publishedTime = post.date ? new Date(post.date).toISOString() : undefined;
 	const authors = post.author ? [post.author] : undefined;
 	const tags = post.tags?.length ? post.tags : undefined;
+	const metadata = createPageMetadata({
+		description,
+		image,
+		imageAlt,
+		path: `/blog/${post.slug}`,
+		title,
+		type: 'article',
+	});
 
 	return {
-		title,
-		description,
-		alternates: {
-			canonical: url,
-		},
-		robots: {
-			follow: true,
-			index: true,
-		},
+		...metadata,
 		openGraph: {
-			title,
-			description,
-			locale: 'en_US',
-			type: 'article',
-			url,
+			...metadata.openGraph,
 			publishedTime,
 			authors,
 			tags,
-			images: [
-				{
-					alt: post.title,
-					height: 630,
-					url: image,
-					width: 1200,
-				},
-			],
-		},
-		twitter: {
-			card: 'summary_large_image',
-			title,
-			description,
-			images: [
-				{
-					alt: post.title,
-					height: 630,
-					url: image,
-					width: 1200,
-				},
-			],
 		},
 	};
 }

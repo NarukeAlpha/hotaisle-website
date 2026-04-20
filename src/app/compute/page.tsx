@@ -7,8 +7,6 @@ export function generateMetadata() {
 	return createPageMetadata({
 		description:
 			'Dell PowerEdge XE9680 infrastructure with 8x AMD MI300X GPUs, high-bandwidth memory, and dense networking for demanding AI workloads.',
-		image: '/assets/compute/hero.png',
-		imageAlt: 'Dell PowerEdge XE9680 with AMD MI300X GPUs',
 		path: '/compute',
 		title: 'Supercomputer Infrastructure',
 	});
