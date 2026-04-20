@@ -125,7 +125,7 @@ function DataColumns() {
 export default function HotAisleHero() {
 	return (
 		<div className="ha-hero-shell w-full overflow-hidden bg-(--ha-hero-bg) text-(--ha-hero-text)">
-			<div className="relative min-h-[92vh]">
+			<div className="relative min-h-[64vh]">
 				{/* Background gradients */}
 				<div
 					className="absolute inset-0"
@@ -218,7 +218,7 @@ export default function HotAisleHero() {
 				</div>
 
 				{/* Centered hero content */}
-				<div className="relative z-10 flex min-h-[92vh] flex-col items-center justify-center px-6 py-24 text-center">
+				<div className="relative z-10 flex min-h-[64vh] flex-col items-center justify-center px-6 py-16 text-center">
 					<div className="mx-auto max-w-4xl">
 						{/* Badge */}
 						<div
