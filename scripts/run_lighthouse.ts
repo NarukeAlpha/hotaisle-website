@@ -10,7 +10,7 @@ import lighthouse, { desktopConfig, generateReport } from 'lighthouse';
 import { startStaticServer } from './static_server.ts';
 
 const CONFIG_FILE_NAME = '.lighthouserc.cjs';
-const DEFAULT_HOST = '127.0.0.1';
+const DEFAULT_HOST = 'localhost';
 const DEFAULT_PORT = 4174;
 const DEFAULT_NUMBER_OF_RUNS = 1;
 const DEFAULT_OUTPUT_DIRECTORY = '.lighthouseci/reports';
@@ -273,16 +273,28 @@ async function runBuild(): Promise<void> {
 
 async function writeReports(
 	reportDirectory: string,
-	runResult: LighthouseRunResult
+	runResult: LighthouseRunResult,
+	publicBaseUrl: string
 ): Promise<void> {
 	const { htmlPath, jsonPath, lhr } = runResult;
 	await writeFile(jsonPath, `${JSON.stringify(lhr, null, 2)}\n`, 'utf8');
 
-	const htmlReport = generateReport(lhr, 'html');
+	const htmlReport = rewriteReportTopbarLink(generateReport(lhr, 'html'), publicBaseUrl);
 	await writeFile(htmlPath, htmlReport, 'utf8');
 	console.log(
 		`Saved Lighthouse reports to ${normalizePath(path.relative(PROJECT_ROOT, reportDirectory))}`
 	);
+}
+
+function rewriteReportTopbarLink(reportHtml: string, publicBaseUrl: string): string {
+	const targetCode = 'this._dom.safelySetHref(n,e.finalDisplayedUrl),t}';
+	const replacementCode = `this._dom.safelySetHref(n,${JSON.stringify(publicBaseUrl)}),n.setAttribute("target","_self"),n.removeAttribute("rel"),t}`;
+
+	if (!reportHtml.includes(targetCode)) {
+		throw new Error('Could not find Lighthouse topbar link code to rewrite');
+	}
+
+	return reportHtml.replace(targetCode, replacementCode);
 }
 
 function selectRepresentativeRunIndices(runResults: LighthouseRunResult[]): Set<number> {
@@ -397,7 +409,7 @@ async function runLighthouseAudit(
 		url: rewriteDisplayUrl(url, publicBaseUrl),
 	};
 
-	await writeReports(reportDirectory, runResult);
+	await writeReports(reportDirectory, runResult, publicBaseUrl);
 	return runResult;
 }
 
@@ -444,7 +456,7 @@ async function main(): Promise<void> {
 		},
 	});
 
-	const baseUrl = `https://${server.hostname}:${server.port}`;
+	const baseUrl = `https://${host}:${server.port}`;
 	const urls = resolveRequestedUrls(lighthouseConfig, baseUrl);
 
 	console.log(`Serving Lighthouse target at ${baseUrl}`);
